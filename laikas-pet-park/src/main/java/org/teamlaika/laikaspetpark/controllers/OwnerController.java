@@ -23,10 +23,8 @@ public class OwnerController {
 
     @GetMapping("/")
     public String index(Model model){
-        model.addAttribute("owner", ownerRepository.findAll());
         return "users/index";
     }
-
     @GetMapping("add")
     public String displayNewOwnerForm(Model model){
         model.addAttribute(new User());
@@ -40,6 +38,10 @@ public class OwnerController {
 
         ownerRepository.save(newOwner);
         return "redirect:";
+    }
+    @GetMapping("newaccount")
+    public String displayNewAccountForm(Model model){
+        return "newaccount";
     }
     @GetMapping("users/{userId}")
     public String displayViewUser(Model model, @PathVariable int userId) {
