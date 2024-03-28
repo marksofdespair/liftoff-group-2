@@ -24,8 +24,13 @@ public class CatApiController {
         return apiService.findAllCats();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/by-id/{id}")
     public CatApi findCatById(@PathVariable String id) {
         return apiService.findCatById(id);
+    }
+
+    @GetMapping("/by-breed/{breed}")
+    public List<CatApi> findCatByBreed(@PathVariable String breed) {
+        return apiService.findCatByBreed(breed);
     }
 }

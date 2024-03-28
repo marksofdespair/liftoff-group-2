@@ -3,6 +3,7 @@ package org.teamlaika.laikaspetpark.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.teamlaika.laikaspetpark.models.CatApi;
 import org.teamlaika.laikaspetpark.models.DogApi;
 import org.teamlaika.laikaspetpark.models.Pet;
 
@@ -28,10 +29,16 @@ public class PetController {
     }
 
     @GetMapping("breed-info")
-    public String displayBreedInfoByBreed(@RequestParam String breed, Model model) {
-        List<DogApi> dog = apiService.findDogByBreed(breed);
-        model.addAttribute("breed", dog.get(0));
-        return "breed-info";
+    public String displayBreedInfoByBreed(@RequestParam String species, @RequestParam String breed, Model model) {
+        if (species.equals("Dog")) {
+            List<DogApi> dog = apiService.findDogByBreed(breed);
+            model.addAttribute("breed", dog.get(0));
+            return "dog-breed-info";
+        } else {
+            List<CatApi> cat = apiService.findCatByBreed(breed);
+            model.addAttribute("breed", cat.get(0));
+            return "cat-breed-info";
+        }
     }
 
     @GetMapping("precreate")

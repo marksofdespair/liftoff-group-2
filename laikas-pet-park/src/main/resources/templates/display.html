@@ -19,7 +19,7 @@
    <tr th:each="pet : ${pets}">
       <td th:text="${pet.name}"></td>
       <td th:text="${pet.species}"></td>
-      <td><a th:href="'/pet/breed-info?breed=' + ${pet.breed}" th:text="${pet.breed}"></a></td>
+      <td><a th:href="'/pet/breed-info?species=' + ${pet.species} + '&breed=' + ${pet.breed}" th:text="${pet.breed}"></a></td>
    </tr>
 </table>
 </body>

@@ -63,10 +63,10 @@ public class ApiService {
                 .body(new ParameterizedTypeReference<List<DogApi>>() {});
     }
 
-    public CatApi findCatByBreed(String breed) {
+    public List<CatApi> findCatByBreed(String breed) {
         return catRestClient.get()
                 .uri("/v1/breeds/search?q={breed}", breed)
                 .retrieve()
-                .body(CatApi.class);
+                .body(new ParameterizedTypeReference<List<CatApi>>() {});
     }
 }
