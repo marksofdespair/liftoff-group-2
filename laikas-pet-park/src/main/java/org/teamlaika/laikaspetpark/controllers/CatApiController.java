@@ -25,7 +25,7 @@ public class CatApiController {
     }
 
     @GetMapping("/{id}")
-    public CatApi findCatById(@PathVariable int id) {
+    public CatApi findCatById(@PathVariable String id) {
         return apiService.findCatById(id);
     }
 }

@@ -3,6 +3,7 @@ package org.teamlaika.laikaspetpark.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.teamlaika.laikaspetpark.models.DogApi;
 import org.teamlaika.laikaspetpark.models.Pet;
 
 import java.util.ArrayList;
@@ -13,17 +14,24 @@ import java.util.Objects;
 @RequestMapping("pet")
 public class PetController {
 
-    private static List<Pet> pets = new ArrayList<>();
+    private static final List<Pet> pets = new ArrayList<>();
     private final ApiService apiService;
 
     public PetController(ApiService apiService) {
         this.apiService = apiService;
     }
 
-    @GetMapping
+    @GetMapping("my-pets")
     public String displayAllPets(Model model) {
         model.addAttribute("pets", pets);
         return "display";
+    }
+
+    @GetMapping("breed-info")
+    public String displayBreedInfoByBreed(@RequestParam String breed, Model model) {
+        List<DogApi> dog = apiService.findDogByBreed(breed);
+        model.addAttribute("breed", dog.get(0));
+        return "breed-info";
     }
 
     @GetMapping("precreate")
