@@ -2,12 +2,9 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8"/>
-    <title>Add Pet</title>
+    <title>Add a New Pet</title>
 </head>
 <body>
-
-<h2>Add or Modify Pet</h2>
-
 <form action="#" th:action="@{/pet/add}" th:object="${pet}" method="post">
     <div>
         <label for="name">Name:</label>
@@ -41,6 +38,5 @@
 <script>
     <!-- May initialize datepicker here -->
 </script>
-
 </body>
 </html>

@@ -1,5 +1,6 @@
 package org.teamlaika.laikaspetpark.models;
 
+
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -37,5 +38,4 @@ public class User extends AbstractEntity {
     public boolean isMatchingPassword(String password) {
         return encoder.matches(password, pwHash);
     }
-
 }

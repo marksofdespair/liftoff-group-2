@@ -1,38 +1,43 @@
 package org.teamlaika.laikaspetpark.controllers;
 
+
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.teamlaika.laikaspetpark.models.Owner;
+import org.teamlaika.laikaspetpark.models.Provider;
+import org.teamlaika.laikaspetpark.models.User;
+import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 
 @Controller
-@RequestMapping("services")
+@RequestMapping("users")
 public class ProviderController {
+    @Autowired
+    private OwnerRepository ownerRepository;
+    @Autowired
+    private ProviderRepository providerRepository;
+    @GetMapping("/")
+    public String index(Model model){
+        model.addAttribute("owner", providerRepository.findAll());
+        return "users/index";
+    }
+    @GetMapping("add")
+    public String displayNewOwnerForm(Model model){
+        model.addAttribute(new User());
+        return "users/newaccount";
+    }
+    @PostMapping("add")
+    String submitNewOwnerForm(@ModelAttribute @Valid Provider newProvider, Error errors, Model model){
+        //if(errors.hasErrors()){
+        //return "users/newaccount";
+        //}
 
-//    @Autowired
-//    private ServiceRepository serviceRepository;
-//
-//    @Autowired
-//    private ProviderRepository providerRepository;
-//
-//    // To display any services the user has already created
-//    @GetMapping
-//    public String displayServices(){}
-//
-//    @GetMapping("create")
-//    public String displayServiceForm(){}
-//
-//    @PostMapping("create")
-//    public String processServiceForm(){}
-//
-//    @GetMapping("delete")
-//    public String processDeleteServiceForm(){}
-//
-//    @GetMapping("edit")
-//    public String editServiceForm(){}
-//
-}
-
+        providerRepository.save(newProvider);
+        return "redirect:";
+    }
