@@ -1,50 +1,41 @@
 package org.teamlaika.laikaspetpark.models;
 
-public class User {
+
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+@Entity
+public class User extends AbstractEntity {
+
+    @NotNull
+    private String name;
+
+    @NotNull
     private String username;
-    private String displayName;
-    private String password;
+
+    @NotNull
+    private String pwHash;
+
+    @Email
     private String email;
-    private String userType;
 
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public String getUsername() {
-        return username;
-    }
+    public User() {}
 
-    public void setUsername(String username) {
+    public User(String name,String username, String password, String email) {
+        this.name = name;
         this.username = username;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
+        this.pwHash = encoder.encode(password);
         this.email = email;
     }
 
-    public String getUserType() {
-        return userType;
-    }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getUsername() {return username;}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public boolean isMatchingPassword(String password) {
+        return encoder.matches(password, pwHash);
     }
 }

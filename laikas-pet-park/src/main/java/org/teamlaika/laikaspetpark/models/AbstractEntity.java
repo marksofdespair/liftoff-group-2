@@ -7,8 +7,11 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
+import java.util.Objects;
+
 @MappedSuperclass
 public class AbstractEntity {
+
 
     @Id
     @GeneratedValue
@@ -36,10 +39,15 @@ public class AbstractEntity {
         if (object == null || getClass() != object.getClass()) return false;
         AbstractEntity that = (AbstractEntity) object;
         return Id == that.Id && Objects.equals(name, that.name);
+
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(Id, name);
     }
 }
+
+
+

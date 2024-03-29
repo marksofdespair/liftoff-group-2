@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 
 public class Pet {
+
     @Id
     @GeneratedValue
     private int id;
@@ -21,17 +22,18 @@ public class Pet {
 
 
 
-    public Pet(String aname, String aspecies, String abreed, String adescription, Owner powner){
+    public Pet(String name, String species, String breed, String description, Owner owner){
         //this();
-        this.name = aname;
-        this.species = aspecies;
-        this.breed = abreed;
-        this.description = adescription;
-        this.owner = powner;
+        this.name = name;
+        this.species = species;
+        this.breed = breed;
+        this.description = description;
+        this.owner = owner;
     }
 
     public int getId() {
         return id;
+
     }
 
     public String getName() {
@@ -42,6 +44,7 @@ public class Pet {
         this.name = name;
     }
 
+
     public Owner getOwner() {
         return owner;
     }
@@ -49,6 +52,7 @@ public class Pet {
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
+
 
     public String getSpecies() {
         return species;
@@ -66,6 +70,7 @@ public class Pet {
         this.breed = breed;
     }
 
+
     public String getDescription() {
         return description;
     }
@@ -74,18 +79,22 @@ public class Pet {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "Pet{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", owner='" + owner + '\'' +
-                ", species='" + species + '\'' +
-                ", breed='" + breed + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
+//     @Override
+//     public String toString() {
+//         return "Pet{" +
+//                 "id=" + id +
+//                 ", name='" + name + '\'' +
+//                 ", owner='" + owner + '\'' +
+//                 ", species='" + species + '\'' +
+//                 ", breed='" + breed + '\'' +
+//                 ", description='" + description + '\'' +
+//                 '}';
+//     }
 
+  @Override
+    public String toString() {
+        return name;
+      
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -96,5 +105,6 @@ public class Pet {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getName(), getOwner(), getSpecies(), getBreed(), getDescription());
+
     }
 }

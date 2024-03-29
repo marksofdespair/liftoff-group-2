@@ -1,37 +1,70 @@
 package org.teamlaika.laikaspetpark.controllers;
 
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.models.Pet;
-import org.teamlaika.laikaspetpark.models.Provider;
-import org.teamlaika.laikaspetpark.models.User;
-import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
-import org.teamlaika.laikaspetpark.models.data.PetRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Controller
-@RequestMapping("users/pets")
+@RequestMapping("pet")
 public class PetController {
-    @Autowired
-    private PetRepository petRepository;
-    @GetMapping("/")
-    public String index(Model model){
-        return "list";
-    }
-    @GetMapping("add")
-    public String displayNewOwnerForm(Model model){
-        model.addAttribute(new User());
-        return "new";
-    }
-    @PostMapping("add")
-    String submitNewOwnerForm(@ModelAttribute @Valid Pet newPet, Error errors, Model model){
 
-        petRepository.save(newPet);
-        return "redirect:";
+    private static List<Pet> pets = new ArrayList<>();
+    private final ApiService apiService;
+
+    public PetController(ApiService apiService) {
+        this.apiService = apiService;
+    }
+
+    @GetMapping
+    public String displayAllPets(Model model) {
+        model.addAttribute("pets", pets);
+        return "display";
+    }
+
+    @GetMapping("precreate")
+    public String displayPreCreatePetForm() {
+        return "precreate";
+    }
+
+    @PostMapping("precreate")
+    public String processPreCreatePetForm(@RequestParam String species) {
+        if (species.equals("dog")) {
+            return "redirect:create-dog";
+        } else {
+            return "redirect:create-cat";
+        }
+    }
+
+    @GetMapping("create-dog")
+    public String displayCreateDogForm(Model model) {
+        model.addAttribute("breeds", apiService.findAllDogs());
+        return "create-dog";
+    }
+
+    @PostMapping("create-dog")
+    public String processCreateDogForm(@RequestParam String name, String breed) {
+        String species = "Dog";
+        pets.add(new Pet(name, species, breed));
+        return "redirect:precreate";
+    }
+
+    @GetMapping("create-cat")
+    public String displayCreateCatForm(Model model) {
+        model.addAttribute("breeds", apiService.findAllCats());
+        return "create-cat";
+    }
+
+    @PostMapping("create-cat")
+    public String processCreateCatForm(@RequestParam String name, String breed) {
+        String species = "Cat";
+        pets.add(new Pet(name, species, breed));
+        return "redirect:precreate";
+
     }
 }

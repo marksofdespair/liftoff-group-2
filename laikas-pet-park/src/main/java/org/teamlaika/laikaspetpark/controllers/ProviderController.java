@@ -1,5 +1,6 @@
 package org.teamlaika.laikaspetpark.controllers;
 
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,4 +41,3 @@ public class ProviderController {
         providerRepository.save(newProvider);
         return "redirect:";
     }
-}
