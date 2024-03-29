@@ -3,22 +3,23 @@ package org.teamlaika.laikaspetpark.controllers;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.teamlaika.laikaspetpark.models.CatApi;
+import org.teamlaika.laikaspetpark.models.DogApi;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/cat-breeds")
-public class CatAPIController {
+@RequestMapping("api/dog-breeds")
+public class DogApiController {
 
     private final ApiService apiService;
 
-    public CatAPIController(ApiService apiService) {
+    public DogApiController(ApiService apiService) {
         this.apiService = apiService;
     }
 
     @GetMapping("")
-    public List<CatApi> findAllCats() {
-        return apiService.findAllCats();
+    public List<DogApi> findAllDogs() {
+        return apiService.findAllDogs();
     }
+
 }
