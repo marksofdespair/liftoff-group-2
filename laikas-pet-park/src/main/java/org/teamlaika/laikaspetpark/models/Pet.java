@@ -21,12 +21,11 @@ public class Pet {
     private String description;
 
 
-    public Pet(String name, String species, String breed, String description, Owner owner) {
+    public Pet(String name, String species, String breed, Owner owner) {
         //this();
         this.name = name;
         this.species = species;
         this.breed = breed;
-        this.description = description;
         this.owner = owner;
     }
 

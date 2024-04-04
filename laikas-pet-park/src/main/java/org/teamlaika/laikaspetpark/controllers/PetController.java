@@ -1,12 +1,12 @@
 package org.teamlaika.laikaspetpark.controllers;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.teamlaika.laikaspetpark.models.CatApi;
-import org.teamlaika.laikaspetpark.models.DogApi;
-import org.teamlaika.laikaspetpark.models.Pet;
+import org.teamlaika.laikaspetpark.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +19,11 @@ public class PetController {
     private static final List<Pet> pets = new ArrayList<>();
     private final ApiService apiService;
 
-    public PetController(ApiService apiService) {
+    private final AuthenticationController authenticationController;
+
+    public PetController(ApiService apiService, AuthenticationController authenticationController) {
         this.apiService = apiService;
+        this.authenticationController = authenticationController;
     }
 
     @GetMapping("my-pets")
@@ -63,9 +66,12 @@ public class PetController {
     }
 
     @PostMapping("create-dog")
-    public String processCreateDogForm(@RequestParam String name, String breed) {
+    public String processCreateDogForm(@RequestParam String name, String breed, HttpServletRequest request) {
         String species = "Dog";
-        pets.add(new Pet(name, species, breed));
+        HttpSession session = request.getSession();
+        User user = authenticationController.getUserFromSession(session);
+        Owner owner = (Owner) user;
+        pets.add(new Pet(name, species, breed, owner));
         return "redirect:precreate";
     }
 
@@ -76,9 +82,12 @@ public class PetController {
     }
 
     @PostMapping("create-cat")
-    public String processCreateCatForm(@RequestParam String name, String breed) {
+    public String processCreateCatForm(@RequestParam String name, String breed, HttpServletRequest request) {
         String species = "Cat";
-        pets.add(new Pet(name, species, breed));
+        HttpSession session = request.getSession();
+        User user = authenticationController.getUserFromSession(session);
+        Owner owner = (Owner) user;
+        pets.add(new Pet(name, species, breed, owner));
         return "redirect:precreate";
 
     }
