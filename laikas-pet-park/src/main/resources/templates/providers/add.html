@@ -8,17 +8,21 @@
 
 <h2>Add or Modify Services</h2>
 
-<form>
+<form method="post">
     <div>
         <label for="name">Name:</label>
         <input type="text" id="name" th:field="*{name}">
+    </div>
+    <div>
+        <label for="displayName">UserName:</label>
+        <input type="text" id="displayName" th:field="*{displayName}">
     </div>
     <div>
         <label for="email">Email:</label>
         <input type="email" id="email" th:field="*{email}">
     </div>
     <div>
-        <label for="skills">Skills:</label>
+        <label >Skills:</label>
         <br>
         <input type="checkbox" id="grooming" name="skills" value="grooming">
         <label for="grooming">Grooming</label>

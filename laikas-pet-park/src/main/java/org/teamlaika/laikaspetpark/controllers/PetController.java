@@ -1,5 +1,6 @@
 package org.teamlaika.laikaspetpark.controllers;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -79,5 +80,6 @@ public class PetController {
         String species = "Cat";
         pets.add(new Pet(name, species, breed));
         return "redirect:precreate";
+
     }
 }
