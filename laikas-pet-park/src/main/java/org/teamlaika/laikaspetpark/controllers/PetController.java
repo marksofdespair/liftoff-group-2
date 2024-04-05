@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("pet")
+@RequestMapping("/pet")
 public class PetController {
 
     private static final List<Pet> pets = new ArrayList<>();
@@ -66,9 +66,8 @@ public class PetController {
     }
 
     @PostMapping("create-dog")
-    public String processCreateDogForm(@RequestParam String name, String breed, HttpServletRequest request) {
+    public String processCreateDogForm(@RequestParam String name, String breed, HttpSession session) {
         String species = "Dog";
-        HttpSession session = request.getSession();
         User user = authenticationController.getUserFromSession(session);
         Owner owner = (Owner) user;
         pets.add(new Pet(name, species, breed, owner));
@@ -82,9 +81,8 @@ public class PetController {
     }
 
     @PostMapping("create-cat")
-    public String processCreateCatForm(@RequestParam String name, String breed, HttpServletRequest request) {
+    public String processCreateCatForm(@RequestParam String name, String breed, HttpSession session) {
         String species = "Cat";
-        HttpSession session = request.getSession();
         User user = authenticationController.getUserFromSession(session);
         Owner owner = (Owner) user;
         pets.add(new Pet(name, species, breed, owner));
