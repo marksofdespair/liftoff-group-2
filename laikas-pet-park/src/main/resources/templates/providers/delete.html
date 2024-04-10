@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Delete Account?</title>
+</head>
+<body>
+<h2>Add or Modify Pet</h2>
+Delete Account?
+<form action="#" th:action="@{/delete}"  method="post">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" th:text="${'Are you sure you would like to delete the account ' + provider.displayName + '?'}">
+    </div>
+    <button type="submit">Delete Account </button>
+</form>
+</body>
+</html>
