@@ -18,7 +18,7 @@ public class Pet {
     private Owner owner;
     private String species;
     private String breed;
-    private String description;
+
 
 
 
@@ -27,7 +27,6 @@ public class Pet {
         this.name = name;
         this.species = species;
         this.breed = breed;
-        this.description = description;
         this.owner = owner;
     }
 
@@ -71,40 +70,34 @@ public class Pet {
     }
 
 
-    public String getDescription() {
-        return description;
-    }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
-//     @Override
-//     public String toString() {
-//         return "Pet{" +
-//                 "id=" + id +
-//                 ", name='" + name + '\'' +
-//                 ", owner='" + owner + '\'' +
-//                 ", species='" + species + '\'' +
-//                 ", breed='" + breed + '\'' +
-//                 ", description='" + description + '\'' +
-//                 '}';
-//     }
+     @Override
+     public String toString() {
+         return "Pet{" +
+                 "id=" + id +
+                 ", name='" + name + '\'' +
+                 ", owner='" + owner + '\'' +
+                 ", species='" + species + '\'' +
+                 ", breed='" + breed + '\'' +
+                  '\'' +
+                 '}';
+     }
 
-  @Override
-    public String toString() {
-        return name;
+//  @Override
+//    public String toString() {
+//        return name;
       
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Pet pet)) return false;
-        return getId() == pet.getId() && Objects.equals(getName(), pet.getName()) && Objects.equals(getOwner(), pet.getOwner()) && Objects.equals(getSpecies(), pet.getSpecies()) && Objects.equals(getBreed(), pet.getBreed()) && Objects.equals(getDescription(), pet.getDescription());
+        return getId() == pet.getId() && Objects.equals(getName(), pet.getName()) && Objects.equals(getOwner(), pet.getOwner()) && Objects.equals(getSpecies(), pet.getSpecies()) && Objects.equals(getBreed(), pet.getBreed());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getOwner(), getSpecies(), getBreed(), getDescription());
+        return Objects.hash(getId(), getName(), getOwner(), getSpecies(), getBreed());
 
     }
 }

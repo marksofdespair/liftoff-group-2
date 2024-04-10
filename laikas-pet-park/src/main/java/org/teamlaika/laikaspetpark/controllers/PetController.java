@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+
 @Controller
 @RequestMapping("pet")
 public class PetController {
@@ -61,9 +62,9 @@ public class PetController {
     }
 
     @PostMapping("create-cat")
-    public String processCreateCatForm(@RequestParam String name, String breed) {
+    public String processCreateCatForm(@RequestParam String name, String breed, String descripton) {
         String species = "Cat";
-        pets.add(new Pet(name, species, breed));
+        pets.add(new Pet(name, species, breed, descripton));
         return "redirect:precreate";
 
     }

@@ -22,18 +22,21 @@ public class ProviderController {
     private OwnerRepository ownerRepository;
     @Autowired
     private ProviderRepository providerRepository;
+
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model) {
         model.addAttribute("owner", providerRepository.findAll());
         return "users/index";
     }
+
     @GetMapping("add")
-    public String displayNewOwnerForm(Model model){
+    public String displayNewOwnerForm(Model model) {
         model.addAttribute(new User());
         return "users/newaccount";
     }
+
     @PostMapping("add")
-    String submitNewOwnerForm(@ModelAttribute @Valid Provider newProvider, Error errors, Model model){
+    String submitNewOwnerForm(@ModelAttribute @Valid Provider newProvider, Error errors, Model model) {
         //if(errors.hasErrors()){
         //return "users/newaccount";
         //}
@@ -41,3 +44,4 @@ public class ProviderController {
         providerRepository.save(newProvider);
         return "redirect:";
     }
+}
