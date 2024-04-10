@@ -1,12 +1,13 @@
 package org.teamlaika.laikaspetpark.models;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
-
+@Entity
 public class Pet {
 
     @Id
@@ -18,11 +19,13 @@ public class Pet {
     private Owner owner;
     private String species;
     private String breed;
+    private String description;
 
 
+    public Pet(){
 
-
-    public Pet(String name, String species, String breed, String description, Owner owner){
+    }
+    public Pet(String name, String species, String breed, Owner owner){
         //this();
         this.name = name;
         this.species = species;
@@ -70,7 +73,13 @@ public class Pet {
     }
 
 
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
      @Override
      public String toString() {
@@ -79,14 +88,13 @@ public class Pet {
                  ", name='" + name + '\'' +
                  ", owner='" + owner + '\'' +
                  ", species='" + species + '\'' +
-                 ", breed='" + breed + '\'' +
-                  '\'' +
+                 ", breed='" + breed + '\''+
                  '}';
      }
 
 //  @Override
 //    public String toString() {
-//        return name;
+//        return name;}
       
     @Override
     public boolean equals(Object o) {
