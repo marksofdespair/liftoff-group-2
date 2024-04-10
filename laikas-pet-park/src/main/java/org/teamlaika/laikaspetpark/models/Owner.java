@@ -16,7 +16,7 @@ public class Owner extends User {
         super();
     }
 
-    public List<Pet> getPet() {
+    public List<Pet> getPets() {
         return pets;
     }
 
