@@ -12,7 +12,7 @@ import java.util.List;
 public class ProviderReviewController {
 
     @Autowired
-    private ProviderReviewRepository providerReviewRepository
+    private ProviderReviewRepository providerReviewRepository;
 
     @GetMapping
     public List<ProviderReviews> getAllProviderReviews() {
@@ -20,7 +20,7 @@ public class ProviderReviewController {
     }
 
     @PostMapping
-    public ProviderReviews addProviderReview(@RequestBody ProviderReview review) {
+    public ProviderReviews addProviderReview(@RequestBody ProviderReviews review) {
         return providerReviewRepository.save(review);
     }
 }
