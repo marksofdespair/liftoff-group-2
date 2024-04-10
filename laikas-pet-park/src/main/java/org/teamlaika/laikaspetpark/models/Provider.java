@@ -11,6 +11,7 @@ public class Provider extends User {
     @OneToMany
     @JoinColumn(name = "owner_id")
     private final List<String> skills = new ArrayList<>();
+
     public Provider(){
         super();
     }

@@ -10,7 +10,7 @@ import org.teamlaika.laikaspetpark.models.DogApi;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/cat-breeds")
+@RequestMapping("/api/cat-breeds")
 public class CatApiController {
 
     private final ApiService apiService;

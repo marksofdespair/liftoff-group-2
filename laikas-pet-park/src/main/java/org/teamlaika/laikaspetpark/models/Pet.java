@@ -18,7 +18,6 @@ public class Pet {
     private Owner owner;
     private String species;
     private String breed;
-    private String description;
 
 
     public Pet(String name, String species, String breed, Owner owner) {
@@ -66,15 +65,6 @@ public class Pet {
 
     public void setBreed(String breed) {
         this.breed = breed;
-    }
-
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
 //     @Override

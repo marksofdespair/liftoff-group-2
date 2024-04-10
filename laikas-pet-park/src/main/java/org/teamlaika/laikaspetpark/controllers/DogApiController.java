@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/dog-breeds")
+@RequestMapping("/api/dog-breeds")
 public class DogApiController {
 
     private final ApiService apiService;

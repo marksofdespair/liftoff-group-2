@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 import org.teamlaika.laikaspetpark.models.Provider;
 @Repository
 public interface ProviderRepository extends CrudRepository<Provider, Integer> {
+
 }
