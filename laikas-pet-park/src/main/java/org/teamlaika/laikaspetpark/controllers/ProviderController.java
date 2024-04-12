@@ -3,6 +3,7 @@ package org.teamlaika.laikaspetpark.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -12,8 +13,10 @@ import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
 import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
+import org.teamlaika.laikaspetpark.models.data.ProviderSpecification;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -21,6 +24,7 @@ import java.util.Optional;
 public class ProviderController {
     @Autowired
     private ProviderRepository providerRepository;
+
     @GetMapping("/")
     public String index(Model model){
         model.addAttribute("owner", providerRepository.findAll());
@@ -85,5 +89,21 @@ public class ProviderController {
 
     @GetMapping("search")
     public String displayProviderSearchForm() { return "providers/search";}
+
+    @PostMapping("search")
+    public String processProviderSearchForm(@RequestParam(required = false) String isGroomer,
+                                            @RequestParam(required = false) String isSitter,
+                                            @RequestParam(required = false) String isTrainer,
+                                            @RequestParam(required = false) String isWalker,
+                                            Model model) {
+
+        List<Provider> providers = providerRepository.findAll(
+                Specification.where(ProviderSpecification.hasSkills(isGroomer,isSitter,isWalker,isTrainer))
+        );
+
+        model.addAttribute("providers",providers);
+
+        return "redirect:search";
+    }
 
 }

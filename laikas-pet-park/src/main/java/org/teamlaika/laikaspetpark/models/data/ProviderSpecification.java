@@ -12,33 +12,33 @@ import java.util.List;
 
 public class ProviderSpecification {
 
-    public static Specification<Provider> hasSkills(boolean isGroomer,
-                                                    boolean isSitter,
-                                                    boolean isTrainer,
-                                                    boolean isWalker) {
+    public static Specification<Provider> hasSkills(String isGroomer,
+                                                    String isSitter,
+                                                    String isTrainer,
+                                                    String isWalker) {
         return (root, query, criteriaBuilder) -> {
 
             List<Predicate> providerPredicates = new ArrayList<>();
 
-            if (isGroomer) {
+            if (isGroomer != null) {
                 providerPredicates.add(
-                        criteriaBuilder.equal(root.get("isGroomer"), true)
+                    criteriaBuilder.equal(root.get("isGroomer"), true)
                 );
             }
 
-            if (isSitter) {
+            if (isSitter != null) {
                 providerPredicates.add(
                         criteriaBuilder.equal(root.get("isSitter"), true)
                 );
             }
 
-            if (isTrainer) {
+            if (isTrainer != null) {
                 providerPredicates.add(
                         criteriaBuilder.equal(root.get("isTrainer"), true)
                 );
             }
 
-            if (isWalker) {
+            if (isWalker != null) {
                 providerPredicates.add(
                         criteriaBuilder.equal(root.get("isWalker"), true)
                 );

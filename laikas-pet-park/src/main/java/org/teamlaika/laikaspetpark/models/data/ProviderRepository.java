@@ -12,6 +12,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.teamlaika.laikaspetpark.models.Provider;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository

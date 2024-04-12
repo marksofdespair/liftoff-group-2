@@ -7,37 +7,62 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1 class="h1">Search for a Provider:</h1>
-    <form method="post">
-        <label class="h2"> What do you need?
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="skillGrooming" name="isGroomer" value="true">
-                <label class="form-check-label h3" for="skillGrooming">
-                    Grooming
-                </label>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 class="h1">Search for a Provider:</h1>
+                <form method="post">
+                    <label class="h2"> What do you need?
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="skillGrooming" name="isGroomer" value="true">
+                            <label class="form-check-label h3" for="skillGrooming">
+                                Grooming
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="skillSitting" name="isSitter" value="true">
+                            <label class="form-check-label h3" for="skillSitting">
+                                Pet Sitting
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="skillTraining" name="isTrainer" value="true">
+                            <label class="form-check-label h3" for="skillTraining">
+                                Training
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="skillWalking" name="isWalker" value="true">
+                            <label class="form-check-label h3" for="skillWalking">
+                                Walking
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Submit" class="btn btn-success h3">
+                        </div>
+                    </label>
+                </form>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="skillSitting" name="isSitter" value="true">
-                <label class="form-check-label h3" for="skillSitting">
-                    Pet Sitting
-                </label>
+            <div class="col">
+                <h1 class="h1">Search Results:</h1>
+                <th:block th:each="provider : ${providers}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title" th:text="${provider.name}"></h3>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" th:text="'Grooming: '+ ${provider.isGroomer)? 'Yes' : 'No'"></li>
+                            <li class="list-group-item" th:text="'Sitting: '+ ${provider.isSitter)? 'Yes' : 'No'"></li>
+                            <li class="list-group-item" th:text="'Walking: '+ ${provider.isWalker)? 'Yes' : 'No'"></li>
+                            <li class="list-group-item" th:text="'Training: '+ ${provider.isTrainer)? 'Yes' : 'No'"></li>
+                        </ul>
+                        <div class="card-body">
+                            <a th:href="@${provider.email}" class="card-link">Email</a>
+                        </div>
+                    </div>
+                </th:block>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="skillTraining" name="isTrainer" value="true">
-                <label class="form-check-label h3" for="skillTraining">
-                    Training
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="skillWalking" name="isWalker" value="true">
-                <label class="form-check-label h3" for="skillWalking">
-                    Walking
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-success h3">
-            </div>
-        </label>
-    </form>
+        </div>
+    </div>
 </body>
 </html>
