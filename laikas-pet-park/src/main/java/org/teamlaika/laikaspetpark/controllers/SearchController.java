@@ -1,9 +1,14 @@
 package org.teamlaika.laikaspetpark.controllers;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.teamlaika.laikaspetpark.models.Provider;
@@ -19,18 +24,18 @@ public class SearchController {
 //    @Autowired
 //    private ProviderRepository providerRepository;
 //
-//    @GetMapping("")
-//    public String displayProviders (@RequestParam boolean isGroomer,
-//                                    @RequestParam boolean isTrainer,
-//                                    Model model) {
+//    @GetMapping
+//    public String displayProviderSearchForm() {
 //
-//        if (!isGroomer && !isTrainer) {
-//            model.addAttribute("errorMessage", "Please select at least one skill.");
-//            return "redirect:";
-//        } else if (isGroomer && isTrainer) {
-//            Optional<Provider> result = providerRepository.findById(1);
-//
-//
-//        }
 //    }
+//
+////    @PostMapping("search")
+//    public String searchProvidersBySkills(@RequestParam String isGroomer,
+//                                          @RequestParam String isSitter,
+//                                          @RequestParam String isTrainer,
+//                                          @RequestParam String isWalker,
+//                                          Model model) {
+//
+//    }
+
 }

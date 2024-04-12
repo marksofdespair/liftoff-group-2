@@ -1,24 +1,29 @@
 package org.teamlaika.laikaspetpark.models;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Provider extends User {
     @OneToMany
     @JoinColumn(name = "provider_id")
     private final List<Service> services = new ArrayList<>();
-
     private boolean isGroomer;
-
     private boolean isSitter;
     private boolean isWalker;
     private boolean isTrainer;
-    public Provider(){
-        super();
+
+    public Provider(String name, String username, String password, String email, boolean isGroomer, boolean isSitter, boolean isWalker, boolean isTrainer) {
+        super(name, username, password, email);
+        this.isGroomer = isGroomer;
+        this.isSitter = isSitter;
+        this.isWalker = isWalker;
+        this.isTrainer = isTrainer;
     }
+
+    public Provider() {}
 
     public List<Service> getServices() {return services;}
 

@@ -82,4 +82,8 @@ public class ProviderController {
         }
         return"redirect:";
     }
+
+    @GetMapping("search")
+    public String displayProviderSearchForm() { return "providers/search";}
+
 }
