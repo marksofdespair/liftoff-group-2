@@ -1,11 +1,13 @@
 package org.teamlaika.laikaspetpark.models;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Provider extends User {
     @OneToMany
     @JoinColumn(name = "provider_id")
