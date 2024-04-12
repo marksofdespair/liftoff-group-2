@@ -10,7 +10,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.User;
+import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
+import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 import org.teamlaika.laikaspetpark.models.dto.RegisterFormDTO;
@@ -22,6 +25,10 @@ public class AuthenticationController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    OwnerRepository ownerRepository;
+    @Autowired
+    ProviderRepository providerRepository;
 
     //Session-Handling Utilities
     private static final String userSessionKey = "username";
@@ -77,8 +84,13 @@ public class AuthenticationController {
             model.addAttribute("title", "Register");
             return "register";
         }
+// TODO Add in accountType as a field and depending on that field, add user to the appropriate repository
 
-        User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail());
+        User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail(), registerFormDTO.getAccountType());
+
+        if (registerFormDTO.getAccountType() == "Regular User"){
+            ownerRepository.save(newUser);
+        }
         userRepository.save(newUser);
         setUserInSession(request.getSession(), newUser);
 

@@ -21,19 +21,25 @@ public class User extends AbstractEntity {
     @Email
     private String email;
 
+   @NotNull
+   private String accountType;
+
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public User() {}
 
-    public User(String name,String username, String password, String email) {
+    public User(String name,String username, String password, String email, String accountType) {
         this.name = name;
         this.username = username;
         this.pwHash = encoder.encode(password);
         this.email = email;
+        this.accountType = accountType;
     }
 
 
     public String getUsername() {return username;}
+
+
 
     public boolean isMatchingPassword(String password) {
         return encoder.matches(password, pwHash);
