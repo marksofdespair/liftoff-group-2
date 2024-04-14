@@ -8,7 +8,7 @@ import org.teamlaika.laikaspetpark.models.CatApi;
 
 import java.util.List;
 
-@CrossOrigin(origins = "https://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/cat-breeds")
 public class CatApiController {

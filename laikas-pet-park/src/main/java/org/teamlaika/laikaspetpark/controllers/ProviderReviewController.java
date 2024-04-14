@@ -7,7 +7,7 @@ import org.teamlaika.laikaspetpark.models.data.ProviderReviewRepository;
 import java.util.List;
 
 // REST Controller to handle incoming requests for managing provider reviews.
-@CrossOrigin(origins = "https://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/provider-reviews") // Using this as the base path for all endpoints in this controller
 public class ProviderReviewController {
