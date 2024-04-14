@@ -20,7 +20,7 @@ import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("api/user")
 public class OwnerController {
     @Autowired
     private OwnerRepository ownerRepository;
