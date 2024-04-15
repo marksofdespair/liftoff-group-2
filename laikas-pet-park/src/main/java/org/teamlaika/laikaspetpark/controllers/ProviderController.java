@@ -13,14 +13,26 @@ import org.teamlaika.laikaspetpark.models.User;
 import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
-@RequestMapping("/providers")
+@RequestMapping("/api/providers")
 public class ProviderController {
     @Autowired
-    private ProviderRepository providerRepository;
+    private ProviderRepository providerRepository; // Assuming you have a ProviderRepository
+
+    @GetMapping
+    public List<Provider> getAllProviders() {
+        Iterable<Provider> providerIterable = providerRepository.findAll(); // Assuming findAll() returns an Iterable<Provider>
+        List<Provider> providerList = new ArrayList<>();
+        providerIterable.forEach(providerList::add);
+        return providerList;
+    }
+
     @GetMapping("/")
     public String index(Model model){
         model.addAttribute("owner", providerRepository.findAll());

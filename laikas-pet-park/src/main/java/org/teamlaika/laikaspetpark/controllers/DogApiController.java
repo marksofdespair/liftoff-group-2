@@ -10,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("api/dog-breeds")
+@RequestMapping("/api/dog-breeds")
 public class DogApiController {
 
     private final ApiService apiService;

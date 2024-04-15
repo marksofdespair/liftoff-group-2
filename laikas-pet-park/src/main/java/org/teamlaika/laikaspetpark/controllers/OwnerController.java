@@ -19,6 +19,7 @@ import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
 @RequestMapping("api/user")
 public class OwnerController {

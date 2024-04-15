@@ -13,8 +13,9 @@ import org.teamlaika.laikaspetpark.models.data.ServiceListingRepository;
 
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
-@RequestMapping("/services")
+@RequestMapping("/api/services")
 public class ServiceController {
     @Autowired
     private ServiceListingRepository serviceRepository;

@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
-@RequestMapping("/pets")
+@RequestMapping("/api/pets")
 public class PetController {
 
     //private static List<Pet> pets = new ArrayList<>();
@@ -65,10 +66,9 @@ public class PetController {
     }
 
     @PostMapping("create-dog")
-    public String processCreateDogForm(@RequestParam Pet pet) {
+    public String processCreateDogForm(@ModelAttribute @Valid Pet pet) {
         String species = "Dog";
         petRepository.save(pet);
-
         return "redirect:precreate";
     }
 
@@ -79,12 +79,12 @@ public class PetController {
     }
 
     @PostMapping("create-cat")
-    public String processCreateCatForm(@RequestParam Pet pet) {
+    public String processCreateCatForm(@ModelAttribute @Valid Pet pet) {
         String species = "Cat";
         petRepository.save(pet);
         return "redirect:precreate";
-
     }
+
     @GetMapping("update/{petId}")
     public String displayUpdatePetForm(Model model, @RequestParam int petId){
         Optional<Pet> optPet = petRepository.findById(petId);
