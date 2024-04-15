@@ -1,14 +1,21 @@
 package org.teamlaika.laikaspetpark.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Owner extends User {
+public class Owner {
+
+    @Id
+    @GeneratedValue
+    private int Id;
+
+    @OneToOne(mappedBy = "owner")
+    private User user;
+    //public String username;
+
     @OneToMany
     @JoinColumn(name = "owner_id")
     private final List<Pet> pets = new ArrayList<>();
@@ -19,6 +26,7 @@ public class Owner extends User {
     public List<Pet> getPets() {
         return pets;
     }
+
 
 
 }

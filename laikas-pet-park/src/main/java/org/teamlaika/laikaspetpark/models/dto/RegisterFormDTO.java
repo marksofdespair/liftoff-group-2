@@ -15,8 +15,6 @@ public class RegisterFormDTO extends org.teamlaika.laikaspetpark.models.dto.Logi
     private String email;
     private String verifyPassword;
 
-    @NotNull
-    private String accountType;
 
     public String getVerifyPassword() {
         return verifyPassword;
@@ -42,11 +40,5 @@ public class RegisterFormDTO extends org.teamlaika.laikaspetpark.models.dto.Logi
         this.email = email;
     }
 
-    public String getAccountType() {
-        return accountType;
-    }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
-    }
 }

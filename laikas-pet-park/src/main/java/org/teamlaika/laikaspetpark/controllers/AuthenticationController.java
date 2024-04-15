@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.teamlaika.laikaspetpark.models.Owner;
+import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
 import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
@@ -84,19 +85,32 @@ public class AuthenticationController {
             model.addAttribute("title", "Register");
             return "register";
         }
-// TODO Add in accountType as a field and depending on that field, add user to the appropriate repository
 
         User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail(), registerFormDTO.getAccountType());
 
-        if (registerFormDTO.getAccountType() == "Regular User"){
-            ownerRepository.save(newUser);
+
+        if (registerFormDTO.getAccountType().equals("Owner")) {
+            Owner newOwner = new Owner();
+            newUser.setOwner(newOwner);
+
+            userRepository.save(newUser);
+            setUserInSession(request.getSession(), newUser);
+
+            return "redirect:/user";
+
+        } else if (registerFormDTO.getAccountType().equals("Service Provider")) {
+            Provider newProvider = new Provider();
+            newUser.setProvider(newProvider);
+
+            userRepository.save(newUser);
+            setUserInSession(request.getSession(), newUser);
+
+            return "redirect:/providers";
+        } else {
+
+            return "redirect:";
         }
-        userRepository.save(newUser);
-        setUserInSession(request.getSession(), newUser);
-
-        return "redirect:";
     }
-
     //Handling User Login
     @GetMapping("/login")
     public String displayLoginForm(Model model) {
@@ -130,6 +144,16 @@ public class AuthenticationController {
             errors.rejectValue("password", "password.invalid", "Invalid password");
             model.addAttribute("title", "Log In");
             return "login";
+        }
+
+        String accountType = loginFormDTO.getAccountType();
+
+        if (accountType.equals("Owner") && theUser.getAccountType().equals("Owner")){
+            setUserInSession(request.getSession(), theUser);
+            return "redirect:/user";
+        }else if (accountType.equals("Service Provider") && theUser.getAccountType().equals("Service Provider")) {
+            setUserInSession(request.getSession(), theUser);
+            return "redirect:/providers";
         }
         // TODO be sure to save user name and profile type to be saved in the session.
         setUserInSession(request.getSession(), theUser);
