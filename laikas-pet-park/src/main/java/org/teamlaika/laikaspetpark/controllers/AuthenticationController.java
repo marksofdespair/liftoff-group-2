@@ -60,6 +60,7 @@ public class AuthenticationController {
         model.addAttribute("title", "Register");
         return "register";
     }
+
     @PostMapping("/register")
     public String processRegistrationForm(@ModelAttribute @Valid RegisterFormDTO registerFormDTO,
                                           Errors errors, HttpServletRequest request,
@@ -96,20 +97,22 @@ public class AuthenticationController {
             userRepository.save(newUser);
             setUserInSession(request.getSession(), newUser);
 
-            return "redirect:/user";
 
-        } else if (registerFormDTO.getAccountType().equals("Service Provider")) {
+            return "";
+
+        } else if (registerFormDTO.getAccountType().equals("Provider")) {
             Provider newProvider = new Provider();
             newUser.setProvider(newProvider);
+            System.out.println("I Provide");
 
             userRepository.save(newUser);
             setUserInSession(request.getSession(), newUser);
 
             return "redirect:/providers";
         } else {
-
             return "redirect:";
         }
+
     }
     //Handling User Login
     @GetMapping("/login")
@@ -148,19 +151,19 @@ public class AuthenticationController {
 
         String accountType = loginFormDTO.getAccountType();
 
-        if (accountType.equals("Owner") && theUser.getAccountType().equals("Owner")){
+        if (accountType.equals("Owner") && theUser.getOwner() != null) {
             setUserInSession(request.getSession(), theUser);
-            return "redirect:/user";
-        }else if (accountType.equals("Service Provider") && theUser.getAccountType().equals("Service Provider")) {
+            return "redirect: /owner";
+        } else if (accountType.equals("Service Provider") && theUser.getProvider() != null) {
             setUserInSession(request.getSession(), theUser);
-            return "redirect:/providers";
+            return "redirect: /provider";
+        } else {
+            // TODO be sure to save user name and profile type to be saved in the session.
+            setUserInSession(request.getSession(), theUser);
+
+            return "redirect:";
         }
-        // TODO be sure to save user name and profile type to be saved in the session.
-        setUserInSession(request.getSession(), theUser);
-
-        return "redirect:";
     }
-
     @GetMapping("/logout")
     public String logout(HttpServletRequest request){
         request.getSession().invalidate();

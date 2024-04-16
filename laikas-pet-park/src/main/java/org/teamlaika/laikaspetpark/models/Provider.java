@@ -30,6 +30,9 @@ public class Provider {
 
     public List<Service> getServices() {return services;}
 
+    public int getId() {
+        return Id;
+    }
     public boolean isGroomer() {
         return isGroomer;
     }

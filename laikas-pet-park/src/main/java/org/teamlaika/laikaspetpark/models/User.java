@@ -2,12 +2,13 @@ package org.teamlaika.laikaspetpark.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
-public class User extends AbstractEntity {
+public class User {
     @Id
     @GeneratedValue
     private int Id;
@@ -29,15 +30,16 @@ public class User extends AbstractEntity {
     @Email
     private String email;
 
-   @NotNull
-   private String accountType;
+    @NotNull
+    private String accountType;
 
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public User() {}
+    public User() {
+    }
 
-    public User(String name,String username, String password, String email, String accountType) {
+    public User(String name, String username, String password, String email, String accountType) {
         this.name = name;
         this.username = username;
         this.pwHash = encoder.encode(password);
@@ -46,7 +48,13 @@ public class User extends AbstractEntity {
     }
 
 
-    public String getUsername() {return username;}
+    public String getUsername() {
+        return username;
+    }
+
+    public int getId() {
+        return Id;
+    }
 
 
 
@@ -70,12 +78,12 @@ public class User extends AbstractEntity {
         this.provider = provider;
     }
 
-    @Override
+    //@Override
     public String getName() {
         return name;
     }
 
-    @Override
+    //@Override
     public void setName(String name) {
         this.name = name;
     }

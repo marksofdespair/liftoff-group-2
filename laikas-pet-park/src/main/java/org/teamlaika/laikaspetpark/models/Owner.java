@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Owner {
+public class Owner{
 
     @Id
     @GeneratedValue
@@ -14,7 +14,7 @@ public class Owner {
 
     @OneToOne(mappedBy = "owner")
     private User user;
-    //public String username;
+//    public String username;
 
     @OneToMany
     @JoinColumn(name = "owner_id")
