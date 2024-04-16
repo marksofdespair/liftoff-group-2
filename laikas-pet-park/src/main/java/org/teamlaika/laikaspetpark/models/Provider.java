@@ -1,12 +1,20 @@
 package org.teamlaika.laikaspetpark.models;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Provider extends User {
+@Entity
+public class Provider {
+
+    @Id
+    @GeneratedValue
+    private int Id;
+
+    @OneToOne(mappedBy = "provider")
+    private User user;
+    //public String username;
     @OneToMany
     @JoinColumn(name = "provider_id")
     private final List<Service> services = new ArrayList<>();
@@ -22,6 +30,9 @@ public class Provider extends User {
 
     public List<Service> getServices() {return services;}
 
+    public int getId() {
+        return Id;
+    }
     public boolean isGroomer() {
         return isGroomer;
     }
@@ -53,4 +64,6 @@ public class Provider extends User {
     public void setTrainer(boolean trainer) {
         isTrainer = trainer;
     }
+
+
 }
