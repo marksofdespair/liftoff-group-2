@@ -1,9 +1,6 @@
 package org.teamlaika.laikaspetpark.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
@@ -17,6 +14,8 @@ public class Pet {
     private String name;
     @ManyToOne
     private Owner owner;
+    @OneToOne
+    private PetInfo petInfo;
     private String species;
     private String breed;
     private String description;
@@ -55,6 +54,13 @@ public class Pet {
         this.owner = owner;
     }
 
+    public PetInfo getPetInfo() {
+        return petInfo;
+    }
+
+    public void setPetInfo(PetInfo petInfo) {
+        this.petInfo = petInfo;
+    }
 
     public String getSpecies() {
         return species;

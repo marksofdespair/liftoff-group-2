@@ -39,6 +39,7 @@ public class OwnerController {
     public String list(Model model, Owner owner, @RequestParam int ownerId){
         model.addAttribute("owner", ownerRepository.findById(ownerId));
         model.addAttribute("pets", owner.getPets());
+        model.addAttribute("title", "Your Pets");
         return "display";
     }
     @GetMapping("delete/{ownerId}")
@@ -48,6 +49,7 @@ public class OwnerController {
         if (optOwner.isPresent()) {
             Owner owner = (Owner) optOwner.get();
             model.addAttribute("owner", owner);
+            model.addAttribute("title", "Delete Account?");
             return "users/delete";
         } else {
             return "redirect:";
@@ -61,6 +63,9 @@ public class OwnerController {
             return "delete/{ownerId}";
         }
         if (passwordInput.equals(password)){
+            for(Pet pet : owner.getPets()){
+                petRepository.deleteById(pet.getId());
+            }
             ownerRepository.delete(owner);
             return"/";
         }
@@ -73,6 +78,7 @@ public class OwnerController {
         if (optOwner.isPresent()) {
             Owner owner = (Owner) optOwner.get();
             model.addAttribute("owner", owner);
+            model.addAttribute("title", "Update Owner Account");
             return "users/update";
         } else {
             return "redirect:";

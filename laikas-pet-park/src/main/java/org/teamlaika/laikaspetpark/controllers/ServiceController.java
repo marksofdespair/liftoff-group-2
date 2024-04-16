@@ -22,10 +22,12 @@ public class ServiceController {
     @GetMapping("/")
     public String displayServices(Model model, Provider provider){
         model.addAttribute("services", provider.getServices());
+        model.addAttribute("title", "View Appointments");
         return "/";
     }
     @GetMapping("add")
-            public String displayAddServiceForm(){
+            public String displayAddServiceForm(Model model){
+        model.addAttribute("title", "Create a Listing");
         return "services/add";
     }
     @PostMapping("add")
@@ -39,6 +41,7 @@ public class ServiceController {
         if(optService.isPresent()){
             Service service = (Service) optService.get();
             model.addAttribute("service", service);
+            model.addAttribute("title", "Remove an Appointment");
             return "services/delete";
         }
 

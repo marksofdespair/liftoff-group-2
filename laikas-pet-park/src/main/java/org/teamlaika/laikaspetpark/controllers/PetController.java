@@ -34,6 +34,7 @@ public class PetController {
     @GetMapping
     public String displayAllPets(Model model, Owner owner){
         model.addAttribute("pets", owner.getPets());
+        model.addAttribute("title", "Pets");
         return"/";
     }
 //    @GetMapping
@@ -61,12 +62,14 @@ public class PetController {
     @GetMapping("create-dog")
     public String displayCreateDogForm(Model model) {
         model.addAttribute("breeds", apiService.findAllDogs());
+        model.addAttribute("species", "Dog");
+        model.addAttribute("title", "Add Your Dog");
         return "create-dog";
     }
 
     @PostMapping("create-dog")
     public String processCreateDogForm(@RequestParam Pet pet) {
-        String species = "Dog";
+        //String species = "Dog";
         petRepository.save(pet);
 
         return "redirect:precreate";
@@ -75,12 +78,14 @@ public class PetController {
     @GetMapping("create-cat")
     public String displayCreateCatForm(Model model) {
         model.addAttribute("breeds", apiService.findAllCats());
+        model.addAttribute("species", "Cat");
+        model.addAttribute("title", "Add Your Cat");
         return "create-cat";
     }
 
     @PostMapping("create-cat")
     public String processCreateCatForm(@RequestParam Pet pet) {
-        String species = "Cat";
+        //String species = "Cat";
         petRepository.save(pet);
         return "redirect:precreate";
 
@@ -91,6 +96,7 @@ public class PetController {
         if (optPet.isPresent()) {
             Pet pet = (Pet) optPet.get();
             model.addAttribute("pet", pet);
+            model.addAttribute("title", "Update Your Pet");
             return "edit";
         } else {
             return "redirect:../pets";
@@ -107,6 +113,7 @@ public class PetController {
         if (optPet.isPresent()) {
             Pet pet = (Pet) optPet.get();
             model.addAttribute("pet", pet);
+            model.addAttribute("title", "Remove Pet");
             return "pets/delete";
         } else {
             return "redirect:";
