@@ -1,13 +1,12 @@
 package org.teamlaika.laikaspetpark.models;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Provider {
+public class Provider extends User {
 
     @Id
     @GeneratedValue
@@ -26,8 +25,8 @@ public class Provider {
     private boolean isWalker;
     private boolean isTrainer;
 
-    public Provider(String name, String username, String password, String email, boolean isGroomer, boolean isSitter, boolean isWalker, boolean isTrainer) {
-        super(name, username, password, email);
+    public Provider(boolean isGroomer, boolean isSitter, boolean isWalker, boolean isTrainer) {
+        super();
         this.isGroomer = isGroomer;
         this.isSitter = isSitter;
         this.isWalker = isWalker;

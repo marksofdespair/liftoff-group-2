@@ -1,9 +1,6 @@
 package org.teamlaika.laikaspetpark.models.data;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 import org.teamlaika.laikaspetpark.models.Provider;
 
