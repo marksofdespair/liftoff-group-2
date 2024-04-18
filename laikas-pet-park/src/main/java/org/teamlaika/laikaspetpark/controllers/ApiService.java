@@ -1,14 +1,23 @@
 package org.teamlaika.laikaspetpark.controllers;
 
-import aj.org.objectweb.asm.TypeReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.mysql.cj.xdevapi.JsonArray;
+import com.mysql.cj.xdevapi.JsonParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestClient;
 import org.teamlaika.laikaspetpark.models.CatApi;
 import org.teamlaika.laikaspetpark.models.DogApi;
+import org.teamlaika.laikaspetpark.models.ZipApi;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,6 +27,10 @@ public class ApiService {
 
     private final RestClient catRestClient;
 
+    private final RestClient zipRestClient;
+
+    private final String zipCodeApiKey = System.getenv("ZIPCODEAPI_KEY");
+
     public ApiService() {
         dogRestClient = RestClient.builder()
                 .baseUrl("https://api.thedogapi.com")
@@ -25,6 +38,10 @@ public class ApiService {
 
         catRestClient = RestClient.builder()
                 .baseUrl("https://api.thecatapi.com")
+                .build();
+
+        zipRestClient = RestClient.builder()
+                .baseUrl("https://www.zipcodeapi.com/rest/")
                 .build();
     }
 
@@ -68,5 +85,21 @@ public class ApiService {
                 .uri("/v1/breeds/search?q={breed}", breed)
                 .retrieve()
                 .body(new ParameterizedTypeReference<List<CatApi>>() {});
+    }
+
+    public List<ZipApi> findZipCodesWithinRadiusZipCode(int zipCode, int radius) throws JsonProcessingException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String json = zipRestClient.get()
+                .uri(zipCodeApiKey + "/radius.json/{zipCode}/{radius}/mile",zipCode, radius)
+                .retrieve()
+                .body(String.class);
+
+        JsonNode jsonNode = objectMapper.readValue(json, JsonNode.class);
+
+        String jsonZipCodeArray = jsonNode.get("zip_codes").toString();
+
+        return objectMapper.readValue(jsonZipCodeArray, new TypeReference<>(){});
     }
 }

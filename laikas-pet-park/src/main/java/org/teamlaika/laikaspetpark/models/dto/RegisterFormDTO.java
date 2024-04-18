@@ -15,6 +15,8 @@ public class RegisterFormDTO extends org.teamlaika.laikaspetpark.models.dto.Logi
     private String email;
     private String verifyPassword;
 
+    private int zipCode;
+
 
     public String getVerifyPassword() {
         return verifyPassword;
@@ -40,5 +42,7 @@ public class RegisterFormDTO extends org.teamlaika.laikaspetpark.models.dto.Logi
         this.email = email;
     }
 
+    public int getZipCode() {return zipCode;}
 
+    public void setZipCode(int zipCode) {this.zipCode = zipCode;}
 }

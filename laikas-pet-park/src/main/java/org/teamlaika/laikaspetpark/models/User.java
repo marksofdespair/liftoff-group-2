@@ -33,18 +33,22 @@ public class User {
     @NotNull
     private String accountType;
 
+    @NotNull
+    private int zipCode;
+
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public User() {
     }
 
-    public User(String name, String username, String password, String email, String accountType) {
+    public User(String name, String username, String password, String email, String accountType, int zipCode) {
         this.name = name;
         this.username = username;
         this.pwHash = encoder.encode(password);
         this.email = email;
         this.accountType = accountType;
+        this.zipCode = zipCode;
     }
 
 
@@ -107,4 +111,8 @@ public class User {
     public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
+
+    public int getZipCode() {return zipCode;}
+
+    public void setZipCode(int zipCode) {this.zipCode = zipCode;}
 }
