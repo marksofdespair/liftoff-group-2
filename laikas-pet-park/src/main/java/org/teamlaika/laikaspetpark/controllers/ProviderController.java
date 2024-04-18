@@ -13,6 +13,7 @@ import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
 import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
+import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderSpecification;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 
@@ -25,29 +26,41 @@ public class ProviderController {
     @Autowired
     private ProviderRepository providerRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model) {
         model.addAttribute("owner", providerRepository.findAll());
         return "providers/index";
     }
+
     @GetMapping("index/{providerId}")
-    public String listProvider(Model model, Provider provider, @RequestParam int providerId){
+    public String listProvider(Model model, Provider provider, @RequestParam int providerId) {
         model.addAttribute("provider", providerRepository.findById(providerId));
         model.addAttribute("pets", provider.getServices());
         return "providers/display";
     }
+
     @GetMapping("delete/{providerId}")
     public String displayDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
-                                           Model model){
-        Optional<Provider> optProvider = providerRepository.findByUsername(loginFormDTO.getUsername());
-        if (optProvider.isPresent()) {
-            Provider provider = (Provider) optProvider.get();
+                                           Model model) {
+        User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
+        if (currentUser.getProvider() != null){
+            Provider provider = (Provider) currentUser.getProvider();
             model.addAttribute("provider", provider);
             return "providers/delete";
-        } else {
+        }
+//        Optional<Provider> optProvider = providerRepository.findByUsername(loginFormDTO.getUsername());
+//        if (optProvider.isPresent()) {
+//            Provider provider = (Provider) optProvider.get();
+//            model.addAttribute("provider", provider);
+//            return "providers/delete";
+         else {
             return "redirect:";
         }
     }
+
     @PostMapping("delete/{providerId}")
     public String postDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid Provider provider,
                                         Errors errors, Model model, @RequestParam String passwordInput){
@@ -64,11 +77,17 @@ public class ProviderController {
     @GetMapping("update/{providerId}")
     String displayUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
                              Model model){
-        Optional<Provider> optProvider = providerRepository.findByUsername(loginFormDTO.getUsername());
-        if (optProvider.isPresent()) {
-            Provider provider = (Provider) optProvider.get();
+        User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
+        if (currentUser.getProvider() != null) {
+            Provider provider = (Provider) currentUser.getProvider();
             model.addAttribute("provider", provider);
             return "providers/update";
+
+//        Optional<Provider> optProvider = providerRepository.findByUsername(loginFormDTO.getUsername());
+//        if (optProvider.isPresent()) {
+//            Provider provider = (Provider) optProvider.get();
+//            model.addAttribute("provider", provider);
+//            return "providers/update";
         } else {
             return "redirect:";
         }
