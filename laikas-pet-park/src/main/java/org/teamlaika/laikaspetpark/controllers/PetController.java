@@ -9,6 +9,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.Pet;
+import org.teamlaika.laikaspetpark.models.PetInfo;
+import org.teamlaika.laikaspetpark.models.data.PetPageRepository;
 import org.teamlaika.laikaspetpark.models.data.PetRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@CrossOrigin(origins = "https://localhost:5173")
 @Controller
 @RequestMapping("/pets")
 public class PetController {
@@ -24,6 +27,8 @@ public class PetController {
     //private static List<Pet> pets = new ArrayList<>();
     @Autowired
     private PetRepository petRepository;
+    @Autowired
+    private PetPageRepository petPageRepository;
 
     private final ApiService apiService;
 
@@ -125,8 +130,68 @@ public class PetController {
                                         Errors errors, Model model){
         if (errors.hasErrors()) {
             return "delete/{petId}";
+        } else{
+            PetInfo petInfo = pet.getPetInfo();
+            Optional<PetInfo> optInfo = petPageRepository.findById(petInfo.getId());
+            if(optInfo.isPresent()){
+                petPageRepository.deleteById(petInfo.getId());
+            }
+            petRepository.delete(pet);
+            return "redirect:../pets";
         }
-        petRepository.delete(pet);
-        return "redirect:../pets";
+    }
+
+    @GetMapping("add-pet-profile/{petId}")
+    public String displayPetProfileForm(Model model, @PathVariable int petId){
+        Optional<Pet> optPet = petRepository.findById(petId);
+        if (optPet.isPresent()) {
+            Pet pet = (Pet) optPet.get();
+            model.addAttribute("pet", pet);
+            model.addAttribute("title", "Add Pet Profile");
+            return "/pets/add-pet-profile";
+        } else {
+            return "redirect:";
+        }
+    }
+    @PostMapping("add-pet-profile/{petId}")
+    public String postAddPetProfileForm(@ModelAttribute @Valid Pet pet, @Valid PetInfo petInfo,
+                                        Errors errors, Model model){
+        if(errors.hasErrors()){
+            return "add-pet-profile/{petId}";
+        } else{
+            petPageRepository.save(petInfo);
+            //petRepository.save(pet);
+            return "redirect:";
+        }
+    }
+
+    @GetMapping("update-pet-profile/{petId}")
+    public String getUpdatePetProfileForm(Model model, @PathVariable int petId){
+        Optional<Pet> optPet = petRepository.findById(petId);
+        if(optPet.isPresent()){
+            Pet pet = (Pet) optPet.get();
+            PetInfo petInfo = pet.getPetInfo();
+            Optional<PetInfo> optInfo = petPageRepository.findById(petInfo.getId());
+            if(optInfo.isPresent()){
+                model.addAttribute("pet", pet);
+                model.addAttribute("petInfo", petInfo);
+                model.addAttribute("title", "Update Pet Profile");
+                return "pets/update-pet-profile";
+            }
+            return "pets/add-pet-profile";
+        } else{
+            return "redirect:";
+        }
+    }
+    @PostMapping("update-pet-profile/{petId}")
+    public String postUpdatePetProfileForm(@ModelAttribute @Valid Pet pet, @Valid PetInfo petInfo,
+                                           Errors errors, Model model){
+     if(errors.hasErrors()){
+         return "update-pet-info/{petId}";
+     }   else{
+         petPageRepository.save(petInfo);
+         //petRepository.save(pet);
+         return "redirect:";
+     }
     }
 }
