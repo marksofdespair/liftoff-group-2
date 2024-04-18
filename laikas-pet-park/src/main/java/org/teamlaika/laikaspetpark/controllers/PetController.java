@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/pets")
+@RequestMapping("/api/pets")
 public class PetController {
 
     //private static List<Pet> pets = new ArrayList<>();
