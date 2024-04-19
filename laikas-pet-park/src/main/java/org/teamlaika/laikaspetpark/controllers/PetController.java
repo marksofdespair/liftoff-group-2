@@ -62,12 +62,13 @@ public class PetController {
     @GetMapping("create-dog")
     public String displayCreateDogForm(Model model) {
         model.addAttribute("breeds", apiService.findAllDogs());
+        model.addAttribute("species", "Dog");
         return "create-dog";
     }
 
     @PostMapping("create-dog")
     public String processCreateDogForm(@ModelAttribute @Valid Pet pet) {
-        String species = "Dog";
+        //String species = "Dog";
         petRepository.save(pet);
         return "redirect:precreate";
     }
@@ -75,12 +76,13 @@ public class PetController {
     @GetMapping("create-cat")
     public String displayCreateCatForm(Model model) {
         model.addAttribute("breeds", apiService.findAllCats());
+        model.addAttribute("species", "Cat");
         return "create-cat";
     }
 
     @PostMapping("create-cat")
     public String processCreateCatForm(@ModelAttribute @Valid Pet pet) {
-        String species = "Cat";
+        //String species = "Cat";
         petRepository.save(pet);
         return "redirect:precreate";
     }

@@ -95,7 +95,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/api/register")
-    public ResponseEntity<?> processRegistrationForm(@ModelAttribute @Valid RegisterFormDTO registerFormDTO,
+    public ResponseEntity<?> processRegistrationForm(@RequestBody @Valid RegisterFormDTO registerFormDTO,
                                                       Errors errors, HttpServletRequest request,
                                                       Model model) {
         if (errors.hasErrors()) {
