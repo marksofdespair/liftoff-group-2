@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class PetInfo {
@@ -14,7 +15,9 @@ public class PetInfo {
     @OneToOne
     private Pet pet;
     @NotNull
+    @Size(max = 1000, message = "Description is too long. Leave description under 1000 characters.")
     private String description;
+    @Size(max = 1000, message = "Conditions list is too long. Leave under 1000 characters.")
     private String conditions;
 
     public int getId() {

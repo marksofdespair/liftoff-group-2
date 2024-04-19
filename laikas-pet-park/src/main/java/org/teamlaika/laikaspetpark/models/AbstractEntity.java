@@ -4,6 +4,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
@@ -18,6 +19,7 @@ public class AbstractEntity {
     private int Id;
 
     @NotNull
+    @Size(min=2, max = 50, message = "Name must be between 2 and 50 characters long.")
     //@Size
     private String name;
 
