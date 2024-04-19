@@ -18,6 +18,9 @@ public class LoginFormDTO {
     private String password;
 
 
+    @NotNull
+    private String accountType;
+
     public String getUsername() {
         return username;
     }
@@ -33,5 +36,11 @@ public class LoginFormDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+    public String getAccountType() {
+        return accountType;
+    }
 
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
 }

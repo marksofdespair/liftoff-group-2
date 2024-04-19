@@ -4,26 +4,38 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
+import org.teamlaika.laikaspetpark.models.Owner;
+import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
+import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
+import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 import org.teamlaika.laikaspetpark.models.dto.RegisterFormDTO;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-@Controller
+@CrossOrigin(origins = "http://localhost:5173")
+@RestController
 public class AuthenticationController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    OwnerRepository ownerRepository;
+    @Autowired
+    ProviderRepository providerRepository;
 
-    //Session-Handling Utilities
+    // Session-Handling Utilities
     private static final String userSessionKey = "username";
 
     public User getUserFromSession(HttpSession session) {
@@ -45,89 +57,197 @@ public class AuthenticationController {
         session.setAttribute(userSessionKey, user.getId());
     }
 
-    //Registering New Users
-    @GetMapping("/register")
-    public String displayRegistrationForm(Model model) {
-        model.addAttribute(new RegisterFormDTO());
-        model.addAttribute("title", "Register");
-        return "register";
-    }
-    @PostMapping("/register")
-    public String processRegistrationForm(@ModelAttribute @Valid RegisterFormDTO registerFormDTO,
-                                          Errors errors, HttpServletRequest request,
-                                          Model model) {
+    // Custom response object for Registration
+    public static class RegistrationResponse {
+        private final String message;
+        private final Map<String, Object> args;
+        private final Map<String, Object> headers;
+        private final String url;
 
+        public RegistrationResponse(String message) {
+            this.message = message;
+            this.args = new HashMap<>();
+            this.headers = new HashMap<>();
+            this.url = "";
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public Map<String, Object> getArgs() {
+            return args;
+        }
+
+        public Map<String, Object> getHeaders() {
+            return headers;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+    }
+
+    // Registering New Users
+    @GetMapping("/api/register")
+    public ResponseEntity<?> displayRegistrationForm(Model model) {
+        return ResponseEntity.ok(new RegistrationResponse("Registration form"));
+    }
+
+    @PostMapping("/api/register")
+    public ResponseEntity<?> processRegistrationForm(@RequestBody @Valid RegisterFormDTO registerFormDTO,
+                                                      Errors errors, HttpServletRequest request,
+                                                      Model model) {
         if (errors.hasErrors()) {
-            model.addAttribute("title", "Register");
-            return "register";
+            Map<String, String> validationErrors = new HashMap<>();
+            for (FieldError error : errors.getFieldErrors()) {
+                validationErrors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(validationErrors);
         }
 
         User existingUser = userRepository.findByUsername(registerFormDTO.getUsername());
 
         if (existingUser != null) {
-            errors.rejectValue("username", "username.alreadyexists", "A user with that username already exists");
-            model.addAttribute("title", "Register");
-            return "register";
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new RegistrationResponse("A user with that username already exists"));
         }
 
         String password = registerFormDTO.getPassword();
         String verifyPassword = registerFormDTO.getVerifyPassword();
         if (!password.equals(verifyPassword)) {
-            errors.rejectValue("password", "passwords.mismatch", "Passwords do not match");
-            model.addAttribute("title", "Register");
-            return "register";
+            return ResponseEntity.badRequest().body(new RegistrationResponse("Passwords do not match"));
         }
 
-        User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail());
-        userRepository.save(newUser);
-        setUserInSession(request.getSession(), newUser);
+        User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail(), registerFormDTO.getAccountType());
 
-        return "redirect:";
+        if (registerFormDTO.getAccountType().equals("Owner")) {
+            Owner newOwner = new Owner();
+            newUser.setOwner(newOwner);
+
+            userRepository.save(newUser);
+            setUserInSession(request.getSession(), newUser);
+
+            return ResponseEntity.ok(new RegistrationResponse("Registration successful"));
+        } else if (registerFormDTO.getAccountType().equals("Provider")) {
+            Provider newProvider = new Provider();
+            newUser.setProvider(newProvider);
+
+            userRepository.save(newUser);
+            setUserInSession(request.getSession(), newUser);
+
+            return ResponseEntity.ok(new RegistrationResponse("Registration successful"));
+        } else {
+            return ResponseEntity.badRequest().body(new RegistrationResponse("Invalid account type"));
+        }
     }
 
-    //Handling User Login
-    @GetMapping("/login")
-    public String displayLoginForm(Model model) {
-        model.addAttribute(new LoginFormDTO());
-        model.addAttribute("title", "Log In");
-        return "login";
+    // Custom response object for Login
+    public static class LoginResponse {
+        private final String message;
+        private final Map<String, Object> args;
+        private final Map<String, Object> headers;
+        private final String url;
+
+        public LoginResponse(String message) {
+            this.message = message;
+            this.args = new HashMap<>();
+            this.headers = new HashMap<>();
+            this.url = "";
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public Map<String, Object> getArgs() {
+            return args;
+        }
+
+        public Map<String, Object> getHeaders() {
+            return headers;
+        }
+
+        public String getUrl() {
+            return url;
+        }
     }
-    @PostMapping("/login")
-    public String processLoginForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
-                                   Errors errors, HttpServletRequest request,
-                                   Model model) {
+
+    // Handling User Login
+    @GetMapping("/api/login")
+    public ResponseEntity<?> displayLoginForm(Model model) {
+        return ResponseEntity.ok(new LoginResponse("Login form"));
+    }
+
+    @PostMapping("/api/login")
+    public ResponseEntity<?> processLoginForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
+                                              Errors errors, HttpServletRequest request,
+                                              Model model) {
 
         if (errors.hasErrors()) {
-            model.addAttribute("title", "Log In");
-            return "login";
+            return ResponseEntity.badRequest().body(new LoginResponse("Validation failed"));
         }
-
-        // TODO: Check user accountType. Depending on type, check that repo.
 
         User theUser = userRepository.findByUsername(loginFormDTO.getUsername());
 
         if (theUser == null) {
-            errors.rejectValue("username", "user.invalid", "The given username does not exist");
-            model.addAttribute("title", "Log In");
-            return "login";
+            return ResponseEntity.notFound().build();
         }
 
         String password = loginFormDTO.getPassword();
 
         if (!theUser.isMatchingPassword(password)) {
-            errors.rejectValue("password", "password.invalid", "Invalid password");
-            model.addAttribute("title", "Log In");
-            return "login";
+            return ResponseEntity.badRequest().body(new LoginResponse("Invalid password"));
         }
-        // TODO be sure to save user name and profile type to be saved in the session.
-        setUserInSession(request.getSession(), theUser);
 
-        return "redirect:";
+        String accountType = loginFormDTO.getAccountType();
+
+        if (accountType.equals("Owner") && theUser.getOwner() != null) {
+            setUserInSession(request.getSession(), theUser);
+            return ResponseEntity.ok(new LoginResponse("Login successful"));
+        } else if (accountType.equals("Service Provider") && theUser.getProvider() != null) {
+            setUserInSession(request.getSession(), theUser);
+            return ResponseEntity.ok(new LoginResponse("Login successful"));
+        } else {
+            // TODO be sure to save user name and profile type to be saved in the session.
+            setUserInSession(request.getSession(), theUser);
+            return ResponseEntity.ok(new LoginResponse("Login successful"));
+        }
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
+    // Custom response object for Logout
+    public static class LogoutResponse {
+        private final String message;
+        private final Map<String, Object> args;
+        private final Map<String, Object> headers;
+        private final String url;
+
+        public LogoutResponse(String message) {
+            this.message = message;
+            this.args = new HashMap<>();
+            this.headers = new HashMap<>();
+            this.url = "";
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public Map<String, Object> getArgs() {
+            return args;
+        }
+
+        public Map<String, Object> getHeaders() {
+            return headers;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+    }
+
+    @GetMapping("/api/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
         request.getSession().invalidate();
-        return "redirect:/login";
+        return ResponseEntity.ok(new LogoutResponse("Logout successful"));
     }
 }

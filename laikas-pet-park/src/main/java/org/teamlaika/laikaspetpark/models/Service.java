@@ -2,7 +2,6 @@ package org.teamlaika.laikaspetpark.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-//import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Objects;
 
@@ -18,7 +17,7 @@ public class Service {
     @OneToOne
     private Pet pet;
     private String location;
-    //private DateTimeFormat dateTime;
+
 
     public String getTitle() {
         return title;
@@ -52,18 +51,18 @@ public class Service {
         this.location = location;
     }
 
-    //public DateTimeFormat getDateTime() {
-    //    return dateTime;
-    //}
 
-    //public void setDateTime(DateTimeFormat dateTime) {
-    //    this.dateTime = dateTime;
-    //}
 
     public int getId() {
         return id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Service service)) return false;
+        return id == service.id && Objects.equals(getTitle(), service.getTitle()) && Objects.equals(getProvider(), service.getProvider()) && Objects.equals(getPet(), service.getPet()) && Objects.equals(getLocation(), service.getLocation());
+    }
 
     @Override
     public int hashCode() {
