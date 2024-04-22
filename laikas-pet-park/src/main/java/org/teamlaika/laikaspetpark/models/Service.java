@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 public class Service {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
     private String title;

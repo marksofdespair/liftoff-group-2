@@ -9,7 +9,7 @@ import java.util.List;
 public class Provider {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
     @OneToOne(mappedBy = "provider")
