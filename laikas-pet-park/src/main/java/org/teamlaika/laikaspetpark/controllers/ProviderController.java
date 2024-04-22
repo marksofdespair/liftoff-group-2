@@ -31,7 +31,7 @@ public class ProviderController {
     @GetMapping("index/{providerId}")
     public String listProvider(Model model, Provider provider, @RequestParam int providerId){
         model.addAttribute("provider", providerRepository.findById(providerId));
-        model.addAttribute("pets", provider.getServices());
+        model.addAttribute("services", provider.getSkills());
         model.addAttribute("title", "Provider");
         return "providers/display";
     }

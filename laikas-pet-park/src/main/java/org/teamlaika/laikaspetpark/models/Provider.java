@@ -18,10 +18,28 @@ public class Provider extends User {
     private boolean isSitter;
     private boolean isWalker;
     private boolean isTrainer;
+
     public Provider(){
         super();
     }
 
+    public List<String> skills = new ArrayList<>();
+
+    public List<String> getSkills() {
+        if(isGroomer == true){
+            skills.add("Grooming");
+        }
+        if(isSitter == true){
+            skills.add("Sitting");
+        }
+        if(isWalker == true){
+            skills.add("Walking");
+        }
+        if(isTrainer == true){
+            skills.add("Training");
+        }
+        return skills;
+    }
     public List<Service> getServices() {return services;}
 
     public boolean isGroomer() {
