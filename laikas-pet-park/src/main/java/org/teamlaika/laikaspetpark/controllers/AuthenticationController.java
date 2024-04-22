@@ -204,7 +204,7 @@ public class AuthenticationController {
         if (accountType.equals("Owner") && theUser.getOwner() != null) {
             setUserInSession(request.getSession(), theUser);
             return ResponseEntity.ok(new LoginResponse("Login successful"));
-        } else if (accountType.equals("Service Provider") && theUser.getProvider() != null) {
+        } else if (accountType.equals("Provider") && theUser.getProvider() != null) {
             setUserInSession(request.getSession(), theUser);
             return ResponseEntity.ok(new LoginResponse("Login successful"));
         } else {
