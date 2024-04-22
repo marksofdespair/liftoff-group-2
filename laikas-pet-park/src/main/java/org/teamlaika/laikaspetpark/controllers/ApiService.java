@@ -18,6 +18,8 @@ import org.teamlaika.laikaspetpark.models.ZipApi;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -96,10 +98,14 @@ public class ApiService {
                 .retrieve()
                 .body(String.class);
 
-        JsonNode jsonNode = objectMapper.readValue(json, JsonNode.class);
+        JsonNode zipsNode = objectMapper.readValue(json, JsonNode.class);
 
-        String jsonZipCodeArray = jsonNode.get("zip_codes").toString();
+        String jsonZipCodeArray = zipsNode.get("zip_codes").toString();
 
-        return objectMapper.readValue(jsonZipCodeArray, new TypeReference<>(){});
+        List<ZipApi> zipApis = objectMapper.readValue(jsonZipCodeArray, new TypeReference<List<ZipApi>>(){});
+
+        Collections.sort(zipApis);
+
+        return zipApis;
     }
 }

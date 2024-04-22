@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Owner{
+public class Owner extends User{
 
     @Id
     @GeneratedValue

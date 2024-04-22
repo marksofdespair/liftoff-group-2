@@ -1,7 +1,6 @@
 package org.teamlaika.laikaspetpark.models;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +17,7 @@ public class Provider extends User {
     @OneToMany
     @JoinColumn(name = "provider_id")
     private final List<Service> services = new ArrayList<>();
-
     private boolean isGroomer;
-
     private boolean isSitter;
     private boolean isWalker;
     private boolean isTrainer;

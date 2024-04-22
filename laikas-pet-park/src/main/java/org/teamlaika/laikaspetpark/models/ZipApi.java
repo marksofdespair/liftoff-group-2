@@ -1,4 +1,9 @@
 package org.teamlaika.laikaspetpark.models;
 
-public record ZipApi(int zipCode, float distance) {
+import java.util.Comparator;
+
+public record ZipApi(Integer zipCode, Float distance) implements Comparable<ZipApi> {
+    public int compareTo(ZipApi zipApi) {
+        return distance().compareTo(zipApi.distance());
+    }
 }

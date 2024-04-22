@@ -36,9 +36,9 @@ public class ProviderController {
     }
 
     @GetMapping("index/{providerId}")
-    public String listProvider(Model model, Provider provider, @RequestParam int providerId) {
+    public String listProvider(@PathVariable int providerId, Model model) {
         model.addAttribute("provider", providerRepository.findById(providerId));
-        model.addAttribute("pets", provider.getServices());
+//        model.addAttribute("services", provider.getServices());
         return "providers/display";
     }
 
@@ -120,7 +120,11 @@ public class ProviderController {
                 Specification.where(ProviderSpecification.hasSkills(isGroomer,isSitter,isWalker,isTrainer))
         );
 
-        model.addAttribute("providers",providers);
+        if (providers.isEmpty()) {
+            model.addAttribute("providers", providerRepository.findAll());
+        } else {
+            model.addAttribute("providers",providers);
+        }
 
         return "redirect:search";
     }
