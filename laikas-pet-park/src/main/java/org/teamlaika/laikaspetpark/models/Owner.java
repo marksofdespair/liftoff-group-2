@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Owner extends User{
+public class Owner {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int Id;
 
     @OneToOne(mappedBy = "owner")

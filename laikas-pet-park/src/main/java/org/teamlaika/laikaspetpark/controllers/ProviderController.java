@@ -1,6 +1,7 @@
 package org.teamlaika.laikaspetpark.controllers;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -11,12 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
+import org.teamlaika.laikaspetpark.models.ZipApi;
 import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderSpecification;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +31,12 @@ public class ProviderController {
 
     @Autowired
     private UserRepository userRepository;
+
+    private final ApiService apiService;
+
+    public ProviderController(ApiService apiService) {
+        this.apiService = apiService;
+    }
 
     @GetMapping("/")
     public String index(Model model) {
@@ -126,7 +135,21 @@ public class ProviderController {
             model.addAttribute("providers",providers);
         }
 
-        return "redirect:search";
+        return "providers/search";
     }
+
+    @GetMapping("search2")
+    public String displayProviderSearchForm2() {return "providers/search2";}
+
+    @PostMapping("search2")
+    public String processProviderSearchForm2(@RequestParam Integer location,
+                                             @RequestParam Integer radius,
+                                             Model model) throws JsonProcessingException {
+
+        model.addAttribute("locations", apiService.findZipCodesWithinRadiusZipCode(location, radius));
+
+        return "providers/search2";
+    }
+
 
 }

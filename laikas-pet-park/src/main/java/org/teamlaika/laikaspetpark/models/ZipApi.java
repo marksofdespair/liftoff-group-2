@@ -1,8 +1,9 @@
 package org.teamlaika.laikaspetpark.models;
 
-import java.util.Comparator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public record ZipApi(Integer zipCode, Float distance) implements Comparable<ZipApi> {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record ZipApi(Integer zip_code, Float distance) implements Comparable<ZipApi> {
     public int compareTo(ZipApi zipApi) {
         return distance().compareTo(zipApi.distance());
     }

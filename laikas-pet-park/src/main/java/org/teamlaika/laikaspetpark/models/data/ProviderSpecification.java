@@ -19,25 +19,25 @@ public class ProviderSpecification {
 
             if (isGroomer != null) {
                 providerPredicates.add(
-                    criteriaBuilder.equal(root.get("isGroomer"), 1)
+                    criteriaBuilder.equal(root.get("isGroomer"), true)
                 );
             }
 
             if (isSitter != null) {
                 providerPredicates.add(
-                        criteriaBuilder.equal(root.get("isSitter"), 1)
+                        criteriaBuilder.equal(root.get("isSitter"), true)
                 );
             }
 
             if (isTrainer != null) {
                 providerPredicates.add(
-                        criteriaBuilder.equal(root.get("isTrainer"), 1)
+                        criteriaBuilder.equal(root.get("isTrainer"), true)
                 );
             }
 
             if (isWalker != null) {
                 providerPredicates.add(
-                        criteriaBuilder.equal(root.get("isWalker"), 1)
+                        criteriaBuilder.equal(root.get("isWalker"), true)
                 );
             }
 

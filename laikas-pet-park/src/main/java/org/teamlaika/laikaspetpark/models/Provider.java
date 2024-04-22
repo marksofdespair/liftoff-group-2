@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Provider extends User {
+public class Provider {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int Id;
 
     @OneToOne(mappedBy = "provider")

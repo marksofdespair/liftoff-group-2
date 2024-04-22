@@ -89,7 +89,7 @@ public class ApiService {
                 .body(new ParameterizedTypeReference<List<CatApi>>() {});
     }
 
-    public List<ZipApi> findZipCodesWithinRadiusZipCode(int zipCode, int radius) throws JsonProcessingException {
+    public List<ZipApi> findZipCodesWithinRadiusZipCode(Integer zipCode, Integer radius) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
 

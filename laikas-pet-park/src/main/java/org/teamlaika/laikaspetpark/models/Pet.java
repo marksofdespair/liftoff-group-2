@@ -1,9 +1,6 @@
 package org.teamlaika.laikaspetpark.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
@@ -11,7 +8,7 @@ import java.util.Objects;
 public class Pet {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
     private String name;
