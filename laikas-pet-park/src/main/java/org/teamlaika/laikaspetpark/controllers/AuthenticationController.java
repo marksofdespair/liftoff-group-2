@@ -10,7 +10,11 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.teamlaika.laikaspetpark.models.Owner;
+import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
+import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
+import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 import org.teamlaika.laikaspetpark.models.dto.RegisterFormDTO;
@@ -22,6 +26,10 @@ public class AuthenticationController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    OwnerRepository ownerRepository;
+    @Autowired
+    ProviderRepository providerRepository;
 
     //Session-Handling Utilities
     private static final String userSessionKey = "username";
@@ -52,6 +60,7 @@ public class AuthenticationController {
         model.addAttribute("title", "Register");
         return "register";
     }
+
     @PostMapping("/register")
     public String processRegistrationForm(@ModelAttribute @Valid RegisterFormDTO registerFormDTO,
                                           Errors errors, HttpServletRequest request,
@@ -78,13 +87,33 @@ public class AuthenticationController {
             return "register";
         }
 
-        User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail());
-        userRepository.save(newUser);
-        setUserInSession(request.getSession(), newUser);
+        User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail(), registerFormDTO.getAccountType());
 
-        return "redirect:";
+
+        if (registerFormDTO.getAccountType().equals("Owner")) {
+            Owner newOwner = new Owner();
+            newUser.setOwner(newOwner);
+
+            userRepository.save(newUser);
+            setUserInSession(request.getSession(), newUser);
+
+
+            return "";
+
+        } else if (registerFormDTO.getAccountType().equals("Provider")) {
+            Provider newProvider = new Provider();
+            newUser.setProvider(newProvider);
+            System.out.println("I Provide");
+
+            userRepository.save(newUser);
+            setUserInSession(request.getSession(), newUser);
+
+            return "redirect:/providers";
+        } else {
+            return "redirect:";
+        }
+
     }
-
     //Handling User Login
     @GetMapping("/login")
     public String displayLoginForm(Model model) {
@@ -119,12 +148,22 @@ public class AuthenticationController {
             model.addAttribute("title", "Log In");
             return "login";
         }
-        // TODO be sure to save user name and profile type to be saved in the session.
-        setUserInSession(request.getSession(), theUser);
 
-        return "redirect:";
+        String accountType = loginFormDTO.getAccountType();
+
+        if (accountType.equals("Owner") && theUser.getOwner() != null) {
+            setUserInSession(request.getSession(), theUser);
+            return "redirect: /owner";
+        } else if (accountType.equals("Service Provider") && theUser.getProvider() != null) {
+            setUserInSession(request.getSession(), theUser);
+            return "redirect: /provider";
+        } else {
+            // TODO be sure to save user name and profile type to be saved in the session.
+            setUserInSession(request.getSession(), theUser);
+
+            return "redirect:";
+        }
     }
-
     @GetMapping("/logout")
     public String logout(HttpServletRequest request){
         request.getSession().invalidate();
