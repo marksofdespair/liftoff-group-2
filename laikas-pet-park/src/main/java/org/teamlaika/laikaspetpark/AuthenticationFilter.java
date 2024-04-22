@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AuthenticationFilter implements HandlerInterceptor {
 
-    @Autowired
+   /* @Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -54,5 +54,5 @@ public class AuthenticationFilter implements HandlerInterceptor {
         // The user is NOT logged in
         response.sendRedirect("/login");
         return false;
-    }
+    } */
 }

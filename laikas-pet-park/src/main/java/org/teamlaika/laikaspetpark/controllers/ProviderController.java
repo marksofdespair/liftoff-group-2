@@ -18,7 +18,7 @@ import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/providers")
+@RequestMapping("/api/providers")
 public class ProviderController {
     @Autowired
     private ProviderRepository providerRepository;
