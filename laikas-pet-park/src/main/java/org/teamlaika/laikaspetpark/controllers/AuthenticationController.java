@@ -19,8 +19,9 @@ import org.teamlaika.laikaspetpark.models.dto.RegisterFormDTO;
 
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173")
+//@CrossOrigin(origins = "http://localhost:5173")
 @RestController
+@RequestMapping("/api")
 public class AuthenticationController {
 
     @Autowired
@@ -57,7 +58,7 @@ public class AuthenticationController {
     public String displayRegistrationForm(Model model) {
         model.addAttribute(new RegisterFormDTO());
         model.addAttribute("title", "Register");
-        return "register";
+        return "/api/register";
     }
 
     @PostMapping("/api/register")
@@ -67,7 +68,7 @@ public class AuthenticationController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Register");
-            return "register";
+            return "/api/register";
         }
 
         User existingUser = userRepository.findByUsername(registerFormDTO.getUsername());
@@ -75,7 +76,7 @@ public class AuthenticationController {
         if (existingUser != null) {
             errors.rejectValue("username", "username.alreadyexists", "A user with that username already exists");
             model.addAttribute("title", "Register");
-            return "register";
+            return "/api/register";
         }
 
         String password = registerFormDTO.getPassword();
@@ -83,7 +84,7 @@ public class AuthenticationController {
         if (!password.equals(verifyPassword)) {
             errors.rejectValue("password", "passwords.mismatch", "Passwords do not match");
             model.addAttribute("title", "Register");
-            return "register";
+            return "/api/register";
         }
 
         User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail(), registerFormDTO.getAccountType(), registerFormDTO.getZipCode());
@@ -97,7 +98,7 @@ public class AuthenticationController {
             setUserInSession(request.getSession(), newUser);
 
 
-            return "";
+            return "/users/display";
 
         } else if (registerFormDTO.getAccountType().equals("Provider")) {
             Provider newProvider = new Provider();
