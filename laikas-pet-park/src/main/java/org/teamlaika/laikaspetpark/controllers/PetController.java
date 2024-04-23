@@ -13,8 +13,9 @@ import org.teamlaika.laikaspetpark.models.data.PetRepository;
 
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
-@RequestMapping("/pets")
+@RequestMapping("/api/pets")
 public class PetController {
 
     //private static List<Pet> pets = new ArrayList<>();

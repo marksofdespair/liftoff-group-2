@@ -23,8 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
-@RequestMapping("/providers")
+@RequestMapping("/api/providers")
 public class ProviderController {
     @Autowired
     private ProviderRepository providerRepository;
