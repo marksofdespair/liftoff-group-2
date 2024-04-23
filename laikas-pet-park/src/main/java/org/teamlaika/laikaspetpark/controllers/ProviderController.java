@@ -124,16 +124,31 @@ public class ProviderController {
                                             @RequestParam(required = false) String isSitter,
                                             @RequestParam(required = false) String isTrainer,
                                             @RequestParam(required = false) String isWalker,
-                                            Model model) {
+                                            @RequestParam(required = false) Integer location,
+                                            @RequestParam(required = false) Integer radius,
+                                            Model model) throws JsonProcessingException {
 
-        List<Provider> providers = providerRepository.findAll(
-                Specification.where(ProviderSpecification.hasSkills(isGroomer,isSitter,isWalker,isTrainer))
-        );
+        List<Provider> matchingProviders = new ArrayList<>();
 
-        if (providers.isEmpty()) {
+        List<ZipApi> nearbyZips = new ApiService().findZipcodesWithinRadiusZipcode(location,radius);
+
+        for (ZipApi nearbyZip : nearbyZips) {
+
+            Integer aZipcode = nearbyZip.zipcode();
+
+            List<Provider> someProviders = providerRepository.findAll(
+                    Specification.where(ProviderSpecification.providerFilter(isGroomer, isSitter, isWalker, isTrainer, aZipcode))
+            );
+
+            if (!someProviders.isEmpty()) {
+                matchingProviders.addAll(someProviders);
+            }
+        }
+
+        if (matchingProviders.isEmpty()) {
             model.addAttribute("providers", providerRepository.findAll());
         } else {
-            model.addAttribute("providers",providers);
+            model.addAttribute("providers",matchingProviders);
         }
 
         return "providers/search";

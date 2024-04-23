@@ -37,6 +37,14 @@
                                 Walking
                             </label>
                         </div>
+                        <div class="mb-3">
+                            <label for="formInput" class="form-label"> Enter Zip Code:</label>
+                            <input type="text" class="form-control" id="formInput" name="location">
+                        </div>
+                        <div class="mb-3">
+                            <label for="formInput2" class="form-label"> Enter Radius:</label>
+                            <input type="text" class="form-control" id="formInput2" name="radius">
+                        </div>
                         <div class="form-group">
                             <input type="submit" value="Submit" class="btn btn-success h3">
                         </div>
@@ -51,13 +59,13 @@
                             <h3 class="card-title" th:text="${provider.user.name}"></h3>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item" th:text="'Grooming: '+ ${provider.isGroomer} == '1' ? 'Yes' : 'No'"></li>
-                            <li class="list-group-item" th:text="'Sitting: '+ ${provider.isSitter} == '1' ? 'Yes' : 'No'"></li>
-                            <li class="list-group-item" th:text="'Walking: '+ ${provider.isWalker} == '1' ? 'Yes' : 'No'"></li>
-                            <li class="list-group-item" th:text="'Training: '+ ${provider.isTrainer} == '1' ? 'Yes' : 'No'"></li>
+                            <li class="list-group-item" th:text="'Grooming: '+ (${provider.isGroomer} == '1' ? 'Yes' : 'No')"></li>
+                            <li class="list-group-item" th:text="'Sitting: '+ (${provider.isSitter} == '1' ? 'Yes' : 'No')"></li>
+                            <li class="list-group-item" th:text="'Walking: '+ (${provider.isWalker} == '1' ? 'Yes' : 'No')"></li>
+                            <li class="list-group-item" th:text="'Training: '+ (${provider.isTrainer} == '1' ? 'Yes' : 'No')"></li>
                         </ul>
                         <div class="card-body">
-                            <a th:href="@${provider.user.email}" class="card-link">Email</a>
+                            <a th:href="${provider.user.email}" class="card-link">Email</a>
                         </div>
                     </div>
                 </th:block>
