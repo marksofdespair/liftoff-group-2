@@ -35,6 +35,20 @@ public class OwnerController {
     public String index(Model model){
         return "users/index";
     }
+    @GetMapping("display/{ownerId}")
+    public String displayOwner(Model model, Owner owner, @PathVariable int ownerId){
+//
+        Optional<Owner> result = ownerRepository.findById(ownerId);
+        if(result.isPresent()){
+            Owner aOwner = result.get();
+            model.addAttribute("owner", aOwner);
+            model.addAttribute("pets", owner.getPets());
+            return "users/display";
+        }
+        else{
+            return "redirect:";
+        }
+    }
     @GetMapping("display")
     public String list(Model model, Owner owner, @RequestParam int ownerId){
         model.addAttribute("owner", ownerRepository.findById(ownerId));

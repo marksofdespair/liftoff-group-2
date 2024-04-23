@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Provider extends User {
+public class Provider{
     @OneToMany
     @JoinColumn(name = "provider_id")
     private final List<Service> services = new ArrayList<>();

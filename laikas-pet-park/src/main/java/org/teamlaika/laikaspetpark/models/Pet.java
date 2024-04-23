@@ -72,16 +72,16 @@ public class Pet extends AbstractEntity {
 //        this.description = description;
 //    }
 
-     @Override
-     public String toString() {
-         return "Pet{" +
-                 "id=" + getId() +
-                 ", name='" + getName() + '\'' +
-                 ", owner='" + owner.getName() + '\'' +
-                 ", species='" + species + '\'' +
-                 ", breed='" + breed + '\''+
-                 '}';
-     }
+//     @Override
+//     public String toString() {
+//         return "Pet{" +
+//                 "id=" + getId() +
+//                 ", name='" + getName() + '\'' +
+//                 ", owner='" + owner.getName() + '\'' +
+//                 ", species='" + species + '\'' +
+//                 ", breed='" + breed + '\''+
+//                 '}';
+//     }
 
 //  @Override
 //    public String toString() {
