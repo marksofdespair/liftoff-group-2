@@ -42,8 +42,11 @@ public class AuthenticationFilter implements HandlerInterceptor {
             // returning true indicates that the request may proceed
             return true;
         }
-  //JwtGenerator.verifyAndGetUserAndRole(token);
+        String token = request.getHeader(toString());
 
+        if (JwtGenerator.verifyAndGetUserAndRole(token).equals(true)) {
+            return true;
+        }
 //        HttpSession session = request.getSession();
 //        User user = authenticationController.getUserFromSession(session);
 
@@ -53,7 +56,10 @@ public class AuthenticationFilter implements HandlerInterceptor {
 //        }
 
         // The user is NOT logged in
-        response.sendRedirect("/login");
-        return false;
+        //response.sendRedirect("/login");
+
+        else{
+            return false;
+        }
     }
 }
