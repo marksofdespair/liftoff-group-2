@@ -42,7 +42,7 @@ public class User {
     public User() {
     }
 
-    public User(String name, String username, String password, String email, String accountType, int zipCode) {
+    public User(String name, String username, String password, String email, String accountType, Integer zipCode) {
         this.name = name;
         this.username = username;
         this.pwHash = encoder.encode(password);
@@ -112,7 +112,7 @@ public class User {
         this.accountType = accountType;
     }
 
-    public int getZipCode() {return zipCode;}
+    public Integer getZipCode() {return zipCode;}
 
-    public void setZipCode(int zipCode) {this.zipCode = zipCode;}
+    public void setZipCode(Integer zipCode) {this.zipCode = zipCode;}
 }

@@ -10,7 +10,7 @@
    <h1 class="h1">Provider:</h1>
    <div class="card">
       <div class="card-body">
-         <h3 class="card-title" th:text="${provider.id}"></h3>
+         <h3 class="card-title" th:text="${provider.user.name}"></h3>
       </div>
       <ul class="list-group list-group-flush">
          <li class="list-group-item" th:text="'Grooming: '+ ${provider.isGroomer)? 'Yes' : 'No'"></li>
@@ -19,7 +19,7 @@
          <li class="list-group-item" th:text="'Training: '+ ${provider.isTrainer)? 'Yes' : 'No'"></li>
       </ul>
       <div class="card-body">
-         <a th:href="@${provider.email}" class="card-link">Email</a>
+         <a th:href="@${provider.user.email}" class="card-link">Email</a>
       </div>
    </div>
 </body>

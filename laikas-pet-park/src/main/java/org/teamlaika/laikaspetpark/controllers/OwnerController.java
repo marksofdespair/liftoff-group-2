@@ -37,7 +37,12 @@ public class OwnerController {
     }
     @GetMapping("display/{ownerId}")
     public String displayOwner(Model model, Owner owner, @PathVariable int ownerId){
-        model.addAttribute("owner", ownerRepository.findById(ownerId));
+
+        Optional<Owner> result = ownerRepository.findById(ownerId);
+
+        Owner aOwner = result.get();
+
+        model.addAttribute("owner", aOwner);
         model.addAttribute("pets", owner.getPets());
         return "users/display";
     }

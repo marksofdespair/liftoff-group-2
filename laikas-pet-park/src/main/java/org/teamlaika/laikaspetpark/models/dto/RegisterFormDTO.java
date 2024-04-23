@@ -9,13 +9,11 @@ public class RegisterFormDTO extends org.teamlaika.laikaspetpark.models.dto.Logi
     @NotNull
     @Size(min = 4,max = 50, message = "Please enter a name between 4-50 characters long")
     private String name;
-
     @NotNull
     @Email(message="Please enter a valid email")
     private String email;
     private String verifyPassword;
-
-    private int zipCode;
+    private Integer zipCode;
 
 
     public String getVerifyPassword() {
@@ -42,7 +40,7 @@ public class RegisterFormDTO extends org.teamlaika.laikaspetpark.models.dto.Logi
         this.email = email;
     }
 
-    public int getZipCode() {return zipCode;}
+    public Integer getZipCode() {return zipCode;}
 
-    public void setZipCode(int zipCode) {this.zipCode = zipCode;}
+    public void setZipCode(Integer zipCode) {this.zipCode = zipCode;}
 }

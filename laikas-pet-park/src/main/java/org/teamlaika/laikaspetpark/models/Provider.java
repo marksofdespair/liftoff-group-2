@@ -23,7 +23,6 @@ public class Provider {
     private boolean isTrainer;
 
     public Provider(boolean isGroomer, boolean isSitter, boolean isWalker, boolean isTrainer) {
-        super();
         this.isGroomer = isGroomer;
         this.isSitter = isSitter;
         this.isWalker = isWalker;
@@ -67,5 +66,12 @@ public class Provider {
 
     public void setTrainer(boolean trainer) {
         isTrainer = trainer;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public User getUser() {
+        return user;
     }
 }
