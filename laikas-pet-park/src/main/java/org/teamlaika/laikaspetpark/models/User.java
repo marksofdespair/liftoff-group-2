@@ -33,7 +33,7 @@ public class User {
     @NotNull
     private String accountType;
 
-    private Integer zipCode;
+    private int zipCode;
 
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -111,7 +111,7 @@ public class User {
         this.accountType = accountType;
     }
 
-    public Integer getZipCode() {return zipCode;}
+    public int getZipCode() {return zipCode;}
 
-    public void setZipCode(Integer zipCode) {this.zipCode = zipCode;}
+    public void setZipCode(int zipCode) {this.zipCode = zipCode;}
 }
