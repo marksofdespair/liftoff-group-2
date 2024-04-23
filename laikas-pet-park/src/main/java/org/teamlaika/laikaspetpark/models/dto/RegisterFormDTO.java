@@ -13,7 +13,7 @@ public class RegisterFormDTO extends org.teamlaika.laikaspetpark.models.dto.Logi
     @Email(message="Please enter a valid email")
     private String email;
     private String verifyPassword;
-    private int zipCode;
+    private Integer zipcode;
 
 
     public String getVerifyPassword() {
@@ -40,7 +40,7 @@ public class RegisterFormDTO extends org.teamlaika.laikaspetpark.models.dto.Logi
         this.email = email;
     }
 
-    public int getZipCode() {return zipCode;}
+    public Integer getZipcode() {return zipcode;}
 
-    public void setZipCode(int zipCode) {this.zipCode = zipCode;}
+    public void setZipcode(Integer zipcode) {this.zipcode = zipcode;}
 }

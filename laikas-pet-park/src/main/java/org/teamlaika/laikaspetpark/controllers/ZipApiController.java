@@ -17,8 +17,8 @@ public class ZipApiController {
     }
 
     @GetMapping("/by-radius/")
-    public List<ZipApi> findZipCodesWithinRadiusZipCode(@RequestParam Integer zipCode,
+    public List<ZipApi> findZipcodesWithinRadiusZipcode(@RequestParam Integer zipcode,
                                                         @RequestParam Integer radius) throws JsonProcessingException {
-        return apiService.findZipCodesWithinRadiusZipCode(zipCode,radius);
+        return apiService.findZipcodesWithinRadiusZipcode(zipcode,radius);
     }
 }

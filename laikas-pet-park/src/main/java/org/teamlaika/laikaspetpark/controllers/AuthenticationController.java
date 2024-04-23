@@ -118,7 +118,7 @@ public class AuthenticationController {
             return ResponseEntity.badRequest().body(new RegistrationResponse("Passwords do not match"));
         }
 
-        User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail(), registerFormDTO.getAccountType(), registerFormDTO.getZipCode());
+        User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail(), registerFormDTO.getAccountType(), registerFormDTO.getZipcode());
 
         if (registerFormDTO.getAccountType().equals("Owner")) {
             Owner newOwner = new Owner();

@@ -89,12 +89,12 @@ public class ApiService {
                 .body(new ParameterizedTypeReference<List<CatApi>>() {});
     }
 
-    public List<ZipApi> findZipCodesWithinRadiusZipCode(Integer zipCode, Integer radius) throws JsonProcessingException {
+    public List<ZipApi> findZipcodesWithinRadiusZipcode(Integer zipcode, Integer radius) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
         String json = zipRestClient.get()
-                .uri(zipCodeApiKey + "/radius.json/{zipCode}/{radius}/mile",zipCode, radius)
+                .uri(zipCodeApiKey + "/radius.json/{zipCode}/{radius}/mile",zipcode, radius)
                 .retrieve()
                 .body(String.class);
 
