@@ -19,8 +19,9 @@ import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 public class OwnerController {
     @Autowired
     private OwnerRepository ownerRepository;
@@ -35,11 +36,16 @@ public class OwnerController {
     public String index(Model model){
         return "users/index";
     }
-    @GetMapping("display")
-    public String list(Model model, Owner owner, @RequestParam int ownerId){
-        model.addAttribute("owner", ownerRepository.findById(ownerId));
+    @GetMapping("display/{ownerId}")
+    public String displayOwner(Model model, Owner owner, @PathVariable int ownerId){
+
+        Optional<Owner> result = ownerRepository.findById(ownerId);
+
+        Owner aOwner = result.get();
+
+        model.addAttribute("owner", aOwner);
         model.addAttribute("pets", owner.getPets());
-        return "display";
+        return "users/display";
     }
     @GetMapping("delete/{ownerId}")
     public String displayDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,

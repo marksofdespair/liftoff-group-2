@@ -1,8 +1,10 @@
 package org.teamlaika.laikaspetpark.controllers;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -10,21 +12,32 @@ import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
+import org.teamlaika.laikaspetpark.models.ZipApi;
 import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
+import org.teamlaika.laikaspetpark.models.data.ProviderSpecification;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
-@RequestMapping("/providers")
+@RequestMapping("/api/providers")
 public class ProviderController {
     @Autowired
     private ProviderRepository providerRepository;
 
     @Autowired
     private UserRepository userRepository;
+
+    private final ApiService apiService;
+
+    public ProviderController(ApiService apiService) {
+        this.apiService = apiService;
+    }
 
     @GetMapping("/")
     public String index(Model model) {
@@ -33,9 +46,9 @@ public class ProviderController {
     }
 
     @GetMapping("index/{providerId}")
-    public String listProvider(Model model, Provider provider, @RequestParam int providerId) {
+    public String listProvider(@PathVariable int providerId, Model model) {
         model.addAttribute("provider", providerRepository.findById(providerId));
-        model.addAttribute("pets", provider.getServices());
+//        model.addAttribute("services", provider.getServices());
         return "providers/display";
     }
 
@@ -102,4 +115,42 @@ public class ProviderController {
         }
         return"redirect:";
     }
+
+    @GetMapping("search")
+    public String displayProviderSearchForm() { return "providers/search";}
+
+    @PostMapping("search")
+    public String processProviderSearchForm(@RequestParam(required = false) String isGroomer,
+                                            @RequestParam(required = false) String isSitter,
+                                            @RequestParam(required = false) String isTrainer,
+                                            @RequestParam(required = false) String isWalker,
+                                            Model model) {
+
+        List<Provider> providers = providerRepository.findAll(
+                Specification.where(ProviderSpecification.hasSkills(isGroomer,isSitter,isWalker,isTrainer))
+        );
+
+        if (providers.isEmpty()) {
+            model.addAttribute("providers", providerRepository.findAll());
+        } else {
+            model.addAttribute("providers",providers);
+        }
+
+        return "providers/search";
+    }
+
+    @GetMapping("search2")
+    public String displayProviderSearchForm2() {return "providers/search2";}
+
+    @PostMapping("search2")
+    public String processProviderSearchForm2(@RequestParam Integer location,
+                                             @RequestParam Integer radius,
+                                             Model model) throws JsonProcessingException {
+
+        model.addAttribute("locations", apiService.findZipCodesWithinRadiusZipCode(location, radius));
+
+        return "providers/search2";
+    }
+
+
 }

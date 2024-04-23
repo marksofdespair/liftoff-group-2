@@ -7,7 +7,7 @@
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 </head>
 <body>
-<p>All Pets</p>
+<h1>All Pets</h1>
 <table class="table table-striped">
    <thead>
    <tr>
@@ -19,7 +19,7 @@
    <tr th:each="pet : ${pets}">
       <td th:text="${pet.name}"></td>
       <td th:text="${pet.species}"></td>
-      <td th:text="${pet.breed}"></td>
+      <td><a th:href="'/pet/breed-info?species=' + ${pet.species} + '&breed=' + ${pet.breed}" th:text="${pet.breed}"></a></td>
    </tr>
 </table>
 </body>

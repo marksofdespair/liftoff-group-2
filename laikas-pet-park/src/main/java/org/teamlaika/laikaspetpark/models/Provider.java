@@ -1,7 +1,6 @@
 package org.teamlaika.laikaspetpark.models;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,7 @@ import java.util.List;
 public class Provider {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int Id;
 
     @OneToOne(mappedBy = "provider")
@@ -18,15 +17,19 @@ public class Provider {
     @OneToMany
     @JoinColumn(name = "provider_id")
     private final List<Service> services = new ArrayList<>();
-
     private boolean isGroomer;
-
     private boolean isSitter;
     private boolean isWalker;
     private boolean isTrainer;
-    public Provider(){
-        super();
+
+    public Provider(boolean isGroomer, boolean isSitter, boolean isWalker, boolean isTrainer) {
+        this.isGroomer = isGroomer;
+        this.isSitter = isSitter;
+        this.isWalker = isWalker;
+        this.isTrainer = isTrainer;
     }
+
+    public Provider() {}
 
     public List<Service> getServices() {return services;}
 
@@ -65,5 +68,10 @@ public class Provider {
         isTrainer = trainer;
     }
 
-
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public User getUser() {
+        return user;
+    }
 }

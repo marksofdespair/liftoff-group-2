@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 public class Service {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
     private String title;
@@ -50,8 +50,6 @@ public class Service {
     public void setLocation(String location) {
         this.location = location;
     }
-
-
 
     public int getId() {
         return id;
