@@ -17,8 +17,8 @@
                <input type="text" class="form-control" id="formInput" name="location">
             </div>
             <div class="mb-3">
-               <label for="formInput" class="form-label"> Enter Radius:</label>
-               <input type="text" class="form-control" id="formInput" name="radius">
+               <label for="formInput2" class="form-label"> Enter Radius:</label>
+               <input type="text" class="form-control" id="formInput2" name="radius">
             </div>
             <div class="form-group">
                <input type="submit" value="Submit" class="btn btn-success h3">
@@ -30,7 +30,7 @@
          <th:block th:each="location : ${locations}">
             <div class="card">
                <div class="card-body">
-                  <h3 class="card-title" th:text="${location.zip_code}"></h3>
+                  <h3 class="card-title" th:text="${location.zipcode}"></h3>
                </div>
                <ul class="list-group list-group-flush">
                   <li class="list-group-item" th:text="${location.distance}"></li>
