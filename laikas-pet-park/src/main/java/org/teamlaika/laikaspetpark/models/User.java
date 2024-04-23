@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Entity
 public class User {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private int Id;
     @OneToOne(cascade = CascadeType.ALL)
     private Owner owner;
@@ -33,7 +33,7 @@ public class User {
     @NotNull
     private String accountType;
 
-    @NotNull
+
     private int zipCode;
 
 
