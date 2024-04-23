@@ -180,7 +180,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/api/login")
-    public ResponseEntity<?> processLoginForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
+    public ResponseEntity<?> processLoginForm(@RequestBody @Valid LoginFormDTO loginFormDTO,
                                               Errors errors, HttpServletRequest request,
                                               Model model) {
 
