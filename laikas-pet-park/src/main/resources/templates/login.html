@@ -9,20 +9,23 @@
 <h2>Login</h2>
 
 <form action="#" th:action="@{/login}" method="post">
+
     <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username">
+        <label th:for="username">Username:
+            <input class="form-contorl" th:field="${loginFormDTO.username}">
+        </label>
     </div>
     <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password">
+        <label>Password:
+            <input class="form-control" th:field="${loginFormDTO.password}" type="password">
+        </label>
     </div>
     <div>
         <!-- Idk if we'll need this, user selects what account type they're trying to log into -->
         <label for="accountType">Account Type:</label>
         <select id="accountType" name="accountType">
-            <option value="regular">Regular User</option>
-            <option value="provider">Service Provider</option>
+            <option value="Owner">Owner</option>
+            <option value="Service Provider">Service Provider</option>
         </select>
     </div>
     <button type="submit">Login</button>

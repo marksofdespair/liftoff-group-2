@@ -2,13 +2,10 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8"/>
-    <title>Add Pet</title>
+    <title>Add a New Pet</title>
 </head>
 <body>
-
-<h2>Add or Modify Pet</h2>
-
-<form action="#" th:action="@{/pet/add}" th:object="${pet}" method="post">
+<form action="pet" th:action="@{/pet/add}" th:object="${pet}" method="post">
     <div>
         <label for="name">Name:</label>
         <input type="text" id="name" th:field="*{name}">
@@ -28,7 +25,14 @@
     <div>
         <label for="breed">Breed:</label>
         <select id="breed" name="breed">
-            <!-- Populated dropdown dynamically using an API -->
+            <label>Breed:
+                <select name="breed" class="form-select">
+                    <option th:each="breed : ${breeds}"
+                            th:value="${breed.name}"
+                            th:text="${breed.name}"
+                    ></option>
+                </select>
+            </label>
         </select>
     </div>
     <div>
@@ -41,6 +45,5 @@
 <script>
     <!-- May initialize datepicker here -->
 </script>
-
 </body>
 </html>

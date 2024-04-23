@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+
+<h2>Register</h2>
+<form method="post">
+    <div class="form-group">
+        <label>Name
+            <input class="form-control" th:field="${registerFormDTO.name}" />
+        </label>
+        <p class="error" th:errors="${registerFormDTO.name}"></p>
+    </div>
+    <div class="form-group">
+        <label>Username
+            <input class="form-control" th:field="${registerFormDTO.username}" />
+        </label>
+        <p class="error" th:errors="${registerFormDTO.username}"></p>
+    </div>
+    <div class="form-group">
+        <label>Password
+            <input class="form-control" th:field="${registerFormDTO.password}" type="password" />
+        </label>
+        <p class="error" th:errors="${registerFormDTO.password}"></p>
+    </div>
+    <div class="form-group">
+        <label>Verify Password
+            <input class="form-control" th:field="${registerFormDTO.verifyPassword}" type="password" />
+        </label>
+    </div>
+    <div class="form-group">
+        <label>Email
+            <input class="form-control" th:field="${registerFormDTO.email}" type="email" />
+        </label>
+        <p class="error" th:errors="${registerFormDTO.email}"></p>
+    </div>
+    <div>
+        <!-- Idk if we'll need this, user selects what account type they're trying to log into -->
+        <label for="accountType">Account Type:</label>
+        <select id="accountType" name="accountType">
+            <option value="Owner">Owner</option>
+            <option value="Provider">Service Provider</option>
+        </select>
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Register" />
+</form>
+
+</body>
+</html>
