@@ -42,8 +42,7 @@ public class JwtGenerator {
 
             String role = (String) result.getPayload().get("role");
             String userId = result.getPayload().getSubject();
-            UserAndRole token = new UserAndRole(role,userId);
-            return token;
+            return true;
         } catch (Exception err) {
             throw new InvalidParameterException("JWT Validation Failed: " + err.getMessage());
         }
