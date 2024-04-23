@@ -33,8 +33,7 @@ public class User {
     @NotNull
     private String accountType;
 
-
-    private int zipCode;
+    private Integer zipCode;
 
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
