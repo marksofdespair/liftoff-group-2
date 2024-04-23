@@ -147,7 +147,7 @@ public class ProviderController {
                                              @RequestParam Integer radius,
                                              Model model) throws JsonProcessingException {
 
-        model.addAttribute("locations", apiService.findZipCodesWithinRadiusZipCode(location, radius));
+        model.addAttribute("locations", apiService.findZipcodesWithinRadiusZipcode(location, radius));
 
         return "providers/search2";
     }
