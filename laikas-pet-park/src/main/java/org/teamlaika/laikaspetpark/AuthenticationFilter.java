@@ -4,6 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.teamlaika.laikaspetpark.controllers.AuthenticationController;
 import org.teamlaika.laikaspetpark.models.User;
@@ -15,12 +19,10 @@ import java.util.List;
 
 public class AuthenticationFilter implements HandlerInterceptor {
 
-//    @Autowired
-//    UserRepository userRepository;
-//
-//    @Autowired
-//    AuthenticationController authenticationController;
-//
+
+
+
+
 //    private static final List<String> whitelist = Arrays.asList("","/login", "/register", "/logout");
 //
 //    private static boolean isWhitelisted(String path) {
@@ -37,26 +39,18 @@ public class AuthenticationFilter implements HandlerInterceptor {
 //                             HttpServletResponse response,
 //                             Object handler) throws IOException {
 //
-//        // Don't require sign-in for whitelisted pages
+//
 //        if (isWhitelisted(request.getRequestURI())) {
-//            // returning true indicates that the request may proceed
+//
 //            return true;
 //        }
-//        String token = request.getHeader(toString());
 //
-//        if (JwtGenerator.verifyAndGetUserAndRole(token).equals(true)) {
+//
+//
+//        if (JwtGenerator.verifyAndGetUserAndRole().equals(true)) {
 //            return true;
 //        }
-////        HttpSession session = request.getSession();
-////        User user = authenticationController.getUserFromSession(session);
 //
-//        // The user is logged in
-////        if (user != null) {
-////            return true;
-////        }
-//
-//        // The user is NOT logged in
-//        //response.sendRedirect("/login");
 //
 //        else{
 //            return false;

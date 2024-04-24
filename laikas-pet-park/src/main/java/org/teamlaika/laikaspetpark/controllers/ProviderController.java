@@ -61,11 +61,7 @@ public class ProviderController {
             model.addAttribute("provider", provider);
             return "providers/delete";
         }
-//        Optional<Provider> optProvider = providerRepository.findByUsername(loginFormDTO.getUsername());
-//        if (optProvider.isPresent()) {
-//            Provider provider = (Provider) optProvider.get();
-//            model.addAttribute("provider", provider);
-//            return "providers/delete";
+
          else {
             return "redirect:";
         }
@@ -93,11 +89,7 @@ public class ProviderController {
             model.addAttribute("provider", provider);
             return "providers/update";
 
-//        Optional<Provider> optProvider = providerRepository.findByUsername(loginFormDTO.getUsername());
-//        if (optProvider.isPresent()) {
-//            Provider provider = (Provider) optProvider.get();
-//            model.addAttribute("provider", provider);
-//            return "providers/update";
+
         } else {
             return "redirect:";
         }

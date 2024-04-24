@@ -19,6 +19,7 @@ import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
+import org.teamlaika.laikaspetpark.models.dto.ProfileFormDTO;
 import org.teamlaika.laikaspetpark.models.dto.RegisterFormDTO;
 
 import java.util.HashMap;
@@ -204,7 +205,8 @@ public class AuthenticationController {
 
         if (accountType.equals("Owner") && theUser.getOwner() != null) {
             //setUserInSession(request.getSession(), theUser);
-           String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
+            String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
+            int userId = theUser.getId();
             return ResponseEntity.ok(token);
         } else if (accountType.equals("Provider") && theUser.getProvider() != null) {
             //setUserInSession(request.getSession(), theUser);
