@@ -8,6 +8,7 @@ import org.teamlaika.laikaspetpark.models.DogApi;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/dog-breeds")
 public class DogApiController {
