@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Entity
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int Id;
     @OneToOne(cascade = CascadeType.ALL)
     private Owner owner;
@@ -33,18 +33,22 @@ public class User {
     @NotNull
     private String accountType;
 
+    @NotNull
+    private Integer zipcode;
+
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public User() {
     }
 
-    public User(String name, String username, String password, String email, String accountType) {
+    public User(String name, String username, String password, String email, String accountType, Integer zipcode) {
         this.name = name;
         this.username = username;
         this.pwHash = encoder.encode(password);
         this.email = email;
         this.accountType = accountType;
+        this.zipcode = zipcode;
     }
 
 
@@ -107,4 +111,8 @@ public class User {
     public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
+
+    public Integer getZipcode() {return zipcode;}
+
+    public void setZipcode(Integer zipcode) {this.zipcode = zipcode;}
 }

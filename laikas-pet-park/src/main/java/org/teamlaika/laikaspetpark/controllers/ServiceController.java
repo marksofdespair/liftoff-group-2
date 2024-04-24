@@ -14,7 +14,7 @@ import org.teamlaika.laikaspetpark.models.data.ServiceListingRepository;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/services")
+@RequestMapping("/api/services")
 public class ServiceController {
     @Autowired
     private ServiceListingRepository serviceRepository;

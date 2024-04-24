@@ -1,47 +1,41 @@
 package org.teamlaika.laikaspetpark.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Provider{
+public class Provider {
+
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private int Id;
+
+    @OneToOne(mappedBy = "provider")
+    private User user;
+    //public String username;
     @OneToMany
     @JoinColumn(name = "provider_id")
     private final List<Service> services = new ArrayList<>();
-
     private boolean isGroomer;
-
     private boolean isSitter;
     private boolean isWalker;
     private boolean isTrainer;
 
-    public Provider(){
-        super();
+    public Provider(boolean isGroomer, boolean isSitter, boolean isWalker, boolean isTrainer) {
+        this.isGroomer = isGroomer;
+        this.isSitter = isSitter;
+        this.isWalker = isWalker;
+        this.isTrainer = isTrainer;
     }
 
-    public List<String> skills = new ArrayList<>();
+    public Provider() {}
 
-    public List<String> getSkills() {
-        if(isGroomer == true){
-            skills.add("Grooming");
-        }
-        if(isSitter == true){
-            skills.add("Sitting");
-        }
-        if(isWalker == true){
-            skills.add("Walking");
-        }
-        if(isTrainer == true){
-            skills.add("Training");
-        }
-        return skills;
-    }
     public List<Service> getServices() {return services;}
 
+    public int getId() {
+        return Id;
+    }
     public boolean isGroomer() {
         return isGroomer;
     }
@@ -72,5 +66,12 @@ public class Provider{
 
     public void setTrainer(boolean trainer) {
         isTrainer = trainer;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public User getUser() {
+        return user;
     }
 }

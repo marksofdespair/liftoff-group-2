@@ -7,21 +7,6 @@
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 </head>
 <body>
-<h1>All Pets</h1>
-<table class="table table-striped">
-   <thead>
    <h1 th:text="${owner.user.name}"></h1>
-   <tr>
-      <th>Name</th>
-      <th>Species</th>
-      <th>Breed</th>
-   </tr>
-   </thead>
-   <tr th:each="pet : ${pets}">
-      <td th:text="${pet.name}"></td>
-      <td th:text="${pet.species}"></td>
-      <td><a th:href="'/pet/breed-info?species=' + ${pet.species} + '&breed=' + ${pet.breed}" th:text="${pet.breed}"></a></td>
-   </tr>
-</table>
 </body>
 </html>

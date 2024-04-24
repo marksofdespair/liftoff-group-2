@@ -1,56 +1,76 @@
 package org.teamlaika.laikaspetpark.controllers;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.teamlaika.laikaspetpark.models.*;
+import org.teamlaika.laikaspetpark.models.Owner;
+import org.teamlaika.laikaspetpark.models.Provider;
+import org.teamlaika.laikaspetpark.models.User;
+import org.teamlaika.laikaspetpark.models.ZipApi;
 import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
-import org.teamlaika.laikaspetpark.models.data.ServiceListingRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
+import org.teamlaika.laikaspetpark.models.data.ProviderSpecification;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
-@RequestMapping("/providers")
+@RequestMapping("/api/providers")
 public class ProviderController {
     @Autowired
     private ProviderRepository providerRepository;
+
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private ServiceListingRepository serviceRepository;
+
+    private final ApiService apiService;
+
+    public ProviderController(ApiService apiService) {
+        this.apiService = apiService;
+    }
+
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model) {
         model.addAttribute("owner", providerRepository.findAll());
-        model.addAttribute("title", "Providers");
         return "providers/index";
     }
+
     @GetMapping("index/{providerId}")
-    public String listProvider(Model model, Provider provider, @RequestParam int providerId){
+    public String listProvider(@PathVariable int providerId, Model model) {
         model.addAttribute("provider", providerRepository.findById(providerId));
-        model.addAttribute("services", provider.getSkills());
-        model.addAttribute("title", "Provider");
+//        model.addAttribute("services", provider.getServices());
         return "providers/display";
     }
-//    @GetMapping("delete/{providerId}")
-//    public String displayDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
-//                                           Model model){
-//        Optional<Provider> optProvider = userRepository.findByUsername(loginFormDTO.getUsername());
+
+    @GetMapping("delete/{providerId}")
+    public String displayDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
+                                           Model model) {
+        User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
+        if (currentUser.getProvider() != null){
+            Provider provider = (Provider) currentUser.getProvider();
+            model.addAttribute("provider", provider);
+            return "providers/delete";
+        }
+//        Optional<Provider> optProvider = providerRepository.findByUsername(loginFormDTO.getUsername());
 //        if (optProvider.isPresent()) {
 //            Provider provider = (Provider) optProvider.get();
 //            model.addAttribute("provider", provider);
-//            model.addAttribute("title", "Delete Account");
 //            return "providers/delete";
-//        } else {
-//            return "redirect:";
-//        }
-//    }
+         else {
+            return "redirect:";
+        }
+    }
+
     @PostMapping("delete/{providerId}")
     public String postDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid Provider provider,
                                         Errors errors, Model model, @RequestParam String passwordInput){
@@ -59,9 +79,6 @@ public class ProviderController {
             return "providers/delete/{providerId}";
         }
         if (passwordInput.equals(password)){
-            for(Service service : provider.getServices()){
-                serviceRepository.deleteById(service.getId());
-            }
             providerRepository.delete(provider);
             return"/";
         }
@@ -70,12 +87,17 @@ public class ProviderController {
     @GetMapping("update/{providerId}")
     String displayUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
                              Model model){
-        User user = userRepository.findByUsername(loginFormDTO.getUsername());
-        if (user.getProvider() != null) {
-            Provider provider = (Provider) user.getProvider();
+        User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
+        if (currentUser.getProvider() != null) {
+            Provider provider = (Provider) currentUser.getProvider();
             model.addAttribute("provider", provider);
-            model.addAttribute("title", "Update Provider Account");
             return "providers/update";
+
+//        Optional<Provider> optProvider = providerRepository.findByUsername(loginFormDTO.getUsername());
+//        if (optProvider.isPresent()) {
+//            Provider provider = (Provider) optProvider.get();
+//            model.addAttribute("provider", provider);
+//            return "providers/update";
         } else {
             return "redirect:";
         }
@@ -93,4 +115,42 @@ public class ProviderController {
         }
         return"redirect:";
     }
+
+    @GetMapping("search")
+    public String displayProviderSearchForm() { return "providers/search";}
+
+    @PostMapping("search")
+    public String processProviderSearchForm(@RequestParam(required = false) String isGroomer,
+                                            @RequestParam(required = false) String isSitter,
+                                            @RequestParam(required = false) String isTrainer,
+                                            @RequestParam(required = false) String isWalker,
+                                            Model model) {
+
+        List<Provider> providers = providerRepository.findAll(
+                Specification.where(ProviderSpecification.hasSkills(isGroomer,isSitter,isWalker,isTrainer))
+        );
+
+        if (providers.isEmpty()) {
+            model.addAttribute("providers", providerRepository.findAll());
+        } else {
+            model.addAttribute("providers",providers);
+        }
+
+        return "providers/search";
+    }
+
+    @GetMapping("search2")
+    public String displayProviderSearchForm2() {return "providers/search2";}
+
+    @PostMapping("search2")
+    public String processProviderSearchForm2(@RequestParam Integer location,
+                                             @RequestParam Integer radius,
+                                             Model model) throws JsonProcessingException {
+
+        model.addAttribute("locations", apiService.findZipcodesWithinRadiusZipcode(location, radius));
+
+        return "providers/search2";
+    }
+
+
 }

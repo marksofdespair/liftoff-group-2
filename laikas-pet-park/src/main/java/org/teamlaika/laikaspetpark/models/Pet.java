@@ -2,34 +2,47 @@ package org.teamlaika.laikaspetpark.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 @Entity
-public class Pet extends AbstractEntity {
+public class Pet {
 
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private int id;
+    @NotNull
+    private String name;
     @ManyToOne
     private Owner owner;
-    @OneToOne
-    private PetInfo petInfo;
-    @NotNull
     private String species;
-    @NotNull
     private String breed;
-//    @Size(max = 1000, message = "Description is too long. Leave description under 1000 characters.")
-//    private String description;
+    private String description;
 
 
     public Pet(){
-        super();
+
     }
     public Pet(String name, String species, String breed, Owner owner){
         //this();
-        this.setName(name);
+        this.name = name;
         this.species = species;
         this.breed = breed;
         this.owner = owner;
     }
+
+    public int getId() {
+        return id;
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
     public Owner getOwner() {
         return owner;
@@ -39,13 +52,6 @@ public class Pet extends AbstractEntity {
         this.owner = owner;
     }
 
-    public PetInfo getPetInfo() {
-        return petInfo;
-    }
-
-    public void setPetInfo(PetInfo petInfo) {
-        this.petInfo = petInfo;
-    }
 
     public String getSpecies() {
         return species;
@@ -64,24 +70,24 @@ public class Pet extends AbstractEntity {
     }
 
 
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
+    public String getDescription() {
+        return description;
+    }
 
-//     @Override
-//     public String toString() {
-//         return "Pet{" +
-//                 "id=" + getId() +
-//                 ", name='" + getName() + '\'' +
-//                 ", owner='" + owner.getName() + '\'' +
-//                 ", species='" + species + '\'' +
-//                 ", breed='" + breed + '\''+
-//                 '}';
-//     }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+     @Override
+     public String toString() {
+         return "Pet{" +
+                 "id=" + id +
+                 ", name='" + name + '\'' +
+                 ", owner='" + owner + '\'' +
+                 ", species='" + species + '\'' +
+                 ", breed='" + breed + '\''+
+                 '}';
+     }
 
 //  @Override
 //    public String toString() {

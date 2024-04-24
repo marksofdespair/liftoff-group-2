@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Owner{
+public class Owner {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int Id;
 
     @OneToOne(mappedBy = "owner")
@@ -27,6 +27,15 @@ public class Owner{
         return pets;
     }
 
+    public int getId() {
+        return Id;
+    }
 
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

@@ -19,8 +19,9 @@ import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 public class OwnerController {
     @Autowired
     private OwnerRepository ownerRepository;
@@ -37,24 +38,14 @@ public class OwnerController {
     }
     @GetMapping("display/{ownerId}")
     public String displayOwner(Model model, Owner owner, @PathVariable int ownerId){
-//
+
         Optional<Owner> result = ownerRepository.findById(ownerId);
-        if(result.isPresent()){
-            Owner aOwner = result.get();
-            model.addAttribute("owner", aOwner);
-            model.addAttribute("pets", owner.getPets());
-            return "users/display";
-        }
-        else{
-            return "redirect:";
-        }
-    }
-    @GetMapping("display")
-    public String list(Model model, Owner owner, @RequestParam int ownerId){
-        model.addAttribute("owner", ownerRepository.findById(ownerId));
+
+        Owner aOwner = result.get();
+
+        model.addAttribute("owner", aOwner);
         model.addAttribute("pets", owner.getPets());
-        model.addAttribute("title", "Your Pets");
-        return "display";
+        return "users/display";
     }
     @GetMapping("delete/{ownerId}")
     public String displayDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
@@ -63,7 +54,6 @@ public class OwnerController {
         if (currentUser.getOwner() != null) {
             Owner owner = (Owner) currentUser.getOwner();
             model.addAttribute("owner", owner);
-            model.addAttribute("title", "Delete Account?");
             return "users/delete";
 //        Optional<Owner> optOwner = ownerRepository.findByUsername(loginFormDTO.getUsername());
 //        if (optOwner.isPresent()) {
@@ -82,9 +72,6 @@ public class OwnerController {
             return "delete/{ownerId}";
         }
         if (passwordInput.equals(password)){
-            for(Pet pet : owner.getPets()){
-                petRepository.deleteById(pet.getId());
-            }
             ownerRepository.delete(owner);
             return"/";
         }
@@ -97,7 +84,6 @@ public class OwnerController {
         if (currentUser.getOwner() != null) {
             Owner owner = (Owner) currentUser.getOwner();
             model.addAttribute("owner", owner);
-            model.addAttribute("title", "Update Owner Account");
             return "users/update";
 
 //        Optional<Owner> optOwner = ownerRepository.findByUsername(loginFormDTO.getUsername());
