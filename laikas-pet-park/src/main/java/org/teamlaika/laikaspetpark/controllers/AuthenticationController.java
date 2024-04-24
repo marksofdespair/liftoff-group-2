@@ -211,7 +211,7 @@ public class AuthenticationController {
             String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
             return ResponseEntity.ok(token);
         }
-        return ResponseEntity.ok(new LoginResponse("you done messed up"));
+        return ResponseEntity.ok(new LoginResponse("Login Failed; Please check your Username, Password and Account Type"));
     }
 
     // Custom response object for Logout
