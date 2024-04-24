@@ -18,7 +18,7 @@ public class Pet {
     private PetInfo petInfo;
     private String species;
     private String breed;
-    private String description;
+    //private String description;
 
 
     public Pet(){
@@ -79,13 +79,13 @@ public class Pet {
     }
 
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
 
      @Override
      public String toString() {

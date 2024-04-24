@@ -20,7 +20,7 @@ public class Owner {
     @JoinColumn(name = "owner_id")
     private final List<Pet> pets = new ArrayList<>();
     public Owner(){
-        super();
+
     }
 
     public List<Pet> getPets() {

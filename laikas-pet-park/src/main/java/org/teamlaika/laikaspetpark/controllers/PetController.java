@@ -3,16 +3,17 @@ package org.teamlaika.laikaspetpark.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.teamlaika.laikaspetpark.models.Owner;
-import org.teamlaika.laikaspetpark.models.Pet;
-import org.teamlaika.laikaspetpark.models.PetInfo;
+import org.teamlaika.laikaspetpark.models.*;
 import org.teamlaika.laikaspetpark.models.data.PetPageRepository;
 import org.teamlaika.laikaspetpark.models.data.PetRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -61,42 +62,41 @@ public class PetController {
     }
 
     @GetMapping("create-dog")
-    public String displayCreateDogForm(Model model) {
-        model.addAttribute("breeds", apiService.findAllDogs());
-        return "create-dog";
+    public ResponseEntity<List<DogApi>> displayCreateDogForm() {
+        return new ResponseEntity<List<DogApi>>(apiService.findAllDogs(), HttpStatus.OK);
     }
 
     @PostMapping("create-dog")
-    public String processCreateDogForm(@RequestParam Pet pet) {
+    public ResponseEntity<Pet> processCreateDogForm(@RequestParam String name,@RequestParam String breed) {
         String species = "Dog";
-        petRepository.save(pet);
+        Owner owner = new Owner();
+        Pet pet = new Pet(name, species, breed, owner);
 
-        return "redirect:precreate";
+        return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
     }
 
     @GetMapping("create-cat")
-    public String displayCreateCatForm(Model model) {
-        model.addAttribute("breeds", apiService.findAllCats());
-        return "create-cat";
+    public ResponseEntity<List<CatApi>> displayCreateCatForm() {
+//        model.addAttribute("breeds", apiService.findAllCats());
+//        return "create-cat";
+        return new ResponseEntity<List<CatApi>>(apiService.findAllCats(), HttpStatus.OK);
     }
 
     @PostMapping("create-cat")
-    public String processCreateCatForm(@RequestParam Pet pet) {
+    public ResponseEntity<Pet> processCreateCatForm(@RequestParam String name,@RequestParam String breed) {
         String species = "Cat";
-        petRepository.save(pet);
-        return "redirect:precreate";
+        Owner owner = new Owner();
+        Pet pet = new Pet(name, species, breed, owner);
+
+        return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
+
 
     }
     @GetMapping("update/{petId}")
-    public String displayUpdatePetForm(Model model, @RequestParam int petId){
+    public ResponseEntity<Optional<Pet>> displayUpdatePetForm(@PathVariable int petId){
         Optional<Pet> optPet = petRepository.findById(petId);
-        if (optPet.isPresent()) {
-            Pet pet = (Pet) optPet.get();
-            model.addAttribute("pet", pet);
-            return "edit";
-        } else {
-            return "redirect:../pets";
-        }
+            return new ResponseEntity<Optional<Pet>>(optPet, HttpStatus.OK);
+
     }
     @PostMapping("update/{petId}")
     String submitUpdateForm(@RequestParam Pet pet){
@@ -104,25 +104,15 @@ public class PetController {
         return "redirect:../pets";
     }
     @GetMapping("delete/{petId}")
-    public String displayDeletePetorm(Model model, @PathVariable int petId){
+    public ResponseEntity<Optional<Pet>> displayDeletePetForm(Model model, @PathVariable int petId){
         Optional<Pet> optPet = petRepository.findById(petId);
-        if (optPet.isPresent()) {
-            Pet pet = (Pet) optPet.get();
-            model.addAttribute("pet", pet);
-            return "pets/delete";
-        } else {
-            return "redirect:";
-        }
+        return new ResponseEntity<Optional<Pet>>(optPet, HttpStatus.OK);
     }
 
     @PostMapping("delete/{petId}")
-    public String postDeletePetForm(@ModelAttribute @Valid Pet pet,
-                                        Errors errors, Model model){
-        if (errors.hasErrors()) {
-            return "delete/{petId}";
-        }
-        petRepository.delete(pet);
-        return "redirect:../pets";
+    public ResponseEntity<Pet> postDeletePetForm(@RequestParam Pet pet){
+
+        return new ResponseEntity<Pet>(petRepository.delete(pet), HttpStatus.OK);
     }
     @GetMapping("add-pet-profile/{petId}")
     public String displayPetProfileForm(Model model, @PathVariable int petId){

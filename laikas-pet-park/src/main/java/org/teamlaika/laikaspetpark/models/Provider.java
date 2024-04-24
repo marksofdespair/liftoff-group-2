@@ -33,9 +33,10 @@ public class Provider {
 
     public List<Service> getServices() {return services;}
 
-    public List<String> skills = new ArrayList<>();
+
 
     public List<String> getSkills() {
+        List<String> skills = new ArrayList<>();
         if(isGroomer){
             skills.add("Grooming");
         }
