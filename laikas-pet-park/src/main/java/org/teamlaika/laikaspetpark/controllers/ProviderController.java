@@ -19,9 +19,7 @@ import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderSpecification;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @Controller
@@ -132,6 +130,12 @@ public class ProviderController {
 
         List<ZipApi> nearbyZips = new ApiService().findZipcodesWithinRadiusZipcode(location,radius);
 
+        Map<Integer, Float> nearbyZipsMap = new HashMap<>();
+
+        for (ZipApi nearbyZip : nearbyZips) {
+            nearbyZipsMap.put(nearbyZip.zipcode(),nearbyZip.distance());
+        }
+
         for (ZipApi nearbyZip : nearbyZips) {
 
             Integer aZipcode = nearbyZip.zipcode();
@@ -149,6 +153,7 @@ public class ProviderController {
             model.addAttribute("providers", providerRepository.findAll());
         } else {
             model.addAttribute("providers",matchingProviders);
+            model.addAttribute("locations",nearbyZipsMap);
         }
 
         return "providers/search";

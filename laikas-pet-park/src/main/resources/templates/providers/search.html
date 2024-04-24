@@ -55,8 +55,9 @@
                 <h1 class="h1">Search Results:</h1>
                 <th:block th:each="provider : ${providers}">
                     <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title" th:text="${provider.user.name}"></h3>
+                        <div class="card-body" th:with="index=${provider.user.zipcode}">
+                            <h4 class="card-title" th:text="${provider.user.name}"></h4>
+                            <h6 class="card-subtitle" th:text="'Distance: ' + ${locations.get(index)} + ' Miles'"></h6>
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item" th:text="'Grooming: '+ (${provider.isGroomer} == '1' ? 'Yes' : 'No')"></li>
@@ -65,7 +66,7 @@
                             <li class="list-group-item" th:text="'Training: '+ (${provider.isTrainer} == '1' ? 'Yes' : 'No')"></li>
                         </ul>
                         <div class="card-body">
-                            <a th:href="${provider.user.email}" class="card-link">Email</a>
+                            <a th:href="'mailto:' + ${provider.user.email}" class="card-link">Email</a>
                         </div>
                     </div>
                 </th:block>
