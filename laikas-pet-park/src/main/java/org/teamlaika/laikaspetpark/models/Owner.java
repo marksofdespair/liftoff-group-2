@@ -9,7 +9,7 @@ import java.util.List;
 public class Owner {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
     @OneToOne(mappedBy = "owner")
