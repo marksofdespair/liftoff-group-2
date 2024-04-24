@@ -24,7 +24,7 @@ public class JwtGenerator {
                 .subject(Integer.toString((userId)))
                 .claim("role", role)
                 .issuedAt(Date.from(now)).expiration(Date.from(now.plus(15, ChronoUnit.MINUTES)))
-                .signWith(Keys.hmacShaKeyFor(ourSecret))
+                //.signWith(Keys.hmacShaKeyFor(ourSecret))
                 .compact();
 
         //System.out.println(jwtToken);
