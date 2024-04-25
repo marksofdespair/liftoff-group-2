@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -44,7 +45,6 @@ public class ProviderController {
         model.addAttribute("owner", providerRepository.findAll());
         return "providers/index";
     }
-
     @GetMapping("index/{providerId}")
     public String listProvider(@PathVariable int providerId, Model model, Provider provider) {
         model.addAttribute("provider", providerRepository.findById(providerId));
@@ -92,12 +92,6 @@ public class ProviderController {
             Provider provider = (Provider) currentUser.getProvider();
             model.addAttribute("provider", provider);
             return "providers/update";
-
-//        Optional<Provider> optProvider = providerRepository.findByUsername(loginFormDTO.getUsername());
-//        if (optProvider.isPresent()) {
-//            Provider provider = (Provider) optProvider.get();
-//            model.addAttribute("provider", provider);
-//            return "providers/update";
         } else {
             return "redirect:";
         }

@@ -13,7 +13,7 @@ public class Pet {
     @NotNull
     private String name;
     @ManyToOne
-    private Owner owner;
+    private User user;
     @OneToOne
     private PetInfo petInfo;
     private String species;
@@ -24,12 +24,12 @@ public class Pet {
     public Pet(){
 
     }
-    public Pet(String name, String species, String breed, Owner owner){
+    public Pet(String name, String species, String breed, User user){
         //this();
         this.name = name;
         this.species = species;
         this.breed = breed;
-        this.owner = owner;
+        this.user = user;
     }
 
     public int getId() {
@@ -46,12 +46,12 @@ public class Pet {
     }
 
 
-    public Owner getOwner() {
-        return owner;
+    public User getOwner() {
+        return user;
     }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setOwner(User user) {
+        this.user = user;
     }
 
     public PetInfo getPetInfo() {
@@ -92,7 +92,7 @@ public class Pet {
          return "Pet{" +
                  "id=" + id +
                  ", name='" + name + '\'' +
-                 ", owner='" + owner + '\'' +
+                 ", owner='" + user + '\'' +
                  ", species='" + species + '\'' +
                  ", breed='" + breed + '\''+
                  '}';

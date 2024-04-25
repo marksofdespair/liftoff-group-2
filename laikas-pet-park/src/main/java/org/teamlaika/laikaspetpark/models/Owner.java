@@ -16,16 +16,16 @@ public class Owner {
     private User user;
 //    public String username;
 
-    @OneToMany
-    @JoinColumn(name = "owner_id")
-    private final List<Pet> pets = new ArrayList<>();
+//    @OneToMany
+//    @JoinColumn(name = "owner_id")
+//    private final List<Pet> pets = new ArrayList<>();
     public Owner(){
 
     }
 
-    public List<Pet> getPets() {
-        return pets;
-    }
+//    public List<Pet> getPets() {
+//        return pets;
+//    }
 
     public int getId() {
         return Id;

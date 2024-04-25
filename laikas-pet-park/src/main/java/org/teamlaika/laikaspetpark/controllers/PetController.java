@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.models.*;
 import org.teamlaika.laikaspetpark.models.data.PetPageRepository;
 import org.teamlaika.laikaspetpark.models.data.PetRepository;
+import org.teamlaika.laikaspetpark.models.data.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,8 @@ public class PetController {
     @Autowired
     private PetRepository petRepository;
     @Autowired
+    UserRepository userRepository;
+    @Autowired
     private PetPageRepository petPageRepository;
 
     private final ApiService apiService;
@@ -35,8 +38,8 @@ public class PetController {
     }
 
     @GetMapping
-    public String displayAllPets(Model model, Owner owner){
-        model.addAttribute("pets", owner.getPets());
+    public String displayAllPets(Model model, User user){
+        model.addAttribute("pets", user.getPets());
         return"/";
     }
 //    @GetMapping
@@ -69,10 +72,19 @@ public class PetController {
     @PostMapping("create-dog")
     public ResponseEntity<Pet> processCreateDogForm(@RequestParam String name,@RequestParam String breed) {
         String species = "Dog";
-        Owner owner = new Owner();
-        Pet pet = new Pet(name, species, breed, owner);
+        Optional<User> user = userRepository.findById(1);
+        if(user.isPresent()){
+            User user1 = user.get();
+            Pet pet = new Pet(name, species, breed, user1);
+            return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
+        }
+        else{
+            Pet pet = new Pet();
+            return new ResponseEntity<Pet>(pet, HttpStatus.OK);
+        }
 
-        return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
+
+
     }
 
     @GetMapping("create-cat")
@@ -85,8 +97,8 @@ public class PetController {
     @PostMapping("create-cat")
     public ResponseEntity<Pet> processCreateCatForm(@RequestParam String name,@RequestParam String breed) {
         String species = "Cat";
-        Owner owner = new Owner();
-        Pet pet = new Pet(name, species, breed, owner);
+        User user = new User();
+        Pet pet = new Pet(name, species, breed, user);
 
         return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
 
@@ -104,15 +116,14 @@ public class PetController {
         return "redirect:../pets";
     }
     @GetMapping("delete/{petId}")
-    public ResponseEntity<Optional<Pet>> displayDeletePetForm(Model model, @PathVariable int petId){
+    public ResponseEntity<?> displayDeletePetForm(@PathVariable int petId){
         Optional<Pet> optPet = petRepository.findById(petId);
         return new ResponseEntity<Optional<Pet>>(optPet, HttpStatus.OK);
     }
-
-    @PostMapping("delete/{petId}")
+    @DeleteMapping("delete/{petId}")
     public ResponseEntity<Pet> postDeletePetForm(@RequestParam Pet pet){
-
-        return new ResponseEntity<Pet>(petRepository.delete(pet), HttpStatus.OK);
+        petRepository.delete(pet);
+        return new ResponseEntity<Pet>(HttpStatus.ACCEPTED);
     }
     @GetMapping("add-pet-profile/{petId}")
     public String displayPetProfileForm(Model model, @PathVariable int petId){
