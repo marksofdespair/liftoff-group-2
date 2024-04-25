@@ -14,6 +14,8 @@ public class Pet {
     private String name;
     @ManyToOne
     private Owner owner;
+    @OneToOne
+    private PetInfo petInfo;
     private String species;
     private String breed;
     private String description;
@@ -52,6 +54,13 @@ public class Pet {
         this.owner = owner;
     }
 
+    public PetInfo getPetInfo() {
+        return petInfo;
+    }
+
+    public void setPetInfo(PetInfo petInfo) {
+        this.petInfo = petInfo;
+    }
 
     public String getSpecies() {
         return species;

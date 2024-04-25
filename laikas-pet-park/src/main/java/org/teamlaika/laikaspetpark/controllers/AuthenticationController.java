@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.teamlaika.laikaspetpark.JwtGenerator;
 import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
@@ -179,7 +180,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/api/login")
-    public ResponseEntity<?> processLoginForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
+    public ResponseEntity<?> processLoginForm(@RequestBody @Valid LoginFormDTO loginFormDTO,
                                               Errors errors, HttpServletRequest request,
                                               Model model) {
 
@@ -202,16 +203,15 @@ public class AuthenticationController {
         String accountType = loginFormDTO.getAccountType();
 
         if (accountType.equals("Owner") && theUser.getOwner() != null) {
-            setUserInSession(request.getSession(), theUser);
-            return ResponseEntity.ok(new LoginResponse("Login successful"));
+            //setUserInSession(request.getSession(), theUser);
+           String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
+            return ResponseEntity.ok(token);
         } else if (accountType.equals("Provider") && theUser.getProvider() != null) {
-            setUserInSession(request.getSession(), theUser);
-            return ResponseEntity.ok(new LoginResponse("Login successful"));
-        } else {
-            // TODO be sure to save user name and profile type to be saved in the session.
-            setUserInSession(request.getSession(), theUser);
-            return ResponseEntity.ok(new LoginResponse("Login successful"));
+            //setUserInSession(request.getSession(), theUser);
+            String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
+            return ResponseEntity.ok(token);
         }
+        return ResponseEntity.ok(new LoginResponse("you done messed up"));
     }
 
     // Custom response object for Logout

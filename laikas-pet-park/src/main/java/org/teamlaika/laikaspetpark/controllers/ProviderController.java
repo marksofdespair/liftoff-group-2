@@ -44,9 +44,9 @@ public class ProviderController {
     }
 
     @GetMapping("index/{providerId}")
-    public String listProvider(@PathVariable int providerId, Model model) {
+    public String listProvider(@PathVariable int providerId, Model model, Provider provider) {
         model.addAttribute("provider", providerRepository.findById(providerId));
-//        model.addAttribute("services", provider.getServices());
+        model.addAttribute("services", provider.getSkills());
         return "providers/display";
     }
 

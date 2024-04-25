@@ -8,7 +8,7 @@ import java.util.List;
 public class Provider {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
     @OneToOne(mappedBy = "provider")
@@ -32,6 +32,24 @@ public class Provider {
     public Provider() {}
 
     public List<Service> getServices() {return services;}
+
+    public List<String> skills = new ArrayList<>();
+
+    public List<String> getSkills() {
+        if(isGroomer){
+            skills.add("Grooming");
+        }
+        if(isSitter){
+            skills.add("Sitting");
+        }
+        if(isWalker){
+            skills.add("Walking");
+        }
+        if(isTrainer){
+            skills.add("Training");
+        }
+        return skills;
+    }
 
     public int getId() {
         return Id;
