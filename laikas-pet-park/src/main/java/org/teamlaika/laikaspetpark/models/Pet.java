@@ -31,6 +31,13 @@ public class Pet {
         this.breed = breed;
         this.user = user;
     }
+    public Pet(String name, String species, String breed){
+        //this();
+        this.name = name;
+        this.species = species;
+        this.breed = breed;
+
+    }
 
     public int getId() {
         return id;
