@@ -159,18 +159,18 @@ public class ProviderController {
         return "providers/search";
     }
 
-    @GetMapping("search2")
-    public String displayProviderSearchForm2() {return "providers/search2";}
-
-    @PostMapping("search2")
-    public String processProviderSearchForm2(@RequestParam Integer location,
-                                             @RequestParam Integer radius,
-                                             Model model) throws JsonProcessingException {
-
-        model.addAttribute("locations", apiService.findZipcodesWithinRadiusZipcode(location, radius));
-
-        return "providers/search2";
-    }
+//    @GetMapping("search2")
+//    public String displayProviderSearchForm2() {return "providers/search2";}
+//
+//    @PostMapping("search2")
+//    public String processProviderSearchForm2(@RequestParam Integer location,
+//                                             @RequestParam Integer radius,
+//                                             Model model) throws JsonProcessingException {
+//
+//        model.addAttribute("locations", apiService.findZipcodesWithinRadiusZipcode(location, radius));
+//
+//        return "providers/search2";
+//    }
 
 
 }
