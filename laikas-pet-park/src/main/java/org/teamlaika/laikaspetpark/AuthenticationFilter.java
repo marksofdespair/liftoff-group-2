@@ -21,9 +21,13 @@ public class AuthenticationFilter implements HandlerInterceptor {
 
 
 
+@Autowired
+UserRepository userRepository;
 
+@Autowired
+AuthenticationController authenticationController;
 
-//    private static final List<String> whitelist = Arrays.asList("","/login", "/register", "/logout");
+//    private static final List<String> whitelist = Arrays.asList("/api/login", "/api/register", "/api/logout");
 //
 //    private static boolean isWhitelisted(String path) {
 //        for (String pathRoot : whitelist) {
@@ -33,27 +37,21 @@ public class AuthenticationFilter implements HandlerInterceptor {
 //        }
 //        return false;
 //    }
-//
 //    @Override
 //    public boolean preHandle(HttpServletRequest request,
 //                             HttpServletResponse response,
 //                             Object handler) throws IOException {
 //
+//        HttpSession session = request.getSession();
+//        User user = authenticationController.getUserFromSession(session);
 //
-//        if (isWhitelisted(request.getRequestURI())) {
-//
+//        // The user is logged in
+//        if (user != null) {
 //            return true;
 //        }
 //
-//
-//
-//        if (JwtGenerator.verifyAndGetUserAndRole().equals(true)) {
-//            return true;
-//        }
-//
-//
-//        else{
-//            return false;
-//        }
+//        // The user is NOT logged in
+//        response.sendRedirect("/api/login");
+//        return false;
 //    }
 }

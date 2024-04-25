@@ -201,12 +201,13 @@ public class AuthenticationController {
         }
 
         String accountType = loginFormDTO.getAccountType();
-
+        setUserInSession(request.getSession(), theUser);
         if (accountType.equals("Owner") && theUser.getOwner() != null) {
 
             userDTO.setUserId(theUser.getId());
             userDTO.setOwnerId(theUser.getOwner().getId());
             userDTO.setToken(JwtGenerator.generateJwt(theUser.getId(),theUser.getAccountType()));
+
 
             return ResponseEntity.ok(userDTO);
 

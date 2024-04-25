@@ -1,6 +1,11 @@
 package org.teamlaika.laikaspetpark.controllers;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,8 +27,6 @@ import java.util.Optional;
 @RequestMapping("/api/pets")
 public class PetController {
 
-    //private static List<Pet> pets = new ArrayList<>();
-
     @Autowired
     private PetRepository petRepository;
     @Autowired
@@ -38,15 +41,10 @@ public class PetController {
     }
 
     @GetMapping
-    public String displayAllPets(Model model, User user){
-        model.addAttribute("pets", user.getPets());
-        return"/";
+    public ResponseEntity<List<Pet>> displayAllPets(@RequestBody User user){
+        return new ResponseEntity<List<Pet>>(user.getPets(), HttpStatus.OK);
     }
-//    @GetMapping
-//    public String displayAllPets(Model model, @PathVariable int petId) {
-//        model.addAttribute("pets", petRepository.findAll());
-//        return "display";
-//    }
+
 
     @GetMapping("precreate")
     public String displayPreCreatePetForm() {
@@ -69,39 +67,63 @@ public class PetController {
         return new ResponseEntity<List<DogApi>>(apiService.findAllDogs(), HttpStatus.OK);
     }
 
-    @PostMapping("create-dog")
-    public ResponseEntity<Pet> processCreateDogForm(@RequestParam String name,@RequestParam String breed) {
-        String species = "Dog";
-        Optional<User> user = userRepository.findById(1);
-        if(user.isPresent()){
-            User user1 = user.get();
-            Pet pet = new Pet(name, species, breed, user1);
-            return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
+//    @PostMapping("create-dog")
+//    public ResponseEntity<Pet> processCreateDogForm(@RequestParam String name,@RequestParam String breed) {
+//        String species = "Dog";
+//        Optional<User> user = userRepository.findById(1);
+//        if(user.isPresent()){
+//            User user1 = user.get();
+//            Pet pet = new Pet(name, species, breed, user1);
+//            return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
+//        }
+//        else{
+//            Pet pet = new Pet();
+//            return new ResponseEntity<Pet>(pet, HttpStatus.OK);
+//        }
+//    }
+
+    @PostMapping("/add-dog")
+    public ResponseEntity<String> addDog(@RequestBody String body) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            JsonNode jsonNode = objectMapper.readTree(body);
+            String name = jsonNode.get("name").asText();
+            String breed = jsonNode.get("breed").asText();
+            String username = jsonNode.get("username").asText();
+            User user = userRepository.findByUsername(username);
+            Pet pet = new Pet(name, "Dog",breed, user);
+            petRepository.save(pet);
+            return ResponseEntity.ok("Dog added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add dog. Please try again.");
         }
-        else{
-            Pet pet = new Pet();
-            return new ResponseEntity<Pet>(pet, HttpStatus.OK);
-        }
-
-
-
     }
 
     @GetMapping("create-cat")
     public ResponseEntity<List<CatApi>> displayCreateCatForm() {
-//        model.addAttribute("breeds", apiService.findAllCats());
-//        return "create-cat";
+
         return new ResponseEntity<List<CatApi>>(apiService.findAllCats(), HttpStatus.OK);
     }
 
     @PostMapping("create-cat")
-    public ResponseEntity<Pet> processCreateCatForm(@RequestParam String name,@RequestParam String breed) {
-        String species = "Cat";
-        User user = new User();
-        Pet pet = new Pet(name, species, breed, user);
+    public ResponseEntity<String> addCat(@RequestBody String body) {
 
-        return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
+        ObjectMapper objectMapper = new ObjectMapper();
 
+        try {
+            JsonNode jsonNode = objectMapper.readTree(body);
+            String name = jsonNode.get("name").asText();
+            String breed = jsonNode.get("breed").asText();
+            String username = jsonNode.get("username").asText();
+            User user = userRepository.findByUsername(username);
+            Pet pet = new Pet(name, "Cat",breed, user);
+            petRepository.save(pet);
+            return ResponseEntity.ok("Cat added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add cat. Please try again.");
+        }
 
     }
     @GetMapping("update/{petId}")
