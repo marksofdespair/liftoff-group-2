@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
@@ -19,8 +18,8 @@ import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
-import org.teamlaika.laikaspetpark.models.dto.ProfileFormDTO;
 import org.teamlaika.laikaspetpark.models.dto.RegisterFormDTO;
+import org.teamlaika.laikaspetpark.models.dto.UserFormDTO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -181,7 +180,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/api/login")
-    public ResponseEntity<?> processLoginForm(@RequestBody @Valid LoginFormDTO loginFormDTO,
+    public ResponseEntity<?> processLoginForm(@RequestBody @Valid LoginFormDTO loginFormDTO, UserFormDTO userDTO,
                                               Errors errors, HttpServletRequest request,
                                               Model model) {
 
@@ -204,14 +203,19 @@ public class AuthenticationController {
         String accountType = loginFormDTO.getAccountType();
 
         if (accountType.equals("Owner") && theUser.getOwner() != null) {
-            //setUserInSession(request.getSession(), theUser);
-            String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
-            int userId = theUser.getId();
-            return ResponseEntity.ok(token);
+
+            userDTO.setUserId(theUser.getId());
+            userDTO.setOwnerId(theUser.getOwner().getId());
+            userDTO.setToken(JwtGenerator.generateJwt(theUser.getId(),theUser.getAccountType()));
+
+            return ResponseEntity.ok(userDTO);
+
         } else if (accountType.equals("Provider") && theUser.getProvider() != null) {
-            //setUserInSession(request.getSession(), theUser);
-            String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
-            return ResponseEntity.ok(token);
+
+            userDTO.setUserId(theUser.getId());
+            userDTO.setProviderId(theUser.getProvider().getId());
+            userDTO.setToken(JwtGenerator.generateJwt(theUser.getId(),theUser.getAccountType()));
+            return ResponseEntity.ok(userDTO);
         }
         return ResponseEntity.ok(new LoginResponse("Login Failed; Please check your Username, Password and Account Type"));
     }

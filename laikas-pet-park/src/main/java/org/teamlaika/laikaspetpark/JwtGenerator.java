@@ -40,8 +40,7 @@ public class JwtGenerator {
                     .verifyWith(Keys.hmacShaKeyFor(ourSecret))
                     .build().parseSignedClaims(jwtToken);
 
-            String role = (String) result.getPayload().get("role");
-            String userId = result.getPayload().getSubject();
+
             return true;
         } catch (Exception err) {
             throw new InvalidParameterException("JWT Validation Failed: " + err.getMessage());
