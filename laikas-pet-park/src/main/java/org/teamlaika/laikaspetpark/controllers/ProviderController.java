@@ -5,6 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -22,7 +25,7 @@ import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:5173")
-@Controller
+@RestController
 @RequestMapping("/api/providers")
 public class ProviderController {
     @Autowired
@@ -114,17 +117,59 @@ public class ProviderController {
         return"redirect:";
     }
 
-    @GetMapping("search")
+    @GetMapping("/search")
     public String displayProviderSearchForm() { return "providers/search";}
 
-    @PostMapping("search")
-    public String processProviderSearchForm(@RequestParam(required = false) String isGroomer,
-                                            @RequestParam(required = false) String isSitter,
-                                            @RequestParam(required = false) String isTrainer,
-                                            @RequestParam(required = false) String isWalker,
-                                            @RequestParam(required = false) Integer location,
-                                            @RequestParam(required = false) Integer radius,
-                                            Model model) throws JsonProcessingException {
+//    @PostMapping("/search")
+//    public String processProviderSearchForm(@RequestParam(required = false) String isGroomer,
+//                                            @RequestParam(required = false) String isSitter,
+//                                            @RequestParam(required = false) String isTrainer,
+//                                            @RequestParam(required = false) String isWalker,
+//                                            @RequestParam(required = false) Integer location,
+//                                            @RequestParam(required = false) Integer radius,
+//                                            Model model) throws JsonProcessingException {
+//
+//        List<Provider> matchingProviders = new ArrayList<>();
+//
+//        List<ZipApi> nearbyZips = new ApiService().findZipcodesWithinRadiusZipcode(location,radius);
+//
+//        Map<Integer, Float> nearbyZipsMap = new HashMap<>();
+//
+//        for (ZipApi nearbyZip : nearbyZips) {
+//            nearbyZipsMap.put(nearbyZip.zipcode(),nearbyZip.distance());
+//        }
+//
+//        for (ZipApi nearbyZip : nearbyZips) {
+//
+//            Integer aZipcode = nearbyZip.zipcode();
+//
+//            List<Provider> someProviders = providerRepository.findAll(
+//                    Specification.where(ProviderSpecification.providerFilter(isGroomer, isSitter, isWalker, isTrainer, aZipcode))
+//            );
+//
+//            if (!someProviders.isEmpty()) {
+//                matchingProviders.addAll(someProviders);
+//            }
+//        }
+//
+//        if (matchingProviders.isEmpty()) {
+//            model.addAttribute("providers", providerRepository.findAll());
+//            model.addAttribute("locations",nearbyZipsMap);
+//        } else {
+//            model.addAttribute("providers",matchingProviders);
+//            model.addAttribute("locations",nearbyZipsMap);
+//        }
+//
+//        return "providers/search";
+//    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<Provider>> processProviderSearchForm(@RequestParam(required = false) String isGroomer,
+                                                    @RequestParam(required = false) String isSitter,
+                                                    @RequestParam(required = false) String isTrainer,
+                                                    @RequestParam(required = false) String isWalker,
+                                                    @RequestParam(required = false) Integer location,
+                                                    @RequestParam(required = false) Integer radius) throws JsonProcessingException {
 
         List<Provider> matchingProviders = new ArrayList<>();
 
@@ -150,14 +195,12 @@ public class ProviderController {
         }
 
         if (matchingProviders.isEmpty()) {
-            model.addAttribute("providers", providerRepository.findAll());
-            model.addAttribute("locations",nearbyZipsMap);
-        } else {
-            model.addAttribute("providers",matchingProviders);
-            model.addAttribute("locations",nearbyZipsMap);
+
+            matchingProviders = (List<Provider>) providerRepository.findAll();
+
         }
 
-        return "providers/search";
+        return new ResponseEntity<>(matchingProviders, HttpStatus.OK);
     }
 
 //    @GetMapping("search2")

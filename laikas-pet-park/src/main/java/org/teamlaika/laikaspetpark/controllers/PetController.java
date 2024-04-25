@@ -1,29 +1,33 @@
 package org.teamlaika.laikaspetpark.controllers;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSessionListener;
 import jakarta.validation.Valid;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.teamlaika.laikaspetpark.JwtGenerator;
 import org.teamlaika.laikaspetpark.models.*;
 import org.teamlaika.laikaspetpark.models.data.PetPageRepository;
 import org.teamlaika.laikaspetpark.models.data.PetRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:5173")
-@Controller
+@RestController
 @RequestMapping("/api/pets")
 public class PetController {
 
@@ -34,17 +38,48 @@ public class PetController {
     @Autowired
     private PetPageRepository petPageRepository;
 
+    @Autowired
+    AuthenticationController authenticationController;
+
     private final ApiService apiService;
 
     public PetController(ApiService apiService) {
         this.apiService = apiService;
     }
 
-    @GetMapping
-    public String displayAllPets(Model model, User user){
-        model.addAttribute("pets", user.getPets());
-        return"/";
+    @GetMapping("")
+    public ResponseEntity<List<Pet>> displayAllPets(@RequestHeader("Authorization") String token) {
+
+        System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        System.out.println(token);
+
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//        JsonNode jsonNode = objectMapper.readTree(body);
+//
+//        String username = jsonNode.get("username").toString();
+
+        Claims claims = JwtGenerator.decodeToken(token);
+
+        String userId = claims.getSubject();
+
+        System.out.println(userId);
+
+        Optional<User> optUser = userRepository.findById(Integer.parseInt(userId));
+
+        User user = optUser.get();
+//
+//        User user = userRepository.findByUsername(username);
+
+        List<Pet> pets = user.getPets();
+
+        return new ResponseEntity<>(pets, HttpStatus.OK);
     }
+//    @GetMapping
+//    public String displayAllPets(Model model, User user){
+//        model.addAttribute("pets", user.getPets());
+//        return"/";
+//    }
 //    @GetMapping
 //    public String displayAllPets(Model model, @PathVariable int petId) {
 //        model.addAttribute("pets", petRepository.findAll());
@@ -113,7 +148,7 @@ public class PetController {
         return new ResponseEntity<List<CatApi>>(apiService.findAllCats(), HttpStatus.OK);
     }
 
-    @PostMapping("create-cat")
+    @PostMapping("/add-cat")
     public ResponseEntity<String> addCat(@RequestBody String body) {
 
         ObjectMapper objectMapper = new ObjectMapper();

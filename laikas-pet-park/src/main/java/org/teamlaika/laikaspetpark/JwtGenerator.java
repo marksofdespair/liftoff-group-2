@@ -48,5 +48,22 @@ public class JwtGenerator {
         }
     }
 
+    public static Claims decodeToken(String jwtToken) {
+
+
+        try {
+            Jws<Claims> result = Jwts.parser()
+                    .setSigningKey(ourSecret).build().parseClaimsJws(jwtToken);
+//                    .build().parseSignedClaims(jwtToken);
+
+            String role = (String) result.getPayload().get("role");
+            String userId = result.getPayload().getSubject();
+
+            return result.getPayload();
+        } catch (Exception err) {
+            throw new InvalidParameterException("JWT Validation Failed: " + err.getMessage());
+        }
+    }
+
     // TODO: Stretch add second jwt generation and db storage for refresh token
 }
