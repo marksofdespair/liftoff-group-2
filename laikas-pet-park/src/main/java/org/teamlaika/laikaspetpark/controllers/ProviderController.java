@@ -151,6 +151,7 @@ public class ProviderController {
 
         if (matchingProviders.isEmpty()) {
             model.addAttribute("providers", providerRepository.findAll());
+            model.addAttribute("locations",nearbyZipsMap);
         } else {
             model.addAttribute("providers",matchingProviders);
             model.addAttribute("locations",nearbyZipsMap);

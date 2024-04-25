@@ -42,7 +42,7 @@
                             <input type="text" class="form-control" id="formInput" name="location">
                         </div>
                         <div class="mb-3">
-                            <label for="formInput2" class="form-label"> Enter Radius:</label>
+                            <label for="formInput2" class="form-label"> Enter Radius (Miles):</label>
                             <input type="text" class="form-control" id="formInput2" name="radius">
                         </div>
                         <div class="form-group">
@@ -60,10 +60,10 @@
                             <h6 class="card-subtitle" th:text="'Distance: ' + ${locations.get(index)} + ' Miles'"></h6>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item" th:text="'Grooming: '+ (${provider.isGroomer} == '1' ? 'Yes' : 'No')"></li>
-                            <li class="list-group-item" th:text="'Sitting: '+ (${provider.isSitter} == '1' ? 'Yes' : 'No')"></li>
-                            <li class="list-group-item" th:text="'Walking: '+ (${provider.isWalker} == '1' ? 'Yes' : 'No')"></li>
-                            <li class="list-group-item" th:text="'Training: '+ (${provider.isTrainer} == '1' ? 'Yes' : 'No')"></li>
+                            <li class="list-group-item" th:text="'Grooming: '+ (${provider.isGroomer} ? 'Yes' : 'No')"></li>
+                            <li class="list-group-item" th:text="'Sitting: '+ (${provider.isSitter} ? 'Yes' : 'No')"></li>
+                            <li class="list-group-item" th:text="'Walking: '+ (${provider.isWalker} ? 'Yes' : 'No')"></li>
+                            <li class="list-group-item" th:text="'Training: '+ (${provider.isTrainer} ? 'Yes' : 'No')"></li>
                         </ul>
                         <div class="card-body">
                             <a th:href="'mailto:' + ${provider.user.email}" class="card-link">Email</a>
