@@ -19,7 +19,9 @@ import org.teamlaika.laikaspetpark.models.data.PetPageRepository;
 import org.teamlaika.laikaspetpark.models.data.PetRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -30,17 +32,19 @@ public class PetController {
     @Autowired
     private PetRepository petRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private PetPageRepository petPageRepository;
 
+
     private final ApiService apiService;
+
 
     public PetController(ApiService apiService) {
         this.apiService = apiService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<Pet>> displayAllPets(@RequestBody User user){
         return new ResponseEntity<List<Pet>>(user.getPets(), HttpStatus.OK);
     }
@@ -67,20 +71,6 @@ public class PetController {
         return new ResponseEntity<List<DogApi>>(apiService.findAllDogs(), HttpStatus.OK);
     }
 
-//    @PostMapping("create-dog")
-//    public ResponseEntity<Pet> processCreateDogForm(@RequestParam String name,@RequestParam String breed) {
-//        String species = "Dog";
-//        Optional<User> user = userRepository.findById(1);
-//        if(user.isPresent()){
-//            User user1 = user.get();
-//            Pet pet = new Pet(name, species, breed, user1);
-//            return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
-//        }
-//        else{
-//            Pet pet = new Pet();
-//            return new ResponseEntity<Pet>(pet, HttpStatus.OK);
-//        }
-//    }
 
     @PostMapping("/add-dog")
     public ResponseEntity<String> addDog(@RequestBody String body) {
@@ -107,7 +97,7 @@ public class PetController {
         return new ResponseEntity<List<CatApi>>(apiService.findAllCats(), HttpStatus.OK);
     }
 
-    @PostMapping("create-cat")
+    @PostMapping("add-cat")
     public ResponseEntity<String> addCat(@RequestBody String body) {
 
         ObjectMapper objectMapper = new ObjectMapper();

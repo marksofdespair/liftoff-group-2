@@ -212,11 +212,11 @@ public class AuthenticationController {
             return ResponseEntity.ok(userDTO);
 
         } else if (accountType.equals("Provider") && theUser.getProvider() != null) {
-
-            userDTO.setUserId(theUser.getId());
-            userDTO.setProviderId(theUser.getProvider().getId());
-            userDTO.setToken(JwtGenerator.generateJwt(theUser.getId(),theUser.getAccountType()));
-            return ResponseEntity.ok(userDTO);
+            String token = JwtGenerator.generateJwt(theUser.getId(),theUser.getAccountType());
+//            userDTO.setUserId(theUser.getId());
+//            userDTO.setProviderId(theUser.getProvider().getId());
+//            userDTO.setToken(JwtGenerator.generateJwt(theUser.getId(),theUser.getAccountType()));
+            return ResponseEntity.ok(token);
         }
         return ResponseEntity.ok(new LoginResponse("Login Failed; Please check your Username, Password and Account Type"));
     }
