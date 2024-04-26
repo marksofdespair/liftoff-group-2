@@ -50,8 +50,8 @@ public class PetController {
     @GetMapping("")
     public ResponseEntity<List<Pet>> displayAllPets(@RequestHeader("Authorization") String token) {
 
-        System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
-        System.out.println(token);
+//        System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+//        System.out.println(token);
 
 //        ObjectMapper objectMapper = new ObjectMapper();
 //

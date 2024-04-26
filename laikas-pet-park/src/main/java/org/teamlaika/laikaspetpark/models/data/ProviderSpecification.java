@@ -22,31 +22,31 @@ public class ProviderSpecification {
 
             List<Predicate> providerPredicates = new ArrayList<>();
 
-            if (isGroomer != null) {
+            if (isGroomer.equals("true")) {
                 providerPredicates.add(
                     criteriaBuilder.equal(root.get("isGroomer"), true)
                 );
             }
 
-            if (isSitter != null) {
+            if (isSitter.equals("true")) {
                 providerPredicates.add(
                         criteriaBuilder.equal(root.get("isSitter"), true)
                 );
             }
 
-            if (isTrainer != null) {
+            if (isTrainer.equals("true")) {
                 providerPredicates.add(
                         criteriaBuilder.equal(root.get("isTrainer"), true)
                 );
             }
 
-            if (isWalker != null) {
+            if (isWalker.equals("true")) {
                 providerPredicates.add(
                         criteriaBuilder.equal(root.get("isWalker"), true)
                 );
             }
 
-            if (zipcode != null) {
+            if (!zipcode.toString().isEmpty()) {
                 providerPredicates.add(
                         criteriaBuilder.equal(userJoin.get("zipcode"), zipcode)
                 );

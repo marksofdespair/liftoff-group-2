@@ -2,7 +2,10 @@ package org.teamlaika.laikaspetpark.controllers;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -12,16 +15,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.teamlaika.laikaspetpark.models.Owner;
-import org.teamlaika.laikaspetpark.models.Provider;
-import org.teamlaika.laikaspetpark.models.User;
-import org.teamlaika.laikaspetpark.models.ZipApi;
+import org.teamlaika.laikaspetpark.models.*;
 import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderSpecification;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -164,43 +165,77 @@ public class ProviderController {
 //    }
 
     @PostMapping("/search")
-    public ResponseEntity<List<Provider>> processProviderSearchForm(@RequestParam(required = false) String isGroomer,
-                                                    @RequestParam(required = false) String isSitter,
-                                                    @RequestParam(required = false) String isTrainer,
-                                                    @RequestParam(required = false) String isWalker,
-                                                    @RequestParam(required = false) Integer location,
-                                                    @RequestParam(required = false) Integer radius) throws JsonProcessingException {
+    public ResponseEntity<Map<Provider,Float>> processProviderSearchForm(@RequestBody String body) throws JsonProcessingException {
 
-        List<Provider> matchingProviders = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonNode jsonNode = objectMapper.readTree(body);
+
+        String isGroomer = jsonNode.get("isGroomer").asText();
+        String isSitter = jsonNode.get("isSitter").asText();
+        String isWalker = jsonNode.get("isWalker").asText();
+        String isTrainer = jsonNode.get("isTrainer").asText();
+        Integer location = jsonNode.get("zipCode").asInt();
+        Integer radius = jsonNode.get("distance").asInt();
+
 
         List<ZipApi> nearbyZips = new ApiService().findZipcodesWithinRadiusZipcode(location,radius);
 
-        Map<Integer, Float> nearbyZipsMap = new HashMap<>();
+        System.out.println(nearbyZips);
+
+        Map<Provider,Float> response = new HashMap<>();
 
         for (ZipApi nearbyZip : nearbyZips) {
-            nearbyZipsMap.put(nearbyZip.zipcode(),nearbyZip.distance());
-        }
 
-        for (ZipApi nearbyZip : nearbyZips) {
+//            Integer aZipcode = nearbyZip.zipcode();
+//            Float aDistance = nearbyZip.distance();
 
-            Integer aZipcode = nearbyZip.zipcode();
+//            System.out.println(aZipcode);
+//            System.out.println(aDistance);
 
             List<Provider> someProviders = providerRepository.findAll(
-                    Specification.where(ProviderSpecification.providerFilter(isGroomer, isSitter, isWalker, isTrainer, aZipcode))
+                    Specification.where(ProviderSpecification.providerFilter(isGroomer, isSitter, isWalker, isTrainer, nearbyZip.zipcode()))
             );
 
+            System.out.println(someProviders);
+
             if (!someProviders.isEmpty()) {
-                matchingProviders.addAll(someProviders);
+                for (Provider someProvider : someProviders) {
+                    response.put(someProvider, nearbyZip.distance());
+                }
             }
         }
 
-        if (matchingProviders.isEmpty()) {
+        System.out.println(response);
 
-            matchingProviders = (List<Provider>) providerRepository.findAll();
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
-        }
+//        List<ZipApi> nearbyZips = new ApiService().findZipcodesWithinRadiusZipcode(location,radius);
+//
+//        Map<Integer, Float> nearbyZipsMap = new HashMap<>();
+//
+//        for (ZipApi nearbyZip : nearbyZips) {
+//            nearbyZipsMap.put(nearbyZip.zipcode(),nearbyZip.distance());
+//        }
 
-        return new ResponseEntity<>(matchingProviders, HttpStatus.OK);
+//        for (ZipApi nearbyZip : nearbyZips) {
+//
+//            Integer aZipcode = nearbyZip.zipcode();
+//
+//            List<Provider> someProviders = providerRepository.findAll(
+//                    Specification.where(ProviderSpecification.providerFilter(isGroomer, isSitter, isWalker, isTrainer, aZipcode))
+//            );
+//
+//            if (!someProviders.isEmpty()) {
+//                matchingProviders.addAll(someProviders);
+//            }
+//        }
+
+//        if (matchingProviders.isEmpty()) {
+//
+//            matchingProviders = (List<Provider>) providerRepository.findAll();
+//
+//        }
     }
 
 //    @GetMapping("search2")
