@@ -4,7 +4,11 @@ package org.teamlaika.laikaspetpark.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.mysql.cj.xdevapi.JsonArray;
 import jakarta.validation.Valid;
+import net.minidev.json.JSONObject;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -165,7 +169,7 @@ public class ProviderController {
 //    }
 
     @PostMapping("/search")
-    public ResponseEntity<Map<Provider,Float>> processProviderSearchForm(@RequestBody String body) throws JsonProcessingException {
+    public ResponseEntity<JsonArray> processProviderSearchForm(@RequestBody String body) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -183,7 +187,9 @@ public class ProviderController {
 
         System.out.println(nearbyZips);
 
-        Map<Provider,Float> response = new HashMap<>();
+        JsonArray response = new JsonArray();
+
+//        Map<Provider,Float> response = new HashMap<>();
 
         for (ZipApi nearbyZip : nearbyZips) {
 
@@ -201,6 +207,10 @@ public class ProviderController {
 
             if (!someProviders.isEmpty()) {
                 for (Provider someProvider : someProviders) {
+                    JSONObject json = new JSONObject();
+                    JsonNode node = objectMapper.valueToTree(someProvider);
+                    json.put("provider", node);
+
                     response.put(someProvider, nearbyZip.distance());
                 }
             }
