@@ -1,5 +1,6 @@
 package org.teamlaika.laikaspetpark.controllers;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.teamlaika.laikaspetpark.JwtGenerator;
 import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.User;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
@@ -25,14 +27,18 @@ public class ProfileController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("{userId}")
-    public ResponseEntity<?>getUserInfo(ProfileFormDTO profileFormDTO,@PathVariable int userId) {
-        Optional<User> result = userRepository.findById(userId);
-        User aUser = result.get();
-        profileFormDTO.setName(aUser.getName());
-        profileFormDTO.setAccountType(aUser.getAccountType());
-        profileFormDTO.setUsername(aUser.getUsername());
+    @GetMapping
+    public ResponseEntity<?>getUserInfo(@RequestHeader("Authorization") String token) {
 
-        return ResponseEntity.ok(profileFormDTO);
+        Claims claims = JwtGenerator.decodeToken(token);
+
+        String userId = claims.getSubject();
+
+        System.out.println(userId);
+
+        Optional<User> result = userRepository.findById(Integer.valueOf(userId));
+        User aUser = result.get();
+
+        return ResponseEntity.ok(aUser);
     }
 }

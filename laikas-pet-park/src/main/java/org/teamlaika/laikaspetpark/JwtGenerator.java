@@ -40,8 +40,26 @@ public class JwtGenerator {
                     .verifyWith(Keys.hmacShaKeyFor(ourSecret))
                     .build().parseSignedClaims(jwtToken);
 
-
+            String role = (String) result.getPayload().get("role");
+            String userId = result.getPayload().getSubject();
             return true;
+        } catch (Exception err) {
+            throw new InvalidParameterException("JWT Validation Failed: " + err.getMessage());
+        }
+    }
+
+    public static Claims decodeToken(String jwtToken) {
+
+
+        try {
+            Jws<Claims> result = Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(ourSecret)).build().parseSignedClaims(jwtToken);
+//                    .build().parseSignedClaims(jwtToken);
+
+            String role = (String) result.getPayload().get("role");
+            String userId = result.getPayload().getSubject();
+
+            return result.getPayload();
         } catch (Exception err) {
             throw new InvalidParameterException("JWT Validation Failed: " + err.getMessage());
         }
