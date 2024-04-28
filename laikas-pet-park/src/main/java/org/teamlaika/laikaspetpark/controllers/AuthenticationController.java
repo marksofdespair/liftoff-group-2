@@ -6,16 +6,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.JwtGenerator;
-import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
-import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
@@ -31,8 +28,7 @@ public class AuthenticationController {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    OwnerRepository ownerRepository;
+
     @Autowired
     ProviderRepository providerRepository;
 
@@ -122,8 +118,6 @@ public class AuthenticationController {
         User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail(), registerFormDTO.getAccountType(), registerFormDTO.getZipcode());
 
         if (registerFormDTO.getAccountType().equals("Owner")) {
-            Owner newOwner = new Owner();
-            newUser.setOwner(newOwner);
 
             userRepository.save(newUser);
             setUserInSession(request.getSession(), newUser);
@@ -202,7 +196,7 @@ public class AuthenticationController {
 
         String accountType = loginFormDTO.getAccountType();
 
-        if (accountType.equals("Owner") && theUser.getOwner() != null) {
+        if (accountType.equals("Owner") && theUser != null) {
             //setUserInSession(request.getSession(), theUser);
            String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
             return ResponseEntity.ok(token);

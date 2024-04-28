@@ -1,6 +1,5 @@
 package org.teamlaika.laikaspetpark.controllers;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,11 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.Errors;
-import org.teamlaika.laikaspetpark.models.Owner;
-import org.teamlaika.laikaspetpark.models.Pet;
-import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
-import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.PetRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
@@ -25,8 +20,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/api/users")
 public class OwnerController {
-    @Autowired
-    private OwnerRepository ownerRepository;
     @Autowired
     private ProviderRepository providerRepository;
     @Autowired
@@ -53,8 +46,8 @@ public class OwnerController {
     public String displayDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
                                            Model model){
         User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
-        if (currentUser.getOwner() != null) {
-            Owner owner = (Owner) currentUser.getOwner();
+        if (currentUser != null) {
+            User owner = (User) currentUser;
             model.addAttribute("owner", owner);
             return "users/delete";
 //        Optional<Owner> optOwner = ownerRepository.findByUsername(loginFormDTO.getUsername());
@@ -67,14 +60,14 @@ public class OwnerController {
         }
     }
     @PostMapping("delete/{ownerId}")
-    public String postDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid Owner owner,
+    public String postDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid User owner,
                                         Errors errors, Model model, @RequestParam String passwordInput){
         String password = loginFormDTO.getPassword();
         if (errors.hasErrors()) {
             return "delete/{ownerId}";
         }
         if (passwordInput.equals(password)){
-            ownerRepository.delete(owner);
+            userRepository.delete(owner);
             return"/";
         }
         return"redirect:";
@@ -83,8 +76,8 @@ public class OwnerController {
     String displayUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
                             Model model){
         User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
-        if (currentUser.getOwner() != null) {
-            Owner owner = (Owner) currentUser.getOwner();
+        if (currentUser != null) {
+            User owner = (User) currentUser;
             model.addAttribute("owner", owner);
             return "users/update";
 
@@ -98,14 +91,14 @@ public class OwnerController {
         }
     }
     @PostMapping("update")
-    String submitUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid Owner owner,
+    String submitUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid User owner,
                             Errors errors, Model model, @RequestParam String passwordInput){
         String password = loginFormDTO.getPassword();
         if (errors.hasErrors()) {
             return "delete/{ownerId}";
         }
         if (passwordInput.equals(password)){
-            ownerRepository.save(owner);
+            userRepository.save(owner);
             return "/";
         }
         return"redirect:";

@@ -86,29 +86,7 @@ public class Pet {
     }
 
 
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
 
-     @Override
-     public String toString() {
-         return "Pet{" +
-                 "id=" + id +
-                 ", name='" + name + '\'' +
-                 ", owner='" + user + '\'' +
-                 ", species='" + species + '\'' +
-                 ", breed='" + breed + '\''+
-                 '}';
-     }
-
-//  @Override
-//    public String toString() {
-//        return name;}
-      
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
