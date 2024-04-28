@@ -48,88 +48,25 @@ public class PetController {
     @GetMapping("")
     public ResponseEntity<List<Pet>> displayAllPets(@RequestHeader("Authorization") String token) {
 
-//        System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
-//        System.out.println(token);
-
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        JsonNode jsonNode = objectMapper.readTree(body);
-//
-//        String username = jsonNode.get("username").toString();
-
         Claims claims = JwtGenerator.decodeToken(token);
 
         String userId = claims.getSubject();
 
 
-        System.out.println(userId);
-
         Optional<User> optUser = userRepository.findById(Integer.parseInt(userId));
 
         User user = optUser.get();
 
-        System.out.println(user);
-//
-//        User user = userRepository.findByUsername(username);
 
         List<Pet> pets = user.getPets();
 
-       // System.out.println(pets);
-
         return new ResponseEntity<>(pets, HttpStatus.OK);
     }
-//    @GetMapping
-//    public String displayAllPets(Model model, User user){
-//        model.addAttribute("pets", user.getPets());
-//        return"/";
-//    }
-//    @GetMapping
-//    public String displayAllPets(Model model, @PathVariable int petId) {
-//        model.addAttribute("pets", petRepository.findAll());
-//        return "display";
-//    }
-
-//    @GetMapping("precreate")
-//    public String displayPreCreatePetForm() {
-//        return "precreate";
-//    }
-//
-//    @PostMapping("precreate")
-//    public String processPreCreatePetForm(@RequestParam String species) {
-//        if (species.equals("dog")) {
-//            return "redirect:create-dog";
-//        } else if (species.equals("cat")){
-//            return "redirect:create-cat";
-//        }{
-//            return "redirect:";
-//        }
-//    }
 
     @GetMapping("create-dog")
     public ResponseEntity<List<DogApi>> displayCreateDogForm() {
         return new ResponseEntity<List<DogApi>>(apiService.findAllDogs(), HttpStatus.OK);
     }
-
-//    @PostMapping("create-dog")
-//    public ResponseEntity<Pet> processCreateDogForm(@RequestHeader ("Authorization") String token, @RequestParam String name,@RequestParam String breed) {
-//        Claims claims = JwtGenerator.decodeToken(token);
-//
-//        String userId = claims.getSubject();
-//
-//        System.out.println(userId);
-//
-//        String species = "Dog";
-//        Optional<User> user = userRepository.findById(Integer.valueOf(userId));
-//        if(user.isPresent()){
-//            User user1 = user.get();
-//            Pet pet = new Pet(name, species, breed, user1);
-//            return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
-//        }
-//        else{
-//            Pet pet = new Pet();
-//            return new ResponseEntity<Pet>(pet, HttpStatus.OK);
-//        }
-//    }
 
     @PostMapping("/add-dog")
     public ResponseEntity<String> addDog(@RequestBody String body) {
@@ -152,8 +89,7 @@ public class PetController {
 
     @GetMapping("create-cat")
     public ResponseEntity<List<CatApi>> displayCreateCatForm() {
-//        model.addAttribute("breeds", apiService.findAllCats());
-//        return "create-cat";
+
         return new ResponseEntity<List<CatApi>>(apiService.findAllCats(), HttpStatus.OK);
     }
 

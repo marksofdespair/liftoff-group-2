@@ -2,6 +2,9 @@ package org.teamlaika.laikaspetpark.controllers;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -10,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.teamlaika.laikaspetpark.JwtGenerator;
+import org.teamlaika.laikaspetpark.models.Pet;
 import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
 import org.teamlaika.laikaspetpark.models.ZipApi;
@@ -100,6 +105,58 @@ public class ProviderController {
             return "redirect:";
         }
     }
+
+@PostMapping("add/service")
+    public ResponseEntity<?> addService(@RequestHeader("Authorization") String token, @RequestBody String body) {
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    Claims claims = JwtGenerator.decodeToken(token);
+    String userId = claims.getSubject();
+
+    try {
+        JsonNode jsonNode = objectMapper.readTree(body);
+        String serviceType = jsonNode.get("serviceType").asText();
+        String certificates = jsonNode.get("certificates").asText();
+        String yearsExperience = jsonNode.get("yearsExperience").asText();
+        String notes = jsonNode.get("notes").asText();
+        Optional<User> result = userRepository.findById(Integer.valueOf(userId));
+        User aUser = result.get();
+        System.out.println(serviceType);
+        if(serviceType.isBlank()){
+
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        }else if (serviceType.equals("Dog Walking")){
+            Provider provider = aUser.getProvider();
+            provider.setWalker(true);
+            providerRepository.save(provider);
+
+        }else if (serviceType.equals("Pet Sitting")) {
+            Provider provider = aUser.getProvider();
+            provider.setSitter(true);
+            providerRepository.save(provider);
+
+        }else if (serviceType.equals("Training")) {
+            Provider provider = aUser.getProvider();
+            provider.setTrainer(true);
+            providerRepository.save(provider);
+
+        }else if (serviceType.equals("Grooming")) {
+            Provider provider = aUser.getProvider();
+            provider.setGroomer(true);
+            providerRepository.save(provider);
+        }
+
+
+        return ResponseEntity.ok("Service added successfully!");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add dog. Please try again.");
+    }
+}
+
+
+
     @PostMapping("update/{providerId}")
     String submitUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid Provider provider,
                             Errors errors, Model model, @RequestParam String passwordInput){
