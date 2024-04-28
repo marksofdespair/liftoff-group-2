@@ -50,23 +50,14 @@ public class PetController {
     @GetMapping("")
     public ResponseEntity<List<Pet>> displayAllPets(@RequestHeader("Authorization") String token) {
 
-
         Claims claims = JwtGenerator.decodeToken(token);
-
         String userId = claims.getSubject();
-
         System.out.println(userId);
-
         Optional<User> optUser = userRepository.findById(Integer.parseInt(userId));
-
         User user = optUser.get();
-
         List<Pet> pets = user.getPets();
-
-        return new ResponseEntity<List<Pet>>(pets, HttpStatus.OK);
-
+        return new ResponseEntity<>(pets, HttpStatus.OK);
     }
-
 
     @GetMapping("precreate")
     public String displayPreCreatePetForm() {
