@@ -1,11 +1,15 @@
 package org.teamlaika.laikaspetpark.models;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -35,6 +39,9 @@ public class User {
 
     @NotNull
     private Integer zipcode;
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private final List<Pet> pets = new ArrayList<>();
 
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -115,4 +122,8 @@ public class User {
     public Integer getZipcode() {return zipcode;}
 
     public void setZipcode(Integer zipcode) {this.zipcode = zipcode;}
+
+    public List<Pet> getPets() {
+        return pets;
+    }
 }

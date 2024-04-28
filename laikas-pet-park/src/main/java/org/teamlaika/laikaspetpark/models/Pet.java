@@ -1,5 +1,7 @@
 package org.teamlaika.laikaspetpark.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,23 +15,23 @@ public class Pet {
     @NotNull
     private String name;
     @ManyToOne
-    private Owner owner;
+    private User user;
     @OneToOne
     private PetInfo petInfo;
     private String species;
     private String breed;
-    private String description;
+    //private String description;
 
 
     public Pet(){
 
     }
-    public Pet(String name, String species, String breed, Owner owner){
+    public Pet(String name, String species, String breed, User user){
         //this();
         this.name = name;
         this.species = species;
         this.breed = breed;
-        this.owner = owner;
+        this.user = user;
     }
 
     public int getId() {
@@ -46,12 +48,12 @@ public class Pet {
     }
 
 
-    public Owner getOwner() {
-        return owner;
-    }
+//    public User getOwner() {
+//        return user;
+//    }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setOwner(User user) {
+        this.user = user;
     }
 
     public PetInfo getPetInfo() {
@@ -79,39 +81,33 @@ public class Pet {
     }
 
 
-    public String getDescription() {
-        return description;
-    }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
-     @Override
-     public String toString() {
-         return "Pet{" +
-                 "id=" + id +
-                 ", name='" + name + '\'' +
-                 ", owner='" + owner + '\'' +
-                 ", species='" + species + '\'' +
-                 ", breed='" + breed + '\''+
-                 '}';
-     }
+//    @Override
+//    public String toString() {
+//        return "Pet{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", owner='" + user + '\'' +
+//                ", species='" + species + '\'' +
+//                ", breed='" + breed + '\''+
+//                '}';
+//    }
 
 //  @Override
 //    public String toString() {
 //        return name;}
-      
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Pet pet)) return false;
-        return getId() == pet.getId() && Objects.equals(getName(), pet.getName()) && Objects.equals(getOwner(), pet.getOwner()) && Objects.equals(getSpecies(), pet.getSpecies()) && Objects.equals(getBreed(), pet.getBreed());
+        return getId() == pet.getId() && Objects.equals(getName(), pet.getName()) && Objects.equals(getSpecies(), pet.getSpecies()) && Objects.equals(getBreed(), pet.getBreed());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getOwner(), getSpecies(), getBreed());
+        return Objects.hash(getId(), getName(), getSpecies(), getBreed());
 
     }
 }

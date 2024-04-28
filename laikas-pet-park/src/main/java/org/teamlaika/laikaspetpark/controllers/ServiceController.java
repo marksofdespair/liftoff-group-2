@@ -13,7 +13,7 @@ import org.teamlaika.laikaspetpark.models.data.ServiceListingRepository;
 
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/api/services")
 public class ServiceController {
     @Autowired
