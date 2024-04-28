@@ -12,16 +12,16 @@ public class Owner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
-    @OneToOne(mappedBy = "owner")
-    private User user;
-//    public String username;
+//    @OneToOne(mappedBy = "owner")
+//    private User user;
 
-    //    @OneToMany
+
+//        @OneToMany
 //    @JoinColumn(name = "owner_id")
 //    private final List<Pet> pets = new ArrayList<>();
-    public Owner(){
-
-    }
+//    public Owner(){
+//
+//    }
 
 //    public List<Pet> getPets() {
 //        return pets;
@@ -31,11 +31,11 @@ public class Owner {
         return Id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 }

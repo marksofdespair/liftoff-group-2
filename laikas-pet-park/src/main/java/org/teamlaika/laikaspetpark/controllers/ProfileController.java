@@ -28,7 +28,7 @@ public class ProfileController {
     UserRepository userRepository;
 
     @GetMapping
-    public ResponseEntity<?>getUserInfo(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<User>getUserInfo(@RequestHeader("Authorization") String token) {
 
         Claims claims = JwtGenerator.decodeToken(token);
 
@@ -39,6 +39,6 @@ public class ProfileController {
         Optional<User> result = userRepository.findById(Integer.valueOf(userId));
         User aUser = result.get();
 
-        return ResponseEntity.ok(aUser);
+        return new ResponseEntity<>(aUser,HttpStatus.OK);
     }
 }

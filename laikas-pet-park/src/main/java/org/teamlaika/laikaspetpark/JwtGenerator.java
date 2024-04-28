@@ -10,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import java.security.InvalidParameterException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 
@@ -39,6 +40,9 @@ public class JwtGenerator {
             Jws<Claims> result = Jwts.parser()
                     .verifyWith(Keys.hmacShaKeyFor(ourSecret))
                     .build().parseSignedClaims(jwtToken);
+            byte [] signature = result.getDigest();
+
+            System.out.println(Arrays.toString(signature));
 
             String role = (String) result.getPayload().get("role");
             String userId = result.getPayload().getSubject();
@@ -53,7 +57,7 @@ public class JwtGenerator {
 
         try {
             Jws<Claims> result = Jwts.parser()
-                    .verifyWith(Keys.hmacShaKeyFor(ourSecret)).build().parseSignedClaims(jwtToken);
+                    .setSigningKey(ourSecret).build().parseClaimsJws(jwtToken);
 //                    .build().parseSignedClaims(jwtToken);
 
             String role = (String) result.getPayload().get("role");

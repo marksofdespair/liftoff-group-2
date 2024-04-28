@@ -12,7 +12,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.JwtGenerator;
-import org.teamlaika.laikaspetpark.models.Owner;
+//import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
 import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
@@ -123,8 +123,8 @@ public class AuthenticationController {
         User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail(), registerFormDTO.getAccountType(), registerFormDTO.getZipcode());
 
         if (registerFormDTO.getAccountType().equals("Owner")) {
-            Owner newOwner = new Owner();
-            newUser.setOwner(newOwner);
+//            Owner newOwner = new Owner();
+//            newUser.setOwner(newOwner);
 
             userRepository.save(newUser);
             setUserInSession(request.getSession(), newUser);
@@ -174,13 +174,15 @@ public class AuthenticationController {
 
         String accountType = loginFormDTO.getAccountType();
 
-        if (accountType.equals("Owner") && theUser.getOwner() != null) {
+        if (accountType.equals("Owner")) {
             //setUserInSession(request.getSession(), theUser);
             String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
+            System.out.println(token);
             return ResponseEntity.ok(token);
         } else if (accountType.equals("Provider") && theUser.getProvider() != null) {
             //setUserInSession(request.getSession(), theUser);
             String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
+            System.out.println(token);
             return ResponseEntity.ok(token);
         }
         return ResponseEntity.ok(" Error. Please try re-entering your information");
