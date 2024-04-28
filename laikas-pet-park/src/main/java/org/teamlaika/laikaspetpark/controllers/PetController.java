@@ -74,7 +74,7 @@ public class PetController {
 
         List<Pet> pets = user.getPets();
 
-        System.out.println(pets);
+       // System.out.println(pets);
 
         return new ResponseEntity<>(pets, HttpStatus.OK);
     }
@@ -89,47 +89,47 @@ public class PetController {
 //        return "display";
 //    }
 
-    @GetMapping("precreate")
-    public String displayPreCreatePetForm() {
-        return "precreate";
-    }
-
-    @PostMapping("precreate")
-    public String processPreCreatePetForm(@RequestParam String species) {
-        if (species.equals("dog")) {
-            return "redirect:create-dog";
-        } else if (species.equals("cat")){
-            return "redirect:create-cat";
-        }{
-            return "redirect:";
-        }
-    }
+//    @GetMapping("precreate")
+//    public String displayPreCreatePetForm() {
+//        return "precreate";
+//    }
+//
+//    @PostMapping("precreate")
+//    public String processPreCreatePetForm(@RequestParam String species) {
+//        if (species.equals("dog")) {
+//            return "redirect:create-dog";
+//        } else if (species.equals("cat")){
+//            return "redirect:create-cat";
+//        }{
+//            return "redirect:";
+//        }
+//    }
 
     @GetMapping("create-dog")
     public ResponseEntity<List<DogApi>> displayCreateDogForm() {
         return new ResponseEntity<List<DogApi>>(apiService.findAllDogs(), HttpStatus.OK);
     }
 
-    @PostMapping("create-dog")
-    public ResponseEntity<Pet> processCreateDogForm(@RequestHeader ("Authorization") String token, @RequestParam String name,@RequestParam String breed) {
-        Claims claims = JwtGenerator.decodeToken(token);
-
-        String userId = claims.getSubject();
-
-        System.out.println(userId);
-
-        String species = "Dog";
-        Optional<User> user = userRepository.findById(Integer.valueOf(userId));
-        if(user.isPresent()){
-            User user1 = user.get();
-            Pet pet = new Pet(name, species, breed, user1);
-            return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
-        }
-        else{
-            Pet pet = new Pet();
-            return new ResponseEntity<Pet>(pet, HttpStatus.OK);
-        }
-    }
+//    @PostMapping("create-dog")
+//    public ResponseEntity<Pet> processCreateDogForm(@RequestHeader ("Authorization") String token, @RequestParam String name,@RequestParam String breed) {
+//        Claims claims = JwtGenerator.decodeToken(token);
+//
+//        String userId = claims.getSubject();
+//
+//        System.out.println(userId);
+//
+//        String species = "Dog";
+//        Optional<User> user = userRepository.findById(Integer.valueOf(userId));
+//        if(user.isPresent()){
+//            User user1 = user.get();
+//            Pet pet = new Pet(name, species, breed, user1);
+//            return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.OK);
+//        }
+//        else{
+//            Pet pet = new Pet();
+//            return new ResponseEntity<Pet>(pet, HttpStatus.OK);
+//        }
+//    }
 
     @PostMapping("/add-dog")
     public ResponseEntity<String> addDog(@RequestBody String body) {
@@ -158,9 +158,7 @@ public class PetController {
     }
 
     @PostMapping("/add-cat")
-    public ResponseEntity<String> addCat(@RequestHeader ("Authorization") String token, @RequestBody String body) {
-
-
+    public ResponseEntity<String> addCat(@RequestBody String body) {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -174,9 +172,8 @@ public class PetController {
             petRepository.save(pet);
             return ResponseEntity.ok("Cat added successfully!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add cat. Please try again.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add dog. Please try again.");
         }
-
     }
     @GetMapping("update/{petId}")
     public ResponseEntity<Optional<Pet>> displayUpdatePetForm(@PathVariable int petId){
