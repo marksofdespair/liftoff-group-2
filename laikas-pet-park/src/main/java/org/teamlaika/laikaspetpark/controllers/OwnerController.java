@@ -13,7 +13,7 @@ import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.Pet;
 import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
-import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
+//import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.PetRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
@@ -25,8 +25,8 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/api/users")
 public class OwnerController {
-    @Autowired
-    private OwnerRepository ownerRepository;
+//    @Autowired
+//    private OwnerRepository ownerRepository;
     @Autowired
     private ProviderRepository providerRepository;
     @Autowired
@@ -67,14 +67,14 @@ public class OwnerController {
 //        }
 //    }
     @PostMapping("delete/{ownerId}")
-    public String postDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid Owner owner,
+    public String postDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid User owner,
                                         Errors errors, Model model, @RequestParam String passwordInput){
         String password = loginFormDTO.getPassword();
         if (errors.hasErrors()) {
             return "delete/{ownerId}";
         }
         if (passwordInput.equals(password)){
-            ownerRepository.delete(owner);
+            userRepository.delete(owner);
             return"/";
         }
         return"redirect:";
@@ -98,14 +98,14 @@ public class OwnerController {
 //        }
 //    }
     @PostMapping("update")
-    String submitUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid Owner owner,
+    String submitUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid User owner,
                             Errors errors, Model model, @RequestParam String passwordInput){
         String password = loginFormDTO.getPassword();
         if (errors.hasErrors()) {
             return "delete/{ownerId}";
         }
         if (passwordInput.equals(password)){
-            ownerRepository.save(owner);
+            userRepository.save(owner);
             return "/";
         }
         return"redirect:";

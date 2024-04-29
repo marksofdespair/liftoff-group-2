@@ -15,7 +15,7 @@ import org.teamlaika.laikaspetpark.JwtGenerator;
 //import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
-import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
+//import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
 import org.teamlaika.laikaspetpark.models.data.ProviderRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
@@ -32,8 +32,8 @@ public class AuthenticationController {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    OwnerRepository ownerRepository;
+    //@Autowired
+    //OwnerRepository ownerRepository;
     @Autowired
     ProviderRepository providerRepository;
 
