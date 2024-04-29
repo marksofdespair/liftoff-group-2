@@ -17,7 +17,6 @@ public class User {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int Id;
 
-
     @OneToOne(cascade = CascadeType.ALL)
     private Provider provider;
 
@@ -71,15 +70,6 @@ public class User {
     public boolean isMatchingPassword(String password) {
         return encoder.matches(password, pwHash);
     }
-// TODO This can probably be deleted
-//
-//    public Owner getOwner() {
-//        return owner;
-//    }
-//
-//    public void setOwner(Owner owner) {
-//        this.owner = owner;
-//    }
 
     public Provider getProvider() {
         return provider;
