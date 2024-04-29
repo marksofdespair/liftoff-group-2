@@ -31,6 +31,8 @@ import java.util.Optional;
 @RequestMapping("/api/pets")
 public class PetController {
 
+    //private static List<Pet> pets = new ArrayList<>();
+
     @Autowired
     private PetRepository petRepository;
     @Autowired
@@ -176,7 +178,6 @@ public class PetController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add cat. Please try again.");
         }
-
     }
     @GetMapping("update/{petId}")
     public ResponseEntity<Optional<Pet>> displayUpdatePetForm(@PathVariable int petId){
