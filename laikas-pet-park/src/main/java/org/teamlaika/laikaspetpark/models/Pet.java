@@ -48,8 +48,8 @@ public class Pet {
     }
 
 
-    public User getOwner() {
-        return user;
+    public int getOwnerId() {
+        return user.getId();
     }
 
     public void setOwner(User user) {
