@@ -189,15 +189,32 @@ public class PetController {
         petRepository.save(pet);
         return "redirect:../pets";
     }
-    @GetMapping("delete/{petId}")
-    public ResponseEntity<?> displayDeletePetForm(@PathVariable int petId){
+    @GetMapping("/delete/{petId}")
+    public ResponseEntity<Pet> displayDeletePetForm(@PathVariable int petId){
+
+//        Claims claims = JwtGenerator.decodeToken(token);
+//        String userId = claims.getSubject();
+
         Optional<Pet> optPet = petRepository.findById(petId);
-        return new ResponseEntity<Optional<Pet>>(optPet, HttpStatus.OK);
+        Pet pet = optPet.get();
+        return new ResponseEntity<Pet>(pet, HttpStatus.OK);
+
+
     }
-    @DeleteMapping("delete/{petId}")
-    public ResponseEntity<Pet> postDeletePetForm(@RequestParam Pet pet){
-        petRepository.delete(pet);
-        return new ResponseEntity<Pet>(HttpStatus.ACCEPTED);
+    @PostMapping("/delete/{petId}")
+    public ResponseEntity<String> postDeletePetForm(@PathVariable int petId){
+        //if (petId == pet.getId()){
+            Optional<Pet> optPet = petRepository.findById(petId);
+            if(optPet.isPresent()){
+                petRepository.deleteById(petId);
+                return ResponseEntity.ok("Pet was removed.");
+            }
+            else{
+                return ResponseEntity.ok("Pet not found.");
+            }
+
+        //}
+        //return ResponseEntity.ok("No pet to delete.");
     }
     @GetMapping("add-pet-profile/{petId}")
     public String displayPetProfileForm(Model model, @PathVariable int petId){
