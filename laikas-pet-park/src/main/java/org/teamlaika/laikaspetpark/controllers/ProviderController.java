@@ -169,7 +169,7 @@ public class ProviderController {
 //    }
 
     @PostMapping("/search")
-    public ResponseEntity<List<JSONObject>> processProviderSearchForm(@RequestBody String body) throws JsonProcessingException {
+    public ResponseEntity<List<ProviderSearchResult>> processProviderSearchForm(@RequestBody String body) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -182,24 +182,11 @@ public class ProviderController {
         Integer location = jsonNode.get("zipCode").asInt();
         Integer radius = jsonNode.get("distance").asInt();
 
-
         List<ZipApi> nearbyZips = new ApiService().findZipcodesWithinRadiusZipcode(location,radius);
 
-        System.out.println(nearbyZips);
-
-//        JsonArray response = new JsonArray();
-
-        List<JSONObject> response = new ArrayList<>();
-
-//        Map<Provider,Float> response = new HashMap<>();
+        List<ProviderSearchResult> response = new ArrayList<>();
 
         for (ZipApi nearbyZip : nearbyZips) {
-
-//            Integer aZipcode = nearbyZip.zipcode();
-//            Float aDistance = nearbyZip.distance();
-
-//            System.out.println(aZipcode);
-//            System.out.println(aDistance);
 
             List<Provider> someProviders = providerRepository.findAll(
                     Specification.where(ProviderSpecification.providerFilter(isGroomer, isSitter, isWalker, isTrainer, nearbyZip.zipcode()))
@@ -210,23 +197,42 @@ public class ProviderController {
             if (!someProviders.isEmpty()) {
                 for (Provider someProvider : someProviders) {
 
-                    JSONObject providerResult = new JSONObject();
+                    String grooming = "No";
+                    String sitting = "No";
+                    String walking = "No";
+                    String training = "No";
 
-                    providerResult.put("id", someProvider.getId());
-                    providerResult.put("name", someProvider.getUser().getName());
-                    providerResult.put("isGroomer", someProvider.isGroomer());
-                    providerResult.put("isSitter", someProvider.isSitter());
-                    providerResult.put("isTrainer", someProvider.isTrainer());
-                    providerResult.put("isWalker", someProvider.isWalker());
-                    providerResult.put("distance", nearbyZip.distance());
-                    providerResult.put("zipcode", nearbyZip.zipcode());
 
-                    response.add(providerResult);
+                    if (someProvider.isGroomer()) {
+                        grooming = "Yes";
+                    }
+
+                    if (someProvider.isSitter()) {
+                        sitting = "Yes";
+                    }
+
+                    if (someProvider.isWalker()) {
+                        walking = "Yes";
+                    }
+
+                    if (someProvider.isTrainer()) {
+                        training = "Yes";
+                    }
+
+                    ProviderSearchResult providerSearchResult = new ProviderSearchResult(
+                            someProvider.getUser().getName(),
+                            nearbyZip.zipcode(),
+                            nearbyZip.distance(),
+                            grooming,
+                            sitting,
+                            walking,
+                            training
+                    );
+
+                    response.add(providerSearchResult);
                 }
             }
         }
-
-        System.out.println(response);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
