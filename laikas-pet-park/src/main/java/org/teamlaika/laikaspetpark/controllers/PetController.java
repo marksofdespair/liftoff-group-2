@@ -216,6 +216,12 @@ public class PetController {
         //}
         //return ResponseEntity.ok("No pet to delete.");
     }
+    @GetMapping("petinfo/{petId}")
+    public ResponseEntity<Pet> displayPetInfo(@PathVariable int petId){
+        Optional<Pet> optPet = petRepository.findById(petId);
+        Pet pet = optPet.get();
+        return new ResponseEntity<Pet>(pet, HttpStatus.OK);
+    }
     @GetMapping("add-pet-profile/{petId}")
     public String displayPetProfileForm(Model model, @PathVariable int petId){
         Optional<Pet> optPet = petRepository.findById(petId);
