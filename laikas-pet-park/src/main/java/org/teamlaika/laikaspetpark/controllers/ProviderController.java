@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -171,8 +172,69 @@ public class ProviderController {
         return"redirect:";
     }
 
-    @GetMapping("/search")
-    public String displayProviderSearchForm() { return "providers/search";}
+    @PostMapping("/search")
+    public ResponseEntity<List<JSONObject>> processProviderSearchForm(@RequestBody String body) throws JsonProcessingException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonNode jsonNode = objectMapper.readTree(body);
+
+        String isGroomer = jsonNode.get("isGroomer").asText();
+        String isSitter = jsonNode.get("isSitter").asText();
+        String isWalker = jsonNode.get("isWalker").asText();
+        String isTrainer = jsonNode.get("isTrainer").asText();
+        Integer location = jsonNode.get("zipCode").asInt();
+        Integer radius = jsonNode.get("distance").asInt();
+
+
+        List<ZipApi> nearbyZips = new ApiService().findZipcodesWithinRadiusZipcode(location, radius);
+
+        System.out.println(nearbyZips);
+
+//        JsonArray response = new JsonArray();
+
+        List<JSONObject> response = new ArrayList<>();
+
+//        Map<Provider,Float> response = new HashMap<>();
+
+        for (ZipApi nearbyZip : nearbyZips) {
+
+//            Integer aZipcode = nearbyZip.zipcode();
+//            Float aDistance = nearbyZip.distance();
+
+//            System.out.println(aZipcode);
+//            System.out.println(aDistance);
+
+            List<Provider> someProviders = providerRepository.findAll(
+                    Specification.where(ProviderSpecification.providerFilter(isGroomer, isSitter, isWalker, isTrainer, nearbyZip.zipcode()))
+            );
+
+            System.out.println(someProviders);
+
+            if (!someProviders.isEmpty()) {
+                for (Provider someProvider : someProviders) {
+
+                    JSONObject providerResult = new JSONObject();
+
+                    providerResult.put("id", someProvider.getId());
+                    providerResult.put("name", someProvider.getUser().getName());
+                    providerResult.put("isGroomer", someProvider.isGroomer());
+                    providerResult.put("isSitter", someProvider.isSitter());
+                    providerResult.put("isTrainer", someProvider.isTrainer());
+                    providerResult.put("isWalker", someProvider.isWalker());
+                    providerResult.put("distance", nearbyZip.distance());
+                    providerResult.put("zipcode", nearbyZip.zipcode());
+
+                    response.add(providerResult);
+                }
+            }
+        }
+
+        System.out.println(response);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+      // TODO probably remove this method
 
 //    @PostMapping("/search")
 //    public String processProviderSearchForm(@RequestParam(required = false) String isGroomer,
@@ -217,45 +279,47 @@ public class ProviderController {
 //        return "providers/search";
 //    }
 
-    @PostMapping("/search")
-    public ResponseEntity<List<Provider>> processProviderSearchForm(@RequestParam(required = false) String isGroomer,
-                                                                    @RequestParam(required = false) String isSitter,
-                                                                    @RequestParam(required = false) String isTrainer,
-                                                                    @RequestParam(required = false) String isWalker,
-                                                                    @RequestParam(required = false) Integer location,
-                                                                    @RequestParam(required = false) Integer radius) throws JsonProcessingException {
+//    @PostMapping("/search")
+//    public ResponseEntity<List<Provider>> processProviderSearchForm(@RequestParam(required = false) String isGroomer,
+//                                                                    @RequestParam(required = false) String isSitter,
+//                                                                    @RequestParam(required = false) String isTrainer,
+//                                                                    @RequestParam(required = false) String isWalker,
+//                                                                    @RequestParam(required = false) Integer location,
+//                                                                    @RequestParam(required = false) Integer radius) throws JsonProcessingException {
+//
+//        List<Provider> matchingProviders = new ArrayList<>();
+//
+//        List<ZipApi> nearbyZips = new ApiService().findZipcodesWithinRadiusZipcode(location,radius);
+//
+//        Map<Integer, Float> nearbyZipsMap = new HashMap<>();
+//
+//        for (ZipApi nearbyZip : nearbyZips) {
+//            nearbyZipsMap.put(nearbyZip.zipcode(),nearbyZip.distance());
+//        }
+//
+//        for (ZipApi nearbyZip : nearbyZips) {
+//
+//            Integer aZipcode = nearbyZip.zipcode();
+//
+//            List<Provider> someProviders = providerRepository.findAll(
+//                    Specification.where(ProviderSpecification.providerFilter(isGroomer, isSitter, isWalker, isTrainer, aZipcode))
+//            );
+//
+//            if (!someProviders.isEmpty()) {
+//                matchingProviders.addAll(someProviders);
+//            }
+//        }
+//
+//        if (matchingProviders.isEmpty()) {
+//
+//            matchingProviders = (List<Provider>) providerRepository.findAll();
+//
+//        }
+//
+//        return new ResponseEntity<>(matchingProviders, HttpStatus.OK);
+//    }
 
-        List<Provider> matchingProviders = new ArrayList<>();
-
-        List<ZipApi> nearbyZips = new ApiService().findZipcodesWithinRadiusZipcode(location,radius);
-
-        Map<Integer, Float> nearbyZipsMap = new HashMap<>();
-
-        for (ZipApi nearbyZip : nearbyZips) {
-            nearbyZipsMap.put(nearbyZip.zipcode(),nearbyZip.distance());
-        }
-
-        for (ZipApi nearbyZip : nearbyZips) {
-
-            Integer aZipcode = nearbyZip.zipcode();
-
-            List<Provider> someProviders = providerRepository.findAll(
-                    Specification.where(ProviderSpecification.providerFilter(isGroomer, isSitter, isWalker, isTrainer, aZipcode))
-            );
-
-            if (!someProviders.isEmpty()) {
-                matchingProviders.addAll(someProviders);
-            }
-        }
-
-        if (matchingProviders.isEmpty()) {
-
-            matchingProviders = (List<Provider>) providerRepository.findAll();
-
-        }
-
-        return new ResponseEntity<>(matchingProviders, HttpStatus.OK);
-    }
+    //TODO Probably remove this as well.
 
 //    @GetMapping("search2")
 //    public String displayProviderSearchForm2() {return "providers/search2";}

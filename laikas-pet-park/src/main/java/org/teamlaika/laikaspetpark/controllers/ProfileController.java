@@ -6,7 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.JwtGenerator;
+import org.teamlaika.laikaspetpark.models.Pet;
+import org.teamlaika.laikaspetpark.models.ProviderReview;
 import org.teamlaika.laikaspetpark.models.User;
+import org.teamlaika.laikaspetpark.models.data.ProviderReviewRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.dto.ProfileFormDTO;
 
@@ -18,6 +21,8 @@ import java.util.Optional;
 @RequestMapping("/api/profile")
 public class ProfileController {
 
+    @Autowired
+    ProviderReviewRepository providerReviewRepository;
     @Autowired
     UserRepository userRepository;
 
@@ -34,12 +39,14 @@ public class ProfileController {
         Optional<User> result = userRepository.findById(Integer.valueOf(userId));
 
         User aUser = result.get();
-        aUser.toString();
+        List<Pet> pets = aUser.getPets();
+       // List<ProviderReview> reviews = providerReviewRepository.findByProviderId(aUser.getProvider());
 
         profileFormDTO.setUsername(aUser.getUsername());
         profileFormDTO.setName(aUser.getName());
         profileFormDTO.setAccountType(aUser.getAccountType());
-        System.out.println(profileFormDTO);
-        return new ResponseEntity<>(profileFormDTO,HttpStatus.OK);
+        profileFormDTO.setPets(pets);
+
+        return new ResponseEntity<>(profileFormDTO, HttpStatus.OK);
     }
 }
