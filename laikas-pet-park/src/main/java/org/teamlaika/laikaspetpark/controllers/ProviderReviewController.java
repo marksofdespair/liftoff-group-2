@@ -1,8 +1,10 @@
 package org.teamlaika.laikaspetpark.controllers;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.teamlaika.laikaspetpark.models.ProviderReviews;
-import org.teamlaika.laikaspetpark.models.data.ProviderReviewRepository;
+import org.teamlaika.laikaspetpark.models.ProviderReview;
+import org.teamlaika.laikaspetpark.models.dto.ReviewDTO;
+import org.teamlaika.laikaspetpark.models.service.ProviderReviewService;
 
 import java.util.List;
 
@@ -11,17 +13,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/provider-review")
 public class ProviderReviewController {
-
     @Autowired
-    private ProviderReviewRepository providerReviewRepository;
+    private ProviderReviewService reviewService;
 
-    @GetMapping
-    public List<ProviderReviews> getAllProviderReviews() {
-        return providerReviewRepository.findAll();
+    @GetMapping("/provider/{providerId}")
+    public List<ProviderReview> getReviewsByProviderId(@PathVariable Long providerId) {
+        return reviewService.getReviewsByProviderId(providerId);
     }
 
-    @PostMapping
-    public ProviderReviews addProviderReview(@RequestBody ProviderReviews review) {
-        return providerReviewRepository.save(review);
-    }
+    // Other REST endpoints for CRUD  if I need to later :')
 }
