@@ -6,9 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.JwtGenerator;
+import org.teamlaika.laikaspetpark.models.Pet;
+import org.teamlaika.laikaspetpark.models.ProviderReview;
 import org.teamlaika.laikaspetpark.models.User;
+import org.teamlaika.laikaspetpark.models.data.ProviderReviewRepository;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
+import org.teamlaika.laikaspetpark.models.dto.ProfileFormDTO;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -17,20 +22,40 @@ import java.util.Optional;
 public class ProfileController {
 
     @Autowired
+    ProviderReviewRepository providerReviewRepository;
+    @Autowired
     UserRepository userRepository;
 
     @GetMapping
-    public ResponseEntity<User>getUserInfo(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<?>getUserInfo(@RequestHeader("Authorization") String token, @RequestParam(value = "userId", required = false) String id, ProfileFormDTO profileFormDTO) {
 
-        Claims claims = JwtGenerator.decodeToken(token);
+        System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        System.out.println(id);
 
-        String userId = claims.getSubject();
+        if (id != null) {
 
-        System.out.println(userId);
+            Optional<User> result = userRepository.findById(Integer.valueOf(id));
 
-        Optional<User> result = userRepository.findById(Integer.valueOf(userId));
-        User aUser = result.get();
+            User aUser = result.get();
 
-        return new ResponseEntity<>(aUser,HttpStatus.OK);
+            profileFormDTO.setUsername(aUser.getUsername());
+            profileFormDTO.setName(aUser.getName());
+            profileFormDTO.setAccountType(aUser.getAccountType());
+        } else {
+
+            Claims claims = JwtGenerator.decodeToken(token);
+
+            String userId = claims.getSubject();
+
+            Optional<User> result = userRepository.findById(Integer.valueOf(userId));
+
+            User aUser = result.get();
+
+            profileFormDTO.setUsername(aUser.getUsername());
+            profileFormDTO.setName(aUser.getName());
+            profileFormDTO.setAccountType(aUser.getAccountType());
+        }
+
+        return new ResponseEntity<>(profileFormDTO, HttpStatus.OK);
     }
 }

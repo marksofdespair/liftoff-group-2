@@ -1,7 +1,8 @@
 package org.teamlaika.laikaspetpark.models.dto;
 
 import org.teamlaika.laikaspetpark.models.Pet;
-import org.teamlaika.laikaspetpark.models.ProviderReviews;
+import org.teamlaika.laikaspetpark.models.ProviderReview;
+import org.teamlaika.laikaspetpark.models.ProviderReview;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class ProfileFormDTO {
     private String username;
     private String accountType;
     private List<Pet> pets = new ArrayList<>();
-    private List<ProviderReviews> reviews = new ArrayList<>();
+    private List<ProviderReview> reviews = new ArrayList<>();
 
 
     public String getName() {
