@@ -39,13 +39,13 @@ public class ProfileController {
         Optional<User> result = userRepository.findById(Integer.valueOf(userId));
 
         User aUser = result.get();
-        List<Pet> pets = aUser.getPets();
+        //List<Pet> pets = aUser.getPets();
        // List<ProviderReview> reviews = providerReviewRepository.findByProviderId(aUser.getProvider());
 
         profileFormDTO.setUsername(aUser.getUsername());
         profileFormDTO.setName(aUser.getName());
         profileFormDTO.setAccountType(aUser.getAccountType());
-        profileFormDTO.setPets(pets);
+        //profileFormDTO.setPets(pets);
 
         return new ResponseEntity<>(profileFormDTO, HttpStatus.OK);
     }
