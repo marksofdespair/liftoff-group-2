@@ -11,9 +11,11 @@ public class ProfileFormDTO {
 
     private String name;
     private String username;
+    private String email;
     private String accountType;
     private List<Pet> pets = new ArrayList<>();
     private List<ProviderReview> reviews = new ArrayList<>();
+
 
 
     public String getName() {
@@ -30,6 +32,14 @@ public class ProfileFormDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getAccountType() {

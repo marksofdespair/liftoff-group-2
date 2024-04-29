@@ -38,9 +38,14 @@ public class ProfileController {
 
             User aUser = result.get();
 
+            List<Pet> pets = aUser.getPets();
+
             profileFormDTO.setUsername(aUser.getUsername());
             profileFormDTO.setName(aUser.getName());
+            profileFormDTO.setEmail(aUser.getEmail());
             profileFormDTO.setAccountType(aUser.getAccountType());
+            profileFormDTO.setPets(pets);
+
         } else {
 
             Claims claims = JwtGenerator.decodeToken(token);
@@ -51,9 +56,15 @@ public class ProfileController {
 
             User aUser = result.get();
 
+            List<Pet> pets = aUser.getPets();
+            // List<ProviderReview> reviews = providerReviewRepository.findByProviderId(aUser.getProvider());
+
             profileFormDTO.setUsername(aUser.getUsername());
             profileFormDTO.setName(aUser.getName());
+            profileFormDTO.setEmail(aUser.getEmail());
             profileFormDTO.setAccountType(aUser.getAccountType());
+            profileFormDTO.setPets(pets);
+
         }
 
         return new ResponseEntity<>(profileFormDTO, HttpStatus.OK);
