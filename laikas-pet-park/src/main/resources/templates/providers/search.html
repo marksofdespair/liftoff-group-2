@@ -37,6 +37,14 @@
                                 Walking
                             </label>
                         </div>
+                        <div class="mb-3">
+                            <label for="formInput" class="form-label"> Enter Zip Code:</label>
+                            <input type="text" class="form-control" id="formInput" name="location">
+                        </div>
+                        <div class="mb-3">
+                            <label for="formInput2" class="form-label"> Enter Radius (Miles):</label>
+                            <input type="text" class="form-control" id="formInput2" name="radius">
+                        </div>
                         <div class="form-group">
                             <input type="submit" value="Submit" class="btn btn-success h3">
                         </div>
@@ -47,17 +55,18 @@
                 <h1 class="h1">Search Results:</h1>
                 <th:block th:each="provider : ${providers}">
                     <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title" th:text="${provider.user.name}"></h3>
+                        <div class="card-body" th:with="index=${provider.user.zipcode}">
+                            <h4 class="card-title" th:text="${provider.user.name}"></h4>
+                            <h6 class="card-subtitle" th:text="'Distance: ' + ${locations.get(index)} + ' Miles'"></h6>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item" th:text="'Grooming: '+ ${provider.isGroomer} == '1' ? 'Yes' : 'No'"></li>
-                            <li class="list-group-item" th:text="'Sitting: '+ ${provider.isSitter} == '1' ? 'Yes' : 'No'"></li>
-                            <li class="list-group-item" th:text="'Walking: '+ ${provider.isWalker} == '1' ? 'Yes' : 'No'"></li>
-                            <li class="list-group-item" th:text="'Training: '+ ${provider.isTrainer} == '1' ? 'Yes' : 'No'"></li>
+                            <li class="list-group-item" th:text="'Grooming: '+ (${provider.isGroomer} ? 'Yes' : 'No')"></li>
+                            <li class="list-group-item" th:text="'Sitting: '+ (${provider.isSitter} ? 'Yes' : 'No')"></li>
+                            <li class="list-group-item" th:text="'Walking: '+ (${provider.isWalker} ? 'Yes' : 'No')"></li>
+                            <li class="list-group-item" th:text="'Training: '+ (${provider.isTrainer} ? 'Yes' : 'No')"></li>
                         </ul>
                         <div class="card-body">
-                            <a th:href="@${provider.user.email}" class="card-link">Email</a>
+                            <a th:href="'mailto:' + ${provider.user.email}" class="card-link">Email</a>
                         </div>
                     </div>
                 </th:block>
