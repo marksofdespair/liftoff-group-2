@@ -9,7 +9,9 @@ public class ProviderSearchResult {
     private String walker;
     private String trainer;
 
-    public ProviderSearchResult(String name, Integer zipcode, Float distance, String groomer, String sitter, String walker, String trainer) {
+    private Integer userId;
+
+    public ProviderSearchResult(String name, Integer zipcode, Float distance, String groomer, String sitter, String walker, String trainer, Integer userId) {
         this.name = name;
         this.zipcode = zipcode;
         this.distance = distance;
@@ -17,6 +19,7 @@ public class ProviderSearchResult {
         this.sitter = sitter;
         this.walker = walker;
         this.trainer = trainer;
+        this.userId = userId;
     }
 
     public String getName() {
@@ -73,5 +76,13 @@ public class ProviderSearchResult {
 
     public void setTrainer(String trainer) {
         this.trainer = trainer;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

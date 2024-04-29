@@ -51,11 +51,14 @@ public class ProviderController {
         return "providers/index";
     }
 
-    @GetMapping("index/{providerId}")
-    public String listProvider(@PathVariable int providerId, Model model, Provider provider) {
-        model.addAttribute("provider", providerRepository.findById(providerId));
-        model.addAttribute("services", provider.getSkills());
-        return "providers/display";
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> displayProviderProfile(@PathVariable Integer userId) {
+
+        Optional<User> optUser = userRepository.findById(userId);
+
+        User user = optUser.get();
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("delete/{providerId}")
@@ -226,7 +229,8 @@ public class ProviderController {
                             grooming,
                             sitting,
                             walking,
-                            training
+                            training,
+                            someProvider.getUser().getId()
                     );
 
                     response.add(providerSearchResult);
