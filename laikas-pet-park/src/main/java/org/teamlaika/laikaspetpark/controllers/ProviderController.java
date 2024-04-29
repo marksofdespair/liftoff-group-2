@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.mysql.cj.xdevapi.JsonArray;
 import jakarta.validation.Valid;
-import net.minidev.json.JSONObject;
 import org.apache.coyote.Response;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -169,7 +169,7 @@ public class ProviderController {
 //    }
 
     @PostMapping("/search")
-    public ResponseEntity<JsonArray> processProviderSearchForm(@RequestBody String body) throws JsonProcessingException {
+    public ResponseEntity<List<JSONObject>> processProviderSearchForm(@RequestBody String body) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -187,7 +187,9 @@ public class ProviderController {
 
         System.out.println(nearbyZips);
 
-        JsonArray response = new JsonArray();
+//        JsonArray response = new JsonArray();
+
+        List<JSONObject> response = new ArrayList<>();
 
 //        Map<Provider,Float> response = new HashMap<>();
 
@@ -207,11 +209,19 @@ public class ProviderController {
 
             if (!someProviders.isEmpty()) {
                 for (Provider someProvider : someProviders) {
-                    JSONObject json = new JSONObject();
-                    JsonNode node = objectMapper.valueToTree(someProvider);
-                    json.put("provider", node);
 
-                    response.put(someProvider, nearbyZip.distance());
+                    JSONObject providerResult = new JSONObject();
+
+                    providerResult.put("id", someProvider.getId());
+                    providerResult.put("name", someProvider.getUser().getName());
+                    providerResult.put("isGroomer", someProvider.isGroomer());
+                    providerResult.put("isSitter", someProvider.isSitter());
+                    providerResult.put("isTrainer", someProvider.isTrainer());
+                    providerResult.put("isWalker", someProvider.isWalker());
+                    providerResult.put("distance", nearbyZip.distance());
+                    providerResult.put("zipcode", nearbyZip.zipcode());
+
+                    response.add(providerResult);
                 }
             }
         }
