@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 @Entity
 public class PetInfo {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
     @OneToOne
     private Pet pet;

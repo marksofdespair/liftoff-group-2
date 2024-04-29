@@ -6,6 +6,7 @@ import org.teamlaika.laikaspetpark.models.ZipApi;
 
 import java.util.List;
 
+@CrossOrigin(origins = "localhost:5173")
 @RestController
 @RequestMapping("/api/zipcodes")
 public class ZipApiController {

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.JwtGenerator;
+import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.User;
 import org.teamlaika.laikaspetpark.models.data.UserRepository;
 import org.teamlaika.laikaspetpark.models.dto.LoginFormDTO;
@@ -26,18 +27,18 @@ public class ProfileController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<User>getUserInfo(@RequestHeader("Authorization") String token, @RequestParam Integer userId) {
+    @GetMapping
+    public ResponseEntity<User>getUserInfo(@RequestHeader("Authorization") String token) {
 
-//        Claims claims = JwtGenerator.decodeToken(token);
-//
-//        String userId = claims.getSubject();
+        Claims claims = JwtGenerator.decodeToken(token);
+
+        String userId = claims.getSubject();
 
         System.out.println(userId);
 
-        Optional<User> result = userRepository.findById(userId);
+        Optional<User> result = userRepository.findById(Integer.valueOf(userId));
         User aUser = result.get();
 
-        return new ResponseEntity<User>(aUser, HttpStatus.OK);
+        return new ResponseEntity<>(aUser,HttpStatus.OK);
     }
 }

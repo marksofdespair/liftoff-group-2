@@ -1,25 +1,30 @@
 package org.teamlaika.laikaspetpark.models.data;
 
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.teamlaika.laikaspetpark.models.Provider;
+import org.teamlaika.laikaspetpark.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProviderSpecification {
 
-    public static Specification<Provider> hasSkills(String isGroomer,
-                                                    String isSitter,
-                                                    String isTrainer,
-                                                    String isWalker) {
+    public static Specification<Provider> providerFilter (String isGroomer,
+                                                          String isSitter,
+                                                          String isTrainer,
+                                                          String isWalker,
+                                                          Integer zipcode) {
         return (root, query, criteriaBuilder) -> {
+
+            Join<Provider, User> userJoin = root.join("user");
 
             List<Predicate> providerPredicates = new ArrayList<>();
 
             if (isGroomer != null) {
                 providerPredicates.add(
-                    criteriaBuilder.equal(root.get("isGroomer"), true)
+                        criteriaBuilder.equal(root.get("isGroomer"), true)
                 );
             }
 
@@ -38,6 +43,12 @@ public class ProviderSpecification {
             if (isWalker != null) {
                 providerPredicates.add(
                         criteriaBuilder.equal(root.get("isWalker"), true)
+                );
+            }
+
+            if (zipcode != null) {
+                providerPredicates.add(
+                        criteriaBuilder.equal(userJoin.get("zipcode"), zipcode)
                 );
             }
 
