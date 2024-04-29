@@ -31,6 +31,8 @@ import java.util.Optional;
 @RequestMapping("/api/pets")
 public class PetController {
 
+    //private static List<Pet> pets = new ArrayList<>();
+
     @Autowired
     private PetRepository petRepository;
     @Autowired
@@ -38,8 +40,6 @@ public class PetController {
     @Autowired
     private PetPageRepository petPageRepository;
 
-    @Autowired
-    AuthenticationController authenticationController;
 
     private final ApiService apiService;
 
@@ -63,15 +63,20 @@ public class PetController {
 
         String userId = claims.getSubject();
 
+
         System.out.println(userId);
 
         Optional<User> optUser = userRepository.findById(Integer.parseInt(userId));
 
         User user = optUser.get();
+
+        System.out.println(user);
 //
 //        User user = userRepository.findByUsername(username);
 
         List<Pet> pets = user.getPets();
+
+        System.out.println(pets);
 
         return new ResponseEntity<>(pets, HttpStatus.OK);
     }
@@ -108,9 +113,15 @@ public class PetController {
     }
 
     @PostMapping("create-dog")
-    public ResponseEntity<Pet> processCreateDogForm(@RequestParam String name,@RequestParam String breed) {
+    public ResponseEntity<Pet> processCreateDogForm(@RequestHeader ("Authorization") String token, @RequestParam String name,@RequestParam String breed) {
+        Claims claims = JwtGenerator.decodeToken(token);
+
+        String userId = claims.getSubject();
+
+        System.out.println(userId);
+
         String species = "Dog";
-        Optional<User> user = userRepository.findById(1);
+        Optional<User> user = userRepository.findById(Integer.valueOf(userId));
         if(user.isPresent()){
             User user1 = user.get();
             Pet pet = new Pet(name, species, breed, user1);
@@ -149,7 +160,9 @@ public class PetController {
     }
 
     @PostMapping("/add-cat")
-    public ResponseEntity<String> addCat(@RequestBody String body) {
+    public ResponseEntity<String> addCat(@RequestHeader ("Authorization") String token, @RequestBody String body) {
+
+
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -165,7 +178,6 @@ public class PetController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add cat. Please try again.");
         }
-
     }
     @GetMapping("update/{petId}")
     public ResponseEntity<Optional<Pet>> displayUpdatePetForm(@PathVariable int petId){

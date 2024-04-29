@@ -49,23 +49,23 @@ public class OwnerController {
         return new ResponseEntity<User>(aUser, HttpStatus.OK);
     }
 
-    @GetMapping("delete/{ownerId}")
-    public String displayDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
-                                           Model model){
-        User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
-        if (currentUser.getOwner() != null) {
-            Owner owner = (Owner) currentUser.getOwner();
-            model.addAttribute("owner", owner);
-            return "users/delete";
-//        Optional<Owner> optOwner = ownerRepository.findByUsername(loginFormDTO.getUsername());
-//        if (optOwner.isPresent()) {
-//            Owner owner = (Owner) optOwner.get();
+//    @GetMapping("delete/{ownerId}")
+//    public String displayDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
+//                                           Model model){
+//        User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
+//        if (currentUser.getOwner() != null) {
+//            Owner owner = (Owner) currentUser.getOwner();
 //            model.addAttribute("owner", owner);
 //            return "users/delete";
-        } else {
-            return "redirect:";
-        }
-    }
+////        Optional<Owner> optOwner = ownerRepository.findByUsername(loginFormDTO.getUsername());
+////        if (optOwner.isPresent()) {
+////            Owner owner = (Owner) optOwner.get();
+////            model.addAttribute("owner", owner);
+////            return "users/delete";
+//        } else {
+//            return "redirect:";
+//        }
+//    }
     @PostMapping("delete/{ownerId}")
     public String postDeleteAccountForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid Owner owner,
                                         Errors errors, Model model, @RequestParam String passwordInput){
@@ -79,24 +79,24 @@ public class OwnerController {
         }
         return"redirect:";
     }
-    @GetMapping("update")
-    String displayUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
-                             Model model){
-        User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
-        if (currentUser.getOwner() != null) {
-            Owner owner = (Owner) currentUser.getOwner();
-            model.addAttribute("owner", owner);
-            return "users/update";
-
-//        Optional<Owner> optOwner = ownerRepository.findByUsername(loginFormDTO.getUsername());
-//        if (optOwner.isPresent()) {
-//            Owner owner = (Owner) optOwner.get();
+//    @GetMapping("update")
+//    String displayUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
+//                             Model model){
+//        User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
+//        if (currentUser.getOwner() != null) {
+//            Owner owner = (Owner) currentUser.getOwner();
 //            model.addAttribute("owner", owner);
 //            return "users/update";
-        } else {
-            return "redirect:";
-        }
-    }
+//
+////        Optional<Owner> optOwner = ownerRepository.findByUsername(loginFormDTO.getUsername());
+////        if (optOwner.isPresent()) {
+////            Owner owner = (Owner) optOwner.get();
+////            model.addAttribute("owner", owner);
+////            return "users/update";
+//        } else {
+//            return "redirect:";
+//        }
+//    }
     @PostMapping("update")
     String submitUpdateForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO, @Valid Owner owner,
                             Errors errors, Model model, @RequestParam String passwordInput){

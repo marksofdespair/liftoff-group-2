@@ -67,6 +67,7 @@ public class ProviderController {
         User currentUser = userRepository.findByUsername(loginFormDTO.getUsername());
         if (currentUser.getProvider() != null){
             Provider provider = (Provider) currentUser.getProvider();
+            providerRepository.delete(provider);
             model.addAttribute("provider", provider);
             return "providers/delete";
         }
@@ -75,8 +76,8 @@ public class ProviderController {
 //            Provider provider = (Provider) optProvider.get();
 //            model.addAttribute("provider", provider);
 //            return "providers/delete";
-         else {
-            return "redirect:";
+        else {
+            return "redirect:delete/{providerId}";
         }
     }
 

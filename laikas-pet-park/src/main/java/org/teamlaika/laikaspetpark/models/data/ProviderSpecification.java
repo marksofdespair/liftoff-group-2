@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProviderSpecification {
-    public ProviderSpecification() {
-    }
 
     public static Specification<Provider> providerFilter (String isGroomer,
                                                           String isSitter,

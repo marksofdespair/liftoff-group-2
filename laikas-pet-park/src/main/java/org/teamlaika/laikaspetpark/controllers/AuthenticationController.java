@@ -12,7 +12,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.teamlaika.laikaspetpark.JwtGenerator;
-import org.teamlaika.laikaspetpark.models.Owner;
+//import org.teamlaika.laikaspetpark.models.Owner;
 import org.teamlaika.laikaspetpark.models.Provider;
 import org.teamlaika.laikaspetpark.models.User;
 import org.teamlaika.laikaspetpark.models.data.OwnerRepository;
@@ -40,20 +40,20 @@ public class AuthenticationController {
     // Session-Handling Utilities
     private static final String userSessionKey = "username";
 
-    public User getUserFromSession(HttpSession session) {
-        Integer userId = (Integer) session.getAttribute(userSessionKey);
-        if (userId == null) {
-            return null;
-        }
-
-        Optional<User> user = userRepository.findById(userId);
-
-        if (user.isEmpty()) {
-            return null;
-        }
-
-        return user.get();
-    }
+//    public User getUserFromSession(HttpSession session) {
+//        Integer userId = (Integer) session.getAttribute(userSessionKey);
+//        if (userId == null) {
+//            return null;
+//        }
+//
+//        Optional<User> user = userRepository.findById(userId);
+//
+//        if (user.isEmpty()) {
+//            return null;
+//        }
+//
+//        return user.get();
+//    }
 
     private static void setUserInSession(HttpSession session, User user) {
         session.setAttribute(userSessionKey, user.getId());
@@ -123,8 +123,8 @@ public class AuthenticationController {
         User newUser = new User(registerFormDTO.getName(), registerFormDTO.getUsername(), registerFormDTO.getPassword(), registerFormDTO.getEmail(), registerFormDTO.getAccountType(), registerFormDTO.getZipcode());
 
         if (registerFormDTO.getAccountType().equals("Owner")) {
-            Owner newOwner = new Owner();
-            newUser.setOwner(newOwner);
+//            Owner newOwner = new Owner();
+//            newUser.setOwner(newOwner);
 
             userRepository.save(newUser);
             setUserInSession(request.getSession(), newUser);
@@ -143,41 +143,12 @@ public class AuthenticationController {
         }
     }
 
-    // Custom response object for Login
-    public static class LoginResponse {
-        private final String message;
-        private final Map<String, Object> args;
-        private final Map<String, Object> headers;
-        private final String url;
 
-        public LoginResponse(String message) {
-            this.message = message;
-            this.args = new HashMap<>();
-            this.headers = new HashMap<>();
-            this.url = "";
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public Map<String, Object> getArgs() {
-            return args;
-        }
-
-        public Map<String, Object> getHeaders() {
-            return headers;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-    }
 
     // Handling User Login
     @GetMapping("/api/login")
     public ResponseEntity<?> displayLoginForm(Model model) {
-        return ResponseEntity.ok(new LoginResponse("Login form"));
+        return ResponseEntity.ok("Login form");
     }
 
     @PostMapping("/api/login")
@@ -186,7 +157,7 @@ public class AuthenticationController {
                                               Model model) {
 
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(new LoginResponse("Validation failed"));
+            return ResponseEntity.badRequest().body("Validation failed");
         }
 
         User theUser = userRepository.findByUsername(loginFormDTO.getUsername());
@@ -198,57 +169,29 @@ public class AuthenticationController {
         String password = loginFormDTO.getPassword();
 
         if (!theUser.isMatchingPassword(password)) {
-            return ResponseEntity.badRequest().body(new LoginResponse("Invalid password"));
+            return ResponseEntity.badRequest().body("Invalid password");
         }
 
         String accountType = loginFormDTO.getAccountType();
 
-        if (accountType.equals("Owner") && theUser.getOwner() != null) {
+        if (accountType.equals("Owner")) {
             //setUserInSession(request.getSession(), theUser);
-           String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
+            String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
+            System.out.println(token);
             return ResponseEntity.ok(token);
         } else if (accountType.equals("Provider") && theUser.getProvider() != null) {
             //setUserInSession(request.getSession(), theUser);
             String token =  JwtGenerator.generateJwt(theUser.getId(), theUser.getAccountType());
+            System.out.println(token);
             return ResponseEntity.ok(token);
         }
-        return ResponseEntity.ok(new LoginResponse("you done messed up"));
+        return ResponseEntity.ok(" Error. Please try re-entering your information");
     }
 
-    // Custom response object for Logout
-    public static class LogoutResponse {
-        private final String message;
-        private final Map<String, Object> args;
-        private final Map<String, Object> headers;
-        private final String url;
-
-        public LogoutResponse(String message) {
-            this.message = message;
-            this.args = new HashMap<>();
-            this.headers = new HashMap<>();
-            this.url = "";
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public Map<String, Object> getArgs() {
-            return args;
-        }
-
-        public Map<String, Object> getHeaders() {
-            return headers;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-    }
 
     @GetMapping("/api/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         request.getSession().invalidate();
-        return ResponseEntity.ok(new LogoutResponse("Logout successful"));
+        return ResponseEntity.ok("Logout successful");
     }
 }

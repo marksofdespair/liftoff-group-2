@@ -1,5 +1,7 @@
 package org.teamlaika.laikaspetpark.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -79,6 +81,7 @@ public class Pet {
     }
 
 
+
 //    public String getDescription() {
 //        return description;
 //    }
@@ -97,6 +100,16 @@ public class Pet {
                 ", breed='" + breed + '\''+
                 '}';
     }
+//    @Override
+//    public String toString() {
+//        return "Pet{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", owner='" + user + '\'' +
+//                ", species='" + species + '\'' +
+//                ", breed='" + breed + '\''+
+//                '}';
+//    }
 
 //  @Override
 //    public String toString() {
@@ -106,12 +119,12 @@ public class Pet {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Pet pet)) return false;
-        return getId() == pet.getId() && Objects.equals(getName(), pet.getName()) && Objects.equals(getOwner(), pet.getOwner()) && Objects.equals(getSpecies(), pet.getSpecies()) && Objects.equals(getBreed(), pet.getBreed());
+        return getId() == pet.getId() && Objects.equals(getName(), pet.getName()) && Objects.equals(getSpecies(), pet.getSpecies()) && Objects.equals(getBreed(), pet.getBreed());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getOwner(), getSpecies(), getBreed());
+        return Objects.hash(getId(), getName(), getSpecies(), getBreed());
 
     }
 }
