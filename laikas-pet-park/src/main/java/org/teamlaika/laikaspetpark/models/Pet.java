@@ -48,9 +48,9 @@ public class Pet {
     }
 
 
-    public int getOwnerId() {
-        return user.getId();
-    }
+//    public User getOwner() {
+//        return user;
+//    }
 
     public void setOwner(User user) {
         this.user = user;

@@ -27,26 +27,45 @@ public class ProfileController {
     UserRepository userRepository;
 
     @GetMapping
-    public ResponseEntity<?>getUserInfo(@RequestHeader("Authorization") String token, ProfileFormDTO profileFormDTO) {
+    public ResponseEntity<?>getUserInfo(@RequestHeader("Authorization") String token, @RequestParam(value = "userId", required = false) String id, ProfileFormDTO profileFormDTO) {
 
-        Claims claims = JwtGenerator.decodeToken(token);
-        System.out.println(claims);
+        System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        System.out.println(id);
 
-        String userId = claims.getSubject();
+        if (id != null) {
 
-        System.out.println(userId);
+            Optional<User> result = userRepository.findById(Integer.valueOf(id));
 
-        Optional<User> result = userRepository.findById(Integer.valueOf(userId));
+            User aUser = result.get();
 
-        User aUser = result.get();
-        List<Pet> pets = aUser.getPets();
-        // List<ProviderReview> reviews = providerReviewRepository.findByProviderId(aUser.getProvider());
+            List<Pet> pets = aUser.getPets();
 
-        profileFormDTO.setUsername(aUser.getUsername());
-        profileFormDTO.setName(aUser.getName());
-        profileFormDTO.setEmail(aUser.getEmail());
-        profileFormDTO.setAccountType(aUser.getAccountType());
-        profileFormDTO.setPets(pets);
+            profileFormDTO.setUsername(aUser.getUsername());
+            profileFormDTO.setName(aUser.getName());
+            profileFormDTO.setEmail(aUser.getEmail());
+            profileFormDTO.setAccountType(aUser.getAccountType());
+            profileFormDTO.setPets(pets);
+
+        } else {
+
+            Claims claims = JwtGenerator.decodeToken(token);
+
+            String userId = claims.getSubject();
+
+            Optional<User> result = userRepository.findById(Integer.valueOf(userId));
+
+            User aUser = result.get();
+
+            List<Pet> pets = aUser.getPets();
+            // List<ProviderReview> reviews = providerReviewRepository.findByProviderId(aUser.getProvider());
+
+            profileFormDTO.setUsername(aUser.getUsername());
+            profileFormDTO.setName(aUser.getName());
+            profileFormDTO.setEmail(aUser.getEmail());
+            profileFormDTO.setAccountType(aUser.getAccountType());
+            profileFormDTO.setPets(pets);
+
+        }
 
         return new ResponseEntity<>(profileFormDTO, HttpStatus.OK);
     }
