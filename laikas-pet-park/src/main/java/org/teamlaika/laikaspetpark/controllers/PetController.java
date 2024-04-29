@@ -54,11 +54,8 @@ public class PetController {
 
         String userId = claims.getSubject();
 
-
         Optional<User> optUser = userRepository.findById(Integer.parseInt(userId));
-
         User user = optUser.get();
-
 
         List<Pet> pets = user.getPets();
 
