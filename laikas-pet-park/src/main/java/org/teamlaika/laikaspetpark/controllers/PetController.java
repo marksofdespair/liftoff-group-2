@@ -31,6 +31,8 @@ import java.util.Optional;
 @RequestMapping("/api/pets")
 public class PetController {
 
+    //private static List<Pet> pets = new ArrayList<>();
+
     @Autowired
     private PetRepository petRepository;
     @Autowired

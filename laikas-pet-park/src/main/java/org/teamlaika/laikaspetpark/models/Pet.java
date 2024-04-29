@@ -48,9 +48,9 @@ public class Pet {
     }
 
 
-//    public User getOwner() {
-//        return user;
-//    }
+    public User getOwner() {
+        return user;
+    }
 
     public void setOwner(User user) {
         this.user = user;
@@ -82,7 +82,24 @@ public class Pet {
 
 
 
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
 
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", owner='" + user + '\'' +
+                ", species='" + species + '\'' +
+                ", breed='" + breed + '\''+
+                '}';
+    }
 //    @Override
 //    public String toString() {
 //        return "Pet{" +
